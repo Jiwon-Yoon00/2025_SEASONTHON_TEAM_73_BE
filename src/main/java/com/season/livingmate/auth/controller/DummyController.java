@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "로그인/로그아웃", description = "로그인/로그아웃 API")
+@Tag(name = "로그인/로그아웃", description = "로그인/로그아웃 API - Swagger 문서화를 위한 껍데기 컨트롤러이므로 실제작동X")
 @RequestMapping("/auth")
 public class DummyController {
 
