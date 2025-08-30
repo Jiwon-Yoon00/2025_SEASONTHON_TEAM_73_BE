@@ -15,7 +15,7 @@ public class Post {
     @Id
     @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long postId;
 
     @Column(nullable = false)
     private String title;
@@ -87,4 +87,93 @@ public class Post {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Builder
+    private Post(String title,
+                 String content,
+                 String imageUrl,
+                 GeoPoint geoPoint,
+                 String location,
+                 RoomType roomType,
+                 int deposit,
+                 int monthlyRent,
+                 int maintenanceFee,
+                 PaymentStructure paymentStructure,
+                 int floor,
+                 int buildingFloor,
+                 int areaSize,
+                 HeatingType heatingType,
+                 boolean hasElevator,
+                 LocalDateTime availableDate,
+                 int minStayMonths,
+                 int maxStayMonths,
+                 int washroomCount,
+                 int roomCount,
+                 LocalDateTime createdAt,
+                 LocalDateTime updatedAt) {
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.geoPoint = geoPoint;
+        this.location = location;
+        this.roomType = roomType;
+        this.deposit = deposit;
+        this.monthlyRent = monthlyRent;
+        this.maintenanceFee = maintenanceFee;
+        this.paymentStructure = paymentStructure;
+        this.floor = floor;
+        this.buildingFloor = buildingFloor;
+        this.areaSize = areaSize;
+        this.heatingType = heatingType;
+        this.hasElevator = hasElevator;
+        this.availableDate = availableDate;
+        this.minStayMonths = minStayMonths;
+        this.maxStayMonths = maxStayMonths;
+        this.washroomCount = washroomCount;
+        this.roomCount = roomCount;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public void update(String title,
+                       String content,
+                       String imageUrl,
+                       GeoPoint geoPoint,
+                       String location,
+                       RoomType roomType,
+                       int deposit,
+                       int monthlyRent,
+                       int maintenanceFee,
+                       PaymentStructure paymentStructure,
+                       int floor,
+                       int buildingFloor,
+                       int areaSize,
+                       HeatingType heatingType,
+                       boolean hasElevator,
+                       LocalDateTime availableDate,
+                       int minStayMonths,
+                       int maxStayMonths,
+                       int washroomCount,
+                       int roomCount) {
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.geoPoint = geoPoint;
+        this.location = location;
+        this.roomType = roomType;
+        this.deposit = deposit;
+        this.monthlyRent = monthlyRent;
+        this.maintenanceFee = maintenanceFee;
+        this.paymentStructure = paymentStructure;
+        this.floor = floor;
+        this.buildingFloor = buildingFloor;
+        this.areaSize = areaSize;
+        this.heatingType = heatingType;
+        this.hasElevator = hasElevator;
+        this.availableDate = availableDate;
+        this.minStayMonths = minStayMonths;
+        this.maxStayMonths = maxStayMonths;
+        this.washroomCount = washroomCount;
+        this.roomCount = roomCount;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

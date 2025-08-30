@@ -4,6 +4,7 @@ public enum RoomType {
     ONE_ROOM,   // 원룸
     TWO_ROOM,   // 투룸
     VILLA,      // 빌라
-    APARTMENT;  // 아파트
+    APARTMENT,  // 아파트
+    OFFICETEL ;// 오피스텔
 }
 
