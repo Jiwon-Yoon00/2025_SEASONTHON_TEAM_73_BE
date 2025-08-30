@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SignupResDto {
+public class SignupReqDto {
     @NotBlank(message = "아이디는 필수입니다.")
     @Schema(description = "사용자 아이디", example = "testuser", required = true)
     private String username;
