@@ -2,9 +2,7 @@ package com.season.livingmate.config;
 
 import java.util.Collections;
 
-import com.season.livingmate.auth.security.JwtAuthenticationFilter;
-import com.season.livingmate.auth.security.JwtProvider;
-import com.season.livingmate.auth.security.LoginFilter;
+import com.season.livingmate.auth.security.*;
 import com.season.livingmate.auth.service.AuthService;
 import com.season.livingmate.auth.service.RefreshTokenService;
 import com.season.livingmate.user.repository.UserRepository;
@@ -55,7 +53,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager, CustomLogoutFilter customLogoutFilter, JwtBlacklistFilter jwtBlacklistFilter) throws Exception {
 		LoginFilter loginFilter = new LoginFilter(authManager,  jwtProvider, objectMapper, refreshTokenService);
 		loginFilter.setFilterProcessesUrl("/auth/login");
 
@@ -82,9 +80,9 @@ public class SecurityConfig {
 					}
 				}))
 
-			// .addFilterBefore(customLogoutFilter, LogoutFilter.class)
-			// .addFilterBefore(jwtAuthenticationFilter, LoginFilter.class)
-			// .addFilterBefore(jwtBlacklistFilter, JwtAuthenticationFilter.class)
+			 .addFilterBefore(customLogoutFilter, LogoutFilter.class)
+			 .addFilterBefore(jwtAuthenticationFilter, LoginFilter.class)
+			 .addFilterBefore(jwtBlacklistFilter, JwtAuthenticationFilter.class)
 			 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
