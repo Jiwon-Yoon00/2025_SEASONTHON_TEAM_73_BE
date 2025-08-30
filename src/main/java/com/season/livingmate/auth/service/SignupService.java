@@ -3,6 +3,7 @@ package com.season.livingmate.auth.service;
 import com.season.livingmate.auth.dto.request.SignupReqDto;
 import com.season.livingmate.auth.dto.request.VerifyOtpReqDto;
 import com.season.livingmate.auth.dto.response.SignupResDto;
+import com.season.livingmate.auth.security.JwtProvider;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.status.ErrorStatus;
 import com.season.livingmate.user.entity.User;
@@ -30,6 +31,7 @@ public class SignupService {
     private DefaultMessageService messageService;
     private final Map<String, SignupService.OtpInfo> otpStore = new ConcurrentHashMap<>();
     private final Map<String, SignupReqDto> tempSignupStore = new ConcurrentHashMap<>();
+    private final JwtProvider jwtProvider;
 
     @Value("${solapi.apiKey}")
     private String apiKey;
@@ -126,10 +128,10 @@ public class SignupService {
         userRepository.save(user);
 
 //        // JWT 토큰 발급
-//        String accessToken = jwtProvider.generateAccessToken(user.getId());
-//        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
 
-        return SignupResDto.from(user, null, null);
+        return SignupResDto.from(user, accessToken, refreshToken);
     }
 
     // OTP 정보 record
