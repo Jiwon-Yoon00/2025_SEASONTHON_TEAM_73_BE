@@ -14,6 +14,7 @@ import com.season.livingmate.post.domain.PaymentStructure;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.repository.PostRepository;
 import com.season.livingmate.post.domain.repository.PostSpecs;
+import com.season.livingmate.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class PostService {
 
     // 게시글 생성
     @Transactional
-    public Response<Long> createPost(PostCreateReq req){
+    public Response<Long> createPost(PostCreateReq req, User user) {
 
         GeoPoint geo = new GeoPoint(req.latitude(), req.longitude());
         PaymentStructure payment = new PaymentStructure(
@@ -66,6 +66,7 @@ public class PostService {
                 .roomCount(req.roomCount())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .user(user)
                 .build();
 
         Long id = postRepository.save(post).getPostId();
@@ -123,19 +124,59 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Response<Long> updatePost(Long postId, PostUpdateReq req){
+    public Response<Long> updatePost(Long postId, PostUpdateReq req, User currentUser) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
+
+        if(!post.getUser().getId().equals(currentUser.getId())){
+            throw new CustomException(ErrorStatus.FORBIDDEN);
+        }
+
+        GeoPoint geo = new GeoPoint(req.latitude(), req.longitude());
+        PaymentStructure payment = new PaymentStructure(
+                req.depositShare(),
+                req.rentShare(),
+                req.maintenanceShare(),
+                req.utilitiesShare()
+        );
+
+        post.update(
+                req.title(),
+                req.content(),
+                req.imageUrl(),
+                geo,
+                req.location(),
+                req.roomType(),
+                req.deposit(),
+                req.monthlyRent(),
+                req.maintenanceFee(),
+                payment,
+                req.floor(),
+                req.buildingFloor(),
+                req.areaSize(),
+                req.heatingType(),
+                req.hasElevator(),
+                req.availableDate(),
+                req.minStayMonths(),
+                req.maxStayMonths(),
+                req.washroomCount(),
+                req.roomCount()
+        );
 
         return Response.success(SuccessStatus.UPDATE_POST, post.getPostId());
     }
 
     // 게시글 삭제
     @Transactional
-    public Response<Long> deletePost(Long postId){
-        Post p = postRepository.findById(postId)
+    public Response<Long> deletePost(Long postId, User currentUser) {
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
-        postRepository.delete(p);
+
+        if (!post.getUser().getId().equals(currentUser.getId())) {
+            throw new CustomException(ErrorStatus.FORBIDDEN);
+        }
+
+        postRepository.delete(post);
         return Response.success(SuccessStatus.DELETE_POST, postId);
     }
 

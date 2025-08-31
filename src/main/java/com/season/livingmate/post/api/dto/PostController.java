@@ -1,5 +1,6 @@
 package com.season.livingmate.post.api.dto;
 
+import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.post.api.dto.req.PostCreateReq;
@@ -9,12 +10,14 @@ import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
 import com.season.livingmate.post.application.PostService;
 import com.season.livingmate.post.domain.RoomType;
+import com.season.livingmate.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +31,10 @@ public class PostController {
 
     @Operation(summary = "게시글 생성 API")
     @PostMapping
-    public ResponseEntity<Response<Long>> createPost(@RequestBody PostCreateReq req) {
-        Response<Long> res = postService.createPost(req);
+    public ResponseEntity<Response<Long>> createPost(@RequestBody PostCreateReq req,
+                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = userDetails.getUser();
+        Response<Long> res = postService.createPost(req, user);
         return ResponseEntity
                 .status(SuccessStatus.CREATE_POST.getStatus())
                 .body(res);
@@ -53,15 +58,19 @@ public class PostController {
     @Operation(summary = "게시글 수정 API")
     @PatchMapping("{postId}")
     public ResponseEntity<Response<Long>> updatePost(@PathVariable Long postId,
-                                                     @RequestBody PostUpdateReq req){
-        Response<Long> res = postService.updatePost(postId, req);
+                                                     @RequestBody PostUpdateReq req,
+                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = userDetails.getUser();
+        Response<Long> res = postService.updatePost(postId, req, user);
         return ResponseEntity.ok(res);
     }
 
     @Operation(summary = "게시글 삭제 API")
     @DeleteMapping("{postId}")
-    public ResponseEntity<Response<Long>> deletePost(@PathVariable Long postId){
-        Response<Long> res = postService.deletePost(postId);
+    public ResponseEntity<Response<Long>> deletePost(@PathVariable Long postId,
+                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = userDetails.getUser();
+        Response<Long> res = postService.deletePost(postId, user);
         return ResponseEntity.ok(res);
     }
 

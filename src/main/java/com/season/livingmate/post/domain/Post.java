@@ -1,5 +1,6 @@
 package com.season.livingmate.post.domain;
 
+import com.season.livingmate.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -87,6 +88,11 @@ public class Post {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Builder
     private Post(String title,
                  String content,
@@ -109,7 +115,8 @@ public class Post {
                  int washroomCount,
                  int roomCount,
                  LocalDateTime createdAt,
-                 LocalDateTime updatedAt) {
+                 LocalDateTime updatedAt,
+                 User user) {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -132,6 +139,7 @@ public class Post {
         this.roomCount = roomCount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.user = user;
     }
 
     public void update(String title,

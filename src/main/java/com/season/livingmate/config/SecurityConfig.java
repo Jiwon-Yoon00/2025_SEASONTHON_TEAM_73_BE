@@ -65,6 +65,12 @@ public class SecurityConfig {
 			.sessionManagement(session -> session
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 설정
 
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/auth/**").permitAll() // 로그인 회원가입
+						.requestMatchers("/posts/**").authenticated() // 게시글 인증 필요
+						.anyRequest().permitAll()
+				)
+
 			.cors(cors -> cors
 				.configurationSource(new CorsConfigurationSource() {
 					@Override
