@@ -1,6 +1,8 @@
 package com.season.livingmate.post.api.dto.res;
 
 import com.season.livingmate.post.domain.HeatingType;
+import com.season.livingmate.post.domain.PaymentStructure;
+import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.RoomType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -91,4 +93,45 @@ public record PostDetailRes(
         @Schema(description = "수정일시", example = "2025-08-30T13:00:00")
         LocalDateTime updatedAt
 ) {
+
+        public static PostDetailRes from(Post p) {
+                Double lat = (p.getGeoPoint() != null) ? p.getGeoPoint().getLatitude() : null;
+                Double lng = (p.getGeoPoint() != null) ? p.getGeoPoint().getLongitude() : null;
+
+                PaymentStructure ps = p.getPaymentStructure();
+                boolean depositShare = ps != null && ps.isDepositShare();
+                boolean rentShare = ps != null && ps.isRentShare();
+                boolean maintenanceShare = ps != null && ps.isMaintenanceShare();
+                boolean utilitiesShare = ps != null && ps.isUtilitiesShare();
+
+                return new PostDetailRes(
+                        p.getPostId(),
+                        p.getTitle(),
+                        p.getContent(),
+                        p.getImageUrl(),
+                        lat,
+                        lng,
+                        p.getLocation(),
+                        p.getRoomType(),
+                        p.getDeposit(),
+                        p.getMonthlyRent(),
+                        p.getMaintenanceFee(),
+                        depositShare,
+                        rentShare,
+                        maintenanceShare,
+                        utilitiesShare,
+                        p.getFloor(),
+                        p.getBuildingFloor(),
+                        p.getAreaSize(),
+                        p.getHeatingType(),
+                        p.isHasElevator(),
+                        p.getAvailableDate(),
+                        p.getMinStayMonths(),
+                        p.getMaxStayMonths(),
+                        p.getWashroomCount(),
+                        p.getRoomCount(),
+                        p.getCreatedAt(),
+                        p.getUpdatedAt()
+                );
+        }
 }

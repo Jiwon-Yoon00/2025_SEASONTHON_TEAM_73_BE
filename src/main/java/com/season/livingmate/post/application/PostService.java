@@ -78,47 +78,13 @@ public class PostService {
         Post p = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
 
-        PostDetailRes dto =  new PostDetailRes(
-                p.getPostId(),
-                p.getTitle(),
-                p.getContent(),
-                p.getImageUrl(),
-                p.getGeoPoint() != null ? p.getGeoPoint().getLatitude() : null,
-                p.getGeoPoint() != null ? p.getGeoPoint().getLongitude() : null,
-                p.getLocation(),
-                p.getRoomType(),
-                p.getDeposit(),
-                p.getMonthlyRent(),
-                p.getMaintenanceFee(),
-                p.getPaymentStructure() != null && p.getPaymentStructure().isDepositShare(),
-                p.getPaymentStructure() != null && p.getPaymentStructure().isRentShare(),
-                p.getPaymentStructure() != null && p.getPaymentStructure().isMaintenanceShare(),
-                p.getPaymentStructure() != null && p.getPaymentStructure().isUtilitiesShare(),
-                p.getFloor(),
-                p.getBuildingFloor(),
-                p.getAreaSize(),
-                p.getHeatingType(),
-                p.isHasElevator(),
-                p.getAvailableDate(),
-                p.getMinStayMonths(),
-                p.getMaxStayMonths(),
-                p.getWashroomCount(),
-                p.getRoomCount(),
-                p.getCreatedAt(),
-                p.getUpdatedAt()
-        );
-
-        return Response.success(SuccessStatus.GET_POST, dto);
+        return Response.success(SuccessStatus.GET_POST, PostDetailRes.from(p));
     }
 
     // 게시글 목록 조회
     public Response<Page<PostListRes>> getList(Pageable pageable){
         Page<PostListRes> page =  postRepository.findAll(pageable)
-                .map(p -> new PostListRes(
-                        p.getPostId(),
-                        p.getTitle(),
-                        p.getAvailableDate()
-                ));
+                .map(PostListRes::from);
         return Response.success(SuccessStatus.GET_POST_LIST, page);
     }
 
@@ -187,11 +153,7 @@ public class PostService {
         Specification<Post> spec = PostSpecs.build(req);
 
         Page<PostListRes> page = postRepository.findAll(spec, pageable)
-                .map(post -> new PostListRes(
-                        post.getPostId(),
-                        post.getTitle(),
-                        post.getAvailableDate()
-                ));
+                .map(PostListRes::from);
 
         return Response.success(SuccessStatus.GET_POST_LIST, page);
     }
