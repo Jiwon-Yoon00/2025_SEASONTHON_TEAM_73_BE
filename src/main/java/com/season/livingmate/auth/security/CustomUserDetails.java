@@ -1,6 +1,6 @@
 package com.season.livingmate.auth.security;
 
-import com.season.livingmate.user.entity.User;
+import com.season.livingmate.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

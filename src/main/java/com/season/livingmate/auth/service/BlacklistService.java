@@ -4,7 +4,7 @@ package com.season.livingmate.auth.service;
 import com.season.livingmate.auth.entity.BlacklistReason;
 import com.season.livingmate.auth.entity.BlacklistToken;
 import com.season.livingmate.auth.repository.BlacklistTokenRepository;
-import com.season.livingmate.user.entity.User;
+import com.season.livingmate.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

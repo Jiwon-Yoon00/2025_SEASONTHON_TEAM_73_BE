@@ -1,6 +1,6 @@
 package com.season.livingmate.auth.entity;
 
-import com.season.livingmate.user.entity.User;
+import com.season.livingmate.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 

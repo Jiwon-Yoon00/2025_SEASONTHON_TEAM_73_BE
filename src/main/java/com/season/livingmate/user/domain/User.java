@@ -1,4 +1,4 @@
-package com.season.livingmate.user.entity;
+package com.season.livingmate.user.domain;
 
 import com.season.livingmate.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -37,8 +37,8 @@ public class User extends BaseEntity {
 
     private boolean verified; // 본인인증 완료 여부
 
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private UserProfile userProfile;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserProfile userProfile;
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<RefreshToken> refreshTokens;

@@ -2,20 +2,11 @@ package com.season.livingmate.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.season.livingmate.auth.entity.BlacklistReason;
-import com.season.livingmate.auth.repository.RefreshTokenRepository;
-import com.season.livingmate.auth.service.BlacklistService;
 import com.season.livingmate.auth.service.LogoutService;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.ErrorStatus;
-import com.season.livingmate.exception.status.SuccessStatus;
-import com.season.livingmate.user.entity.User;
-import com.season.livingmate.user.repository.UserRepository;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Date;
 
 @RequiredArgsConstructor
 @Component

@@ -2,8 +2,8 @@ package com.season.livingmate.auth.security;
 
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.status.ErrorStatus;
-import com.season.livingmate.user.entity.User;
-import com.season.livingmate.user.repository.UserRepository;
+import com.season.livingmate.user.domain.User;
+import com.season.livingmate.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
