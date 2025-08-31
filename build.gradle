@@ -65,6 +65,9 @@ dependencies {
     // Spring Boot 테스트 기능
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // 문자인증을 위한 라이브러리
+    implementation 'net.nurigo:sdk:4.3.2'
 }
 
 tasks.named('test') {

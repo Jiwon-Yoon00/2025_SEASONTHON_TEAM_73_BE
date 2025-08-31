@@ -2,6 +2,10 @@ package com.season.livingmate.config;
 
 import java.util.Collections;
 
+import com.season.livingmate.auth.security.*;
+import com.season.livingmate.auth.service.AuthService;
+import com.season.livingmate.auth.service.RefreshTokenService;
+import com.season.livingmate.user.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,8 +35,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	//private final JwtProvider jwtProvider;
-	//private final ObjectMapper objectMapper;
+	private final JwtProvider jwtProvider;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final ObjectMapper objectMapper;
+	private final RefreshTokenService refreshTokenService;
+	//private final AuthService authService;
+	private final UserRepository userRepository;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -45,9 +53,9 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		//LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration),  jwtProvider, objectMapper, authService);
-		//loginFilter.setFilterProcessesUrl("/api/v1/users/login");
+	public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager, CustomLogoutFilter customLogoutFilter, JwtBlacklistFilter jwtBlacklistFilter) throws Exception {
+		LoginFilter loginFilter = new LoginFilter(authManager,  jwtProvider, objectMapper, refreshTokenService);
+		loginFilter.setFilterProcessesUrl("/auth/login");
 
 		http
 			.csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화, jwt 방식은 csrf에 대한 공격을 방어하지 않아도 됨
@@ -71,12 +79,11 @@ public class SecurityConfig {
 						return config;
 					}
 				}))
-		;
 
-			// .addFilterBefore(customLogoutFilter, LogoutFilter.class)
-			// .addFilterBefore(jwtAuthenticationFilter, LoginFilter.class)
-			// .addFilterBefore(jwtBlacklistFilter, JwtAuthenticationFilter.class)
-			// .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
+			 .addFilterBefore(customLogoutFilter, LogoutFilter.class)
+			 .addFilterBefore(jwtAuthenticationFilter, LoginFilter.class)
+			 .addFilterBefore(jwtBlacklistFilter, JwtAuthenticationFilter.class)
+			 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
