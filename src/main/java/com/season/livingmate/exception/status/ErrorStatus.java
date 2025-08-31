@@ -24,6 +24,9 @@ public enum ErrorStatus {
     OTP_EXPIRED(HttpStatus.BAD_REQUEST, "OPT400", "OTP가 만료되었습니다"),
     OTP_NOT_FOUND(HttpStatus.BAD_REQUEST, "OPT400", "OTP정보가 없습니다."),
 
+    // post
+    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "POST404", "게시글이 존재하지 않습니다."),
+
     ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST,"TOKEN400","엑세스 토큰이 만료되었습니다."),
     INVALID_ACCESS_TOKEN(HttpStatus.BAD_REQUEST,"TOKEN400","유효하지 않은 토큰입니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST,"TOKEN400","엑세스 토큰이 만료되었습니다."),
