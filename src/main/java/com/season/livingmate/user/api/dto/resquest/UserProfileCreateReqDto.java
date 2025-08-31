@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Schema(description = "유저프로필 생성 요청 DTO")
-public class CreateReqDto {
+public class UserProfileCreateReqDto {
 
     @Schema(description = "MBTI 유형", example = "INFJ", allowableValues = {"ISTJ", "ISFJ", "INFJ", "INTJ", "ISTP", "ISFP", "INFP", "INTP", "ESTP", "ESFP", "ENFP", "ENTP", "ESTJ", "ESFJ", "ENFJ", "ENTJ"})
     @NotNull

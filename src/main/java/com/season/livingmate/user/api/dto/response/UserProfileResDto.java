@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @Schema(description = "유저프로필 응답 DTO")
-public class ResDto {
+public class UserProfileResDto {
 
     @Schema(description = "사용자 ID", example = "1")
     private Long userId;
@@ -96,8 +96,8 @@ public class ResDto {
     @Schema(description = "수정일시", example = "2025-08-31T14:00:00")
     private String updatedAt;
 
-    public static ResDto from(UserProfile userProfile){
-        return new ResDto(
+    public static UserProfileResDto from(UserProfile userProfile){
+        return new UserProfileResDto(
                 userProfile.getId(),
                 userProfile.getMbti(),
                 userProfile.getWorkType(),

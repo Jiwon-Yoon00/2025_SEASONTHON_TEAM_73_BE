@@ -3,9 +3,9 @@ package com.season.livingmate.user.application;
 import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.status.ErrorStatus;
-import com.season.livingmate.user.api.dto.response.ResDto;
-import com.season.livingmate.user.api.dto.resquest.CreateReqDto;
-import com.season.livingmate.user.api.dto.resquest.UpdateReqDto;
+import com.season.livingmate.user.api.dto.response.UserProfileResDto;
+import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
+import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
 import com.season.livingmate.user.domain.User;
 import com.season.livingmate.user.domain.UserProfile;
 import com.season.livingmate.user.domain.repository.UserProfileRepository;
@@ -22,7 +22,7 @@ public class UserProfileService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ResDto create(CreateReqDto createReqDto, CustomUserDetails userDetails) {
+    public UserProfileResDto create(UserProfileCreateReqDto userProfileCreateReqDto, CustomUserDetails userDetails) {
 
         User user = userRepository.findById(userDetails.getUser().getId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
@@ -33,13 +33,13 @@ public class UserProfileService {
             throw new CustomException(ErrorStatus.DUPLICATE_RESOURCE);
         }
 
-        UserProfile userProfile = createReqDto.toEntity(user);
+        UserProfile userProfile = userProfileCreateReqDto.toEntity(user);
         UserProfile savedProfile = userProfileRepository.save(userProfile);
-        return ResDto.from(savedProfile);
+        return UserProfileResDto.from(savedProfile);
     }
 
     @Transactional
-    public ResDto update (UpdateReqDto updateReqDto, CustomUserDetails userDetails){
+    public UserProfileResDto update (UserProfileUpdateReqDto userProfileUpdateReqDto, CustomUserDetails userDetails){
 
         System.out.println("유저프로필 수정" + userDetails.getUser().getId());
 
@@ -49,25 +49,25 @@ public class UserProfileService {
         UserProfile userProfile = userProfileRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
-        userProfile.update(updateReqDto);
+        userProfile.update(userProfileUpdateReqDto);
 
-        return ResDto.from(userProfile);
+        return UserProfileResDto.from(userProfile);
     }
 
     @Transactional(readOnly = true)
-    public ResDto getMyProfile(CustomUserDetails userDetails) {
+    public UserProfileResDto getMyProfile(CustomUserDetails userDetails) {
         UserProfile profile = userProfileRepository.findByUserId(userDetails.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
-        return ResDto.from(profile);
+        return UserProfileResDto.from(profile);
     }
 
     // 상대방 프로필 조회
     @Transactional(readOnly = true)
-    public ResDto getOtherProfile(Long userId) {
+    public UserProfileResDto getOtherProfile(Long userId) {
         UserProfile profile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
-        return ResDto.from(profile);
+        return UserProfileResDto.from(profile);
     }
 }

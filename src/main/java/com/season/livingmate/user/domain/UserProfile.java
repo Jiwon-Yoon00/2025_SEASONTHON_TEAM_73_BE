@@ -2,11 +2,8 @@ package com.season.livingmate.user.domain;
 
 import com.season.livingmate.global.converter.StringListJsonConverter;
 import com.season.livingmate.global.entity.BaseEntity;
-import com.season.livingmate.user.api.dto.resquest.UpdateReqDto;
+import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -107,7 +104,7 @@ public class UserProfile extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    public void update(UpdateReqDto dto) {
+    public void update(UserProfileUpdateReqDto dto) {
         if (dto.getMbti() != null) this.mbti = dto.getMbti();
         if (dto.getWorkType() != null) this.workType = dto.getWorkType();
         if (dto.getWorkDays() != null && !dto.getWorkDays().isEmpty()) this.workDays = dto.getWorkDays();

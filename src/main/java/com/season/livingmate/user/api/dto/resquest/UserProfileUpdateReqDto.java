@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Schema(description = "유저프로필 수정 요청 DTO (모든 필드 선택적)")
-public class UpdateReqDto {
+public class UserProfileUpdateReqDto {
 
     @Schema(description = "MBTI 유형", example = "INFJ")
     private Mbti mbti;

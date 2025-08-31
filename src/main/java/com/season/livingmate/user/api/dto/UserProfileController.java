@@ -3,12 +3,10 @@ package com.season.livingmate.user.api.dto;
 import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
-import com.season.livingmate.post.api.dto.req.PostCreateReq;
-import com.season.livingmate.user.api.dto.response.ResDto;
-import com.season.livingmate.user.api.dto.resquest.CreateReqDto;
-import com.season.livingmate.user.api.dto.resquest.UpdateReqDto;
+import com.season.livingmate.user.api.dto.response.UserProfileResDto;
+import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
+import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
 import com.season.livingmate.user.application.UserProfileService;
-import com.season.livingmate.user.domain.UserProfile;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.attribute.UserPrincipal;
 
 @RestController
 @RequestMapping("/profile")
@@ -29,29 +25,29 @@ public class UserProfileController {
 
     @Operation(summary = "유저프로필 생성")
     @PostMapping
-    public ResponseEntity<Response<ResDto>> create(@RequestBody @Valid CreateReqDto createReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ResDto resDto = userProfileService.create(createReqDto, userDetails);
-        return ResponseEntity.ok(Response.success(SuccessStatus.CREATE_PROFILE,resDto));
+    public ResponseEntity<Response<UserProfileResDto>> create(@RequestBody @Valid UserProfileCreateReqDto userProfileCreateReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserProfileResDto userProfileResDto = userProfileService.create(userProfileCreateReqDto, userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.CREATE_PROFILE, userProfileResDto));
     }
 
     @Operation(summary = "유저프로필 수정")
     @PatchMapping
-    public ResponseEntity<Response<ResDto>> update(@RequestBody @Valid UpdateReqDto updateReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ResDto resDto = userProfileService.update(updateReqDto, userDetails);
-        return ResponseEntity.ok(Response.success(SuccessStatus.UPDATE_PROFILE,resDto));
+    public ResponseEntity<Response<UserProfileResDto>> update(@RequestBody @Valid UserProfileUpdateReqDto userProfileUpdateReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserProfileResDto userProfileResDto = userProfileService.update(userProfileUpdateReqDto, userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.UPDATE_PROFILE, userProfileResDto));
     }
 
     @Operation(summary = "내 유저프로필 조회")
     @GetMapping("/me")
-    public ResponseEntity<Response<ResDto>> getMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails){
-        ResDto resDto = userProfileService.getMyProfile(userDetails);
-        return ResponseEntity.ok(Response.success(SuccessStatus.GET_MY_PROFILE,resDto));
+    public ResponseEntity<Response<UserProfileResDto>> getMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails){
+        UserProfileResDto userProfileResDto = userProfileService.getMyProfile(userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.GET_MY_PROFILE, userProfileResDto));
     }
 
     @Operation(summary = "상대방 프로필 조회")
     @GetMapping("/{userId}")
-    public ResponseEntity<Response<ResDto>> getOtherProfile(@PathVariable Long userId) {
-        ResDto resDto = userProfileService.getOtherProfile(userId);
-        return ResponseEntity.ok(Response.success(SuccessStatus.GET_PROFILE, resDto));
+    public ResponseEntity<Response<UserProfileResDto>> getOtherProfile(@PathVariable Long userId) {
+        UserProfileResDto userProfileResDto = userProfileService.getOtherProfile(userId);
+        return ResponseEntity.ok(Response.success(SuccessStatus.GET_PROFILE, userProfileResDto));
     }
 }
