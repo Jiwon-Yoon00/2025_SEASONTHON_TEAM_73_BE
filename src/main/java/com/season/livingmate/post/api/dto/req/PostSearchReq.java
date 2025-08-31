@@ -24,9 +24,6 @@ public record PostSearchReq(
         @Schema(description = "방 형태")
         List<RoomType> roomTypes,
 
-        @Schema(description = "구 이름")
-        String gu,
-
         @Schema(description = "선택한 동 목록")
         List<String> dongs
 ) {

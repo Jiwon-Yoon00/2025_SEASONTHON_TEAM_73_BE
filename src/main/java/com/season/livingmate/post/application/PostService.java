@@ -183,16 +183,8 @@ public class PostService {
     // 게시글 검색
     @Transactional(readOnly = true)
     public Response<Page<PostListRes>> searchPost(PostSearchReq req, Pageable pageable){
-        Specification<Post> spec = null;
-
-        spec = spec == null ? PostSpecs.keyword(req.keyword()) : spec.and(PostSpecs.keyword(req.keyword()));
-        spec = spec == null ? PostSpecs.depositBetween(req.minDeposit(), req.maxDeposit()) : spec.and(PostSpecs.depositBetween(req.minDeposit(), req.maxDeposit()));
-        spec = spec == null ? PostSpecs.totalMonthlyCostBetween(req.minMonthlyCost(), req.maxMonthlyCost()) : spec.and(PostSpecs.totalMonthlyCostBetween(req.minMonthlyCost(), req.maxMonthlyCost()));
-        spec = spec == null ? PostSpecs.roomTypes(req.roomTypes()) : spec.and(PostSpecs.roomTypes(req.roomTypes()));
-
-        if(req.gu() != null && !req.gu().isBlank() && req.dongs() != null && !req.dongs().isEmpty()) {
-            spec = spec.and(PostSpecs.postStatus(req.gu(), req.dongs()));
-        }
+        // 입력된 값이 있으면 AND로, 없으면 전체 조회
+        Specification<Post> spec = PostSpecs.build(req);
 
         Page<PostListRes> page = postRepository.findAll(spec, pageable)
                 .map(post -> new PostListRes(

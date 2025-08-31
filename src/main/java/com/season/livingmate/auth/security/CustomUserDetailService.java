@@ -1,5 +1,7 @@
 package com.season.livingmate.auth.security;
 
+import com.season.livingmate.exception.CustomException;
+import com.season.livingmate.exception.status.ErrorStatus;
 import com.season.livingmate.user.entity.User;
 import com.season.livingmate.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +29,14 @@ public class CustomUserDetailService implements UserDetailsService {
         }
 
         return new CustomUserDetails(user.get());
+    }
+
+    public UserDetails loadUserById(Long userId) {
+        if (userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND);
+        }
+        return userRepository.findById(userId)
+                .map(CustomUserDetails::new)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
     }
 }
