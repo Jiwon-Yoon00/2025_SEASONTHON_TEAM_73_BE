@@ -1,3 +1,6 @@
+springdoc:
+  show-login-endpoint: true
+
 spring:
   profiles:
     active: prod
