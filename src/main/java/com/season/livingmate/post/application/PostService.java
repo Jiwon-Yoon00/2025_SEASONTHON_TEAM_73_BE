@@ -5,6 +5,7 @@ import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.ErrorStatus;
 import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.post.api.dto.req.PostCreateReq;
+import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.api.dto.req.PostUpdateReq;
 import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
@@ -12,13 +13,16 @@ import com.season.livingmate.post.domain.GeoPoint;
 import com.season.livingmate.post.domain.PaymentStructure;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.repository.PostRepository;
+import com.season.livingmate.post.domain.repository.PostSpecs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -133,5 +137,29 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
         postRepository.delete(p);
         return Response.success(SuccessStatus.DELETE_POST, postId);
+    }
+
+    // 게시글 검색
+    @Transactional(readOnly = true)
+    public Response<Page<PostListRes>> searchPost(PostSearchReq req, Pageable pageable){
+        Specification<Post> spec = null;
+
+        spec = spec == null ? PostSpecs.keyword(req.keyword()) : spec.and(PostSpecs.keyword(req.keyword()));
+        spec = spec == null ? PostSpecs.depositBetween(req.minDeposit(), req.maxDeposit()) : spec.and(PostSpecs.depositBetween(req.minDeposit(), req.maxDeposit()));
+        spec = spec == null ? PostSpecs.totalMonthlyCostBetween(req.minMonthlyCost(), req.maxMonthlyCost()) : spec.and(PostSpecs.totalMonthlyCostBetween(req.minMonthlyCost(), req.maxMonthlyCost()));
+        spec = spec == null ? PostSpecs.roomTypes(req.roomTypes()) : spec.and(PostSpecs.roomTypes(req.roomTypes()));
+
+        if(req.gu() != null && !req.gu().isBlank() && req.dongs() != null && !req.dongs().isEmpty()) {
+            spec = spec.and(PostSpecs.postStatus(req.gu(), req.dongs()));
+        }
+
+        Page<PostListRes> page = postRepository.findAll(spec, pageable)
+                .map(post -> new PostListRes(
+                        post.getPostId(),
+                        post.getTitle(),
+                        post.getAvailableDate()
+                ));
+
+        return Response.success(SuccessStatus.GET_POST_LIST, page);
     }
 }

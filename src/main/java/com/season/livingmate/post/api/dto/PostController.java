@@ -3,16 +3,21 @@ package com.season.livingmate.post.api.dto;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.post.api.dto.req.PostCreateReq;
+import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.api.dto.req.PostUpdateReq;
 import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
 import com.season.livingmate.post.application.PostService;
+import com.season.livingmate.post.domain.RoomType;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -60,4 +65,15 @@ public class PostController {
         return ResponseEntity.ok(res);
     }
 
+    @Operation(summary = "게시글 검색 API")
+    @PostMapping("/search")
+    public ResponseEntity<Response<Page<PostListRes>>> searchPosts(
+            @RequestBody PostSearchReq req,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        Response<Page<PostListRes>> result = postService.searchPost(req, pageable);
+        return ResponseEntity.ok(result);
+    }
 }
