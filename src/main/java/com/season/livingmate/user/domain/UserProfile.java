@@ -1,6 +1,8 @@
 package com.season.livingmate.user.domain;
 
+import com.season.livingmate.global.converter.StringListJsonConverter;
 import com.season.livingmate.global.entity.BaseEntity;
+import com.season.livingmate.user.api.dto.resquest.UpdateReqDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -32,6 +34,7 @@ public class UserProfile extends BaseEntity {
     private WorkType workType; // 통근 유형
 
     @Column(columnDefinition = "json", nullable = false)
+    @Convert(converter = StringListJsonConverter.class)
     private List<String> workDays;
 
     private String wakeUpTimeWorkday; // 출근일 기상 시간
@@ -58,9 +61,11 @@ public class UserProfile extends BaseEntity {
     private SensitivityLevel sleepLevel; // 잠귀 민감도
 
     @Column(columnDefinition = "json" ,nullable = false)
+    @Convert(converter = StringListJsonConverter.class)
     private List<String> sleepHabit; // 잠버릇
 
     @Column(columnDefinition = "json", nullable = false)
+    @Convert(converter = StringListJsonConverter.class)
     private List<String> preferSound; // 선호하는 소리
 
     @Enumerated(EnumType.STRING)
@@ -88,6 +93,7 @@ public class UserProfile extends BaseEntity {
     private IndoorSmokingPreference indoorSmokingPreference; // 실내 흡연 허용 정도
 
     @Column(columnDefinition = "json", nullable = false)
+    @Convert(converter = StringListJsonConverter.class)
     private List<String> pet;
 
     @Column(length = 300, nullable = false)
@@ -100,5 +106,32 @@ public class UserProfile extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
+    public void update(UpdateReqDto dto) {
+        if (dto.getMbti() != null) this.mbti = dto.getMbti();
+        if (dto.getWorkType() != null) this.workType = dto.getWorkType();
+        if (dto.getWorkDays() != null && !dto.getWorkDays().isEmpty()) this.workDays = dto.getWorkDays();
+        if (dto.getWakeUpTimeWorkday() != null) this.wakeUpTimeWorkday = dto.getWakeUpTimeWorkday();
+        if (dto.getGoWorkTime() != null) this.goWorkTime = dto.getGoWorkTime();
+        if (dto.getLeaveWorkTime() != null) this.leaveWorkTime = dto.getLeaveWorkTime();
+        if (dto.getSleepTimeWorkday() != null) this.sleepTimeWorkday = dto.getSleepTimeWorkday();
+        if (dto.getWakeUpTimeHoliday() != null) this.wakeUpTimeHoliday = dto.getWakeUpTimeHoliday();
+        if (dto.getSleepTimeHoliday() != null) this.sleepTimeHoliday = dto.getSleepTimeHoliday();
+        if (dto.getAlarmCount() != null) this.alarmCount = dto.getAlarmCount();
+        if (dto.getStudyCount() != null) this.studyCount = dto.getStudyCount();
+        if (dto.getOutingCount() != null) this.outingCount = dto.getOutingCount();
+        if (dto.getSleepLevel() != null) this.sleepLevel = dto.getSleepLevel();
+        if (dto.getSleepHabit() != null && !dto.getSleepHabit().isEmpty()) this.sleepHabit = dto.getSleepHabit();
+        if (dto.getPreferSound() != null && !dto.getPreferSound().isEmpty()) this.preferSound = dto.getPreferSound();
+        if (dto.getEarphoneUsage() != null) this.earphoneUsage = dto.getEarphoneUsage();
+        if (dto.getCleaningLevel() != null) this.cleaningLevel = dto.getCleaningLevel();
+        if (dto.getBathroomCleaningLevel() != null) this.bathroomCleaningLevel = dto.getBathroomCleaningLevel();
+        if (dto.getTidinessLevel() != null) this.tidinessLevel = dto.getTidinessLevel();
+        if (dto.getSmoking() != null) this.smoking = dto.getSmoking();
+        if (dto.getIndoorSmokingPreference() != null) this.indoorSmokingPreference = dto.getIndoorSmokingPreference();
+        if (dto.getPet() != null && !dto.getPet().isEmpty()) this.pet = dto.getPet();
+        if (dto.getDisease() != null) this.disease = dto.getDisease();
+        if (dto.getIntroduce() != null) this.introduce = dto.getIntroduce();
+    }
 
 }

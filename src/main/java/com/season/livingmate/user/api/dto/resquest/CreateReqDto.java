@@ -3,10 +3,8 @@ package com.season.livingmate.user.api.dto.resquest;
 import com.season.livingmate.user.domain.*;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -107,4 +105,34 @@ public class CreateReqDto {
     @Schema(description = "자기소개", example = "안녕하세요, 새로운 사용자입니다.")
     @NotBlank
     private String introduce;
+
+    public UserProfile toEntity(User user){
+        return UserProfile.builder()
+                .mbti(mbti)
+                .workType(workType)
+                .workDays(workDays)
+                .wakeUpTimeWorkday(wakeUpTimeWorkday)
+                .goWorkTime(goWorkTime)
+                .leaveWorkTime(leaveWorkTime)
+                .wakeUpTimeHoliday(wakeUpTimeHoliday)
+                .sleepTimeWorkday(sleepTimeWorkday)
+                .sleepTimeHoliday(sleepTimeHoliday)
+                .alarmCount(alarmCount)
+                .studyCount(studyCount)
+                .outingCount(outingCount)
+                .sleepLevel(sleepLevel)
+                .sleepHabit(sleepHabit)
+                .preferSound(preferSound)
+                .earphoneUsage(earphoneUsage)
+                .cleaningLevel(cleaningLevel)
+                .bathroomCleaningLevel(bathroomCleaningLevel)
+                .tidinessLevel(tidinessLevel)
+                .smoking(smoking)
+                .indoorSmokingPreference(indoorSmokingPreference)
+                .pet(pet)
+                .disease(disease)
+                .user(user)
+                .introduce(introduce)
+                .build();
+    }
 }

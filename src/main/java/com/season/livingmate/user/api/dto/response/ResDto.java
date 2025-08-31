@@ -3,6 +3,7 @@ package com.season.livingmate.user.api.dto.response;
 import com.season.livingmate.user.domain.*;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @Schema(description = "유저프로필 응답 DTO")
 public class ResDto {
 
@@ -93,4 +95,36 @@ public class ResDto {
 
     @Schema(description = "수정일시", example = "2025-08-31T14:00:00")
     private String updatedAt;
+
+    public static ResDto from(UserProfile userProfile){
+        return new ResDto(
+                userProfile.getId(),
+                userProfile.getMbti(),
+                userProfile.getWorkType(),
+                userProfile.getWorkDays(),
+                userProfile.getWakeUpTimeWorkday(),
+                userProfile.getGoWorkTime(),
+                userProfile.getLeaveWorkTime(),
+                userProfile.getSleepTimeWorkday(),
+                userProfile.getWakeUpTimeHoliday(),
+                userProfile.getSleepTimeHoliday(),
+                userProfile.getAlarmCount(),
+                userProfile.getStudyCount(),
+                userProfile.getOutingCount(),
+                userProfile.getSleepLevel(),
+                userProfile.getSleepHabit(),
+                userProfile.getPreferSound(),
+                userProfile.getEarphoneUsage(),
+                userProfile.getCleaningLevel(),
+                userProfile.getBathroomCleaningLevel(),
+                userProfile.getTidinessLevel(),
+                userProfile.getSmoking(),
+                userProfile.getIndoorSmokingPreference(),
+                userProfile.getPet(),
+                userProfile.getDisease(),
+                userProfile.getIntroduce(),
+                userProfile.getCreatedDate().toString(),
+                userProfile.getModifiedDate().toString()
+        );
+    }
 }

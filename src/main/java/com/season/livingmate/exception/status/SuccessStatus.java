@@ -17,7 +17,14 @@ public enum SuccessStatus {
     GET_POST(HttpStatus.OK, "POST201", "게시글 단건이 성공적으로 조회되었습니다."),
     GET_POST_LIST(HttpStatus.OK, "POST201", "게시글 목록이 성공적으로 조회되었습니다."),
     UPDATE_POST(HttpStatus.OK, "POST201", "게시글이 성공적으로 수정되었습니다."),
-    DELETE_POST(HttpStatus.OK, "POST201", "게시글이 성공적으로 삭제되었습니다."),;
+    DELETE_POST(HttpStatus.OK, "POST201", "게시글이 성공적으로 삭제되었습니다."),
+
+
+    // 유저프로필
+    CREATE_PROFILE(HttpStatus.CREATED, "PROFILE201", "유저프로필이 성공적으로 생성되었습니다."),
+    GET_MY_PROFILE(HttpStatus.OK, "PROFILE200", "나의 유저프로필이 성공적으로 조회되었습니다."),
+    GET_PROFILE(HttpStatus.OK, "PROFILE200", "해당회원의 유저프로필이 성공적으로 조회되었습니다."),
+    UPDATE_PROFILE(HttpStatus.OK, "PROFILE201", "유저프로필이 성공적으로 수정되었습니다."),;
 
     private final HttpStatus status;
     private final String code;
