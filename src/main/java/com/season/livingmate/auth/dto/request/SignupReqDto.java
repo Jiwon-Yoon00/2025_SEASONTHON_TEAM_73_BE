@@ -1,7 +1,7 @@
 package com.season.livingmate.auth.dto.request;
 
-import com.season.livingmate.user.entity.Gender;
-import com.season.livingmate.user.entity.User;
+import com.season.livingmate.user.domain.Gender;
+import com.season.livingmate.user.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;

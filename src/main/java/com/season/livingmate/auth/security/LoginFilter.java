@@ -2,16 +2,11 @@ package com.season.livingmate.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.season.livingmate.auth.dto.request.LoginReqDto;
-import com.season.livingmate.auth.repository.RefreshTokenRepository;
 import com.season.livingmate.auth.service.RefreshTokenService;
-import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.ErrorStatus;
 import com.season.livingmate.exception.status.SuccessStatus;
-import com.season.livingmate.user.entity.User;
-import com.season.livingmate.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
