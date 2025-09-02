@@ -48,7 +48,7 @@ public class ChatController {
 
     // 상대방에게 채팅 신청 걸기
     @Operation(summary = "채팅 신청 API")
-    @PostMapping("/apply/{postId}")
+    @PostMapping("/apply/post/{postId}")
     public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
         ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(postId, userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.APPLY_CHAT_ROOM, chatRoomResDto));
