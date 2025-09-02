@@ -1,6 +1,7 @@
 package com.season.livingmate.chat.api.dto.response;
 
 import com.season.livingmate.chat.domain.ChatRoom;
+import com.season.livingmate.chat.domain.ChatRoomStatus;
 import com.season.livingmate.chat.domain.Message;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,9 @@ public class ChatRoomResDto {
     @Schema(description = "마지막으로 보낸 메세지")
     private ChatMessageResDto lastMessage;
 
+    @Schema(description = "수락상태")
+    private ChatRoomStatus chatRoomStatus;
+
     @Schema(description = "채팅방 생성 시각")
     private LocalDateTime createdAt;
 
@@ -77,6 +81,7 @@ public class ChatRoomResDto {
                 .receiverName(chatRoom.getReceiver().getUsername())
                 .unreadCount(unreadCount)
                 .lastMessage(lastMessage)
+                .chatRoomStatus(chatRoom.getChatRoomStatus())
                 .createdAt(chatRoom.getCreatedAt())
                 .build();
     }

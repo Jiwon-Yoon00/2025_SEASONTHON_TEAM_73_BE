@@ -1,6 +1,7 @@
 package com.season.livingmate.chat.api.dto.request;
 
 import com.season.livingmate.chat.domain.ChatRoom;
+import com.season.livingmate.chat.domain.ChatRoomStatus;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.user.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,6 +27,7 @@ public class ChatRoomReqDto {
                 .post(post)
                 .sender(user)
                 .receiver(post.getUser())
+                .chatRoomStatus(ChatRoomStatus.PENDING)
                 .build();
     }
 }

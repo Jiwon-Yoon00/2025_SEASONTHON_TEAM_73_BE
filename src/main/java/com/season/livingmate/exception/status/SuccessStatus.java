@@ -27,14 +27,18 @@ public enum SuccessStatus {
     UPDATE_PROFILE(HttpStatus.OK, "PROFILE201", "유저프로필이 성공적으로 수정되었습니다."),
 
 
-    // 채팅
-    CREATE_CHAT(HttpStatus.CREATED, "CHAT201", "채팅이 성공적으로 생성되었습니다."),
-    GET_CHAT(HttpStatus.OK, "CHAT200", "채팅이 성공적으로 조회되었습니다."),
-    GET_MY_CHATS(HttpStatus.OK, "CHAT200", "나의 채팅 목록이 성공적으로 조회되었습니다."),
-    UPDATE_CHAT(HttpStatus.OK, "CHAT201", "채팅이 성공적으로 수정되었습니다."),
-    DELETE_CHAT(HttpStatus.OK, "CHAT200", "채팅이 성공적으로 삭제되었습니다."),
-    SEND_MESSAGE(HttpStatus.CREATED, "MESSAGE201", "메시지가 성공적으로 전송되었습니다."),
-    GET_MESSAGES(HttpStatus.OK, "MESSAGE200", "채팅 메시지가 성공적으로 조회되었습니다."),;
+    // 채팅 & 채팅방
+    GET_MESSAGES(HttpStatus.OK, "MESSAGE200", "채팅 메시지가 성공적으로 조회되었습니다."),
+    CREATE_CHAT_ROOM(HttpStatus.CREATED, "CHAT201", "채팅방이 성공적으로 생성되었습니다."),
+    DELETE_CHAT_ROOM(HttpStatus.OK, "CHAT200", "채팅방이 성공적으로 삭제되었습니다."),
+    GET_CHAT_ROOMS(HttpStatus.OK, "CHAT200", "채팅 목록이 성공적으로 조회되었습니다."),
+    GET_SENDER_CHAT_ROOMS(HttpStatus.OK, "CHAT200", "보낸 채팅 목록이 성공적으로 조회되었습니다."),
+
+    // 채팅 신청
+    APPLY_CHAT_ROOM(HttpStatus.CREATED, "CHAT201", "채팅 신청이 성공적으로 완료되었습니다."),
+    ACCEPT_CHAT_ROOM(HttpStatus.OK, "CHAT200", "채팅 신청이 성공적으로 수락되었습니다."),
+    REJECT_CHAT_ROOM(HttpStatus.OK, "CHAT200", "채팅 신청이 성공적으로 거절되었습니다."),;
+
 
 
 

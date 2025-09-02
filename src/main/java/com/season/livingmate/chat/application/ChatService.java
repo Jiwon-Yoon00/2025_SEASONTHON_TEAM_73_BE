@@ -6,6 +6,7 @@ import com.season.livingmate.chat.api.dto.request.ChatRoomReqDto;
 import com.season.livingmate.chat.api.dto.response.ChatMessageResDto;
 import com.season.livingmate.chat.api.dto.response.ChatRoomResDto;
 import com.season.livingmate.chat.domain.ChatRoom;
+import com.season.livingmate.chat.domain.ChatRoomStatus;
 import com.season.livingmate.chat.domain.Message;
 import com.season.livingmate.chat.domain.repository.ChatRoomRepository;
 import com.season.livingmate.chat.domain.repository.MessageRepository;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -67,6 +69,11 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatMessageReqDto.getChatRoomId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
 
+        // 채팅방 수락 상태 확인
+        if (chatRoom.getChatRoomStatus() != ChatRoomStatus.ACCEPTED) {
+            throw new CustomException(ErrorStatus.ONLY_SENDER_CANNOT_CREATE);
+        }
+
         User user = userDetails.getUser();
 
         Message message = chatMessageReqDto.toEntity(user, chatRoom);
@@ -97,7 +104,7 @@ public class ChatService {
         // 내가 속한 채팅방인지 확인
         if (!chatRoom.getSender().getId().equals(userDetails.getUserId()) &&
                 !chatRoom.getReceiver().getId().equals(userDetails.getUserId())) {
-            throw new CustomException(ErrorStatus.FORBIDDEN); // 403
+            throw new CustomException(ErrorStatus.FORBIDDEN);
         }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
@@ -108,5 +115,103 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
+    // 요청자가 게시물 작성자에게 채팅 신청
+    @Transactional
+    public ChatRoomResDto requestChatRoom(ChatRoomReqDto chatRoomReqDto, CustomUserDetails userDetails){
+        Post post = postRepository.findById(chatRoomReqDto.getPostId())
+                .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
 
+        User user = userDetails.getUser();
+
+        if (post.getUser().getId().equals(user.getId())) { // post 작성자와 신청자가 같으면 안됨
+            throw new CustomException(ErrorStatus.FORBIDDEN);
+        }
+
+        Optional<ChatRoom> existRoom =  chatRoomRepository.findByPost_PostIdAndSender_Id(post.getPostId(), user.getId());
+        if(existRoom.isPresent()){
+            throw new CustomException(ErrorStatus.CHAT_ROOM_ALREADY_APPLIED); // 이미 신청한 경우 예외
+        }
+
+        ChatRoom chatRoom = chatRoomReqDto.toEntity(user, post);
+        chatRoomRepository.save(chatRoom);
+
+        return  ChatRoomResDto.from(chatRoom);
+
+    }
+
+    // 작성자가 신청자 목록 조회
+    @Transactional(readOnly = true)
+    public Map<ChatRoomStatus, List<ChatRoomResDto>> getChatRoomsByStatusForReceiver(CustomUserDetails userDetails) {
+        User receiver = userDetails.getUser();
+
+        // 작성자가 받은 모든 상태 채팅방 조회
+        List<ChatRoom> rooms = chatRoomRepository.findByReceiver_IdAndChatRoomStatusIn(
+                receiver.getId(),
+                List.of(ChatRoomStatus.PENDING, ChatRoomStatus.ACCEPTED)
+        );
+
+        return rooms.stream()
+                .map(ChatRoomResDto::from)
+                .collect(Collectors.groupingBy(ChatRoomResDto::getChatRoomStatus));
+    }
+
+
+    // 작성자가 수락
+    @Transactional
+    public ChatRoomResDto acceptChatRoom(Long chatRoomId, CustomUserDetails userDetails) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
+
+        if (!chatRoom.getReceiver().getId().equals(userDetails.getUser().getId())) {
+            throw new CustomException(ErrorStatus.ONLY_RECEIVER_CAN_ACCEPT);
+        }
+
+        chatRoom.setChatRoomStatus(ChatRoomStatus.ACCEPTED);
+        chatRoomRepository.save(chatRoom);
+
+        return ChatRoomResDto.from(chatRoom);
+    }
+
+    // 작성자가 거절
+    @Transactional
+    public void rejectChatRoom(Long chatRoomId, CustomUserDetails userDetails) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
+
+        if (!chatRoom.getReceiver().getId().equals(userDetails.getUser().getId())) {
+            throw new CustomException(ErrorStatus.ONLY_RECEIVER_CAN_REJECT);
+        }
+
+        chatRoomRepository.delete(chatRoom);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<ChatRoomStatus, List<ChatRoomResDto>> getMyChatRoomsByStatus(CustomUserDetails userDetails) {
+        User requester = userDetails.getUser();
+
+        List<ChatRoom> rooms = chatRoomRepository.findBySender_IdAndChatRoomStatusIn(
+                requester.getId(),
+                List.of(ChatRoomStatus.PENDING, ChatRoomStatus.ACCEPTED)
+        );
+
+        return rooms.stream()
+                .map(ChatRoomResDto::from)
+                .collect(Collectors.groupingBy(ChatRoomResDto::getChatRoomStatus));
+    }
+
+    // 채팅방 삭제
+    @Transactional
+    public void delete(Long chatRoomId, CustomUserDetails userDetails) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
+
+
+        if (!chatRoom.getSender().getId().equals(userDetails.getUserId()) &&
+                !chatRoom.getReceiver().getId().equals(userDetails.getUserId())) {
+            throw new CustomException(ErrorStatus.CHAT_ROOM_DELETE_FORBIDDEN);
+        }
+
+        messageRepository.deleteAll(chatRoom.getMessages());
+        chatRoomRepository.delete(chatRoom);
+    }
 }

@@ -5,28 +5,34 @@ import com.season.livingmate.chat.api.dto.request.ChatRoomReqDto;
 import com.season.livingmate.chat.api.dto.response.ChatMessageResDto;
 import com.season.livingmate.chat.api.dto.response.ChatRoomResDto;
 import com.season.livingmate.chat.application.ChatService;
+import com.season.livingmate.chat.domain.ChatRoomStatus;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/chatrooms")
 public class ChatController {
 
     private final ChatService chatService;
 
-    @PostMapping("/chatrooms")
-    public ResponseEntity<Response<ChatRoomResDto>> createRoom(@RequestBody ChatRoomReqDto chatRoomReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    // 채팅방 만들기
+    @PostMapping("")
+    public ResponseEntity<Response<ChatRoomResDto>> createRoom(@RequestBody @Valid ChatRoomReqDto chatRoomReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
         ChatRoomResDto chatRoomResDto =  chatService.createChatRoom(chatRoomReqDto, userDetails);
-        return ResponseEntity.ok(Response.success(SuccessStatus.CREATED, chatRoomResDto));
+        return ResponseEntity.ok(Response.success(SuccessStatus.CREATE_CHAT_ROOM, chatRoomResDto));
     }
 
-    @GetMapping("/chatrooms/{chatRoomId}/messages")
+    // 채팅방 메세지 조회하기
+    @GetMapping("/{chatRoomId}/messages")
     public ResponseEntity<Response<List<ChatMessageResDto>>> getMessages(
             @PathVariable Long chatRoomId,
             @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -34,6 +40,60 @@ public class ChatController {
             @RequestParam(defaultValue = "20") int size
     ) {
         List<ChatMessageResDto> messages = chatService.getMessagesByRoom(chatRoomId, userDetails, page, size);
-        return ResponseEntity.ok(Response.success(SuccessStatus.GET_CHAT, messages));
+        return ResponseEntity.ok(Response.success(SuccessStatus.GET_MESSAGES, messages));
+    }
+
+    // 상대방에게 채팅 신청 걸기
+    @PostMapping("/apply")
+    public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@RequestBody @Valid ChatRoomReqDto chatRoomReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(chatRoomReqDto, userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.APPLY_CHAT_ROOM, chatRoomResDto));
+    }
+
+    // 작성자가 신청자 목록 조회
+    @GetMapping("/receiver")
+    public ResponseEntity<Response<Map<ChatRoomStatus, List<ChatRoomResDto>>>> getChatRoomsByStatusForReceiver(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Map<ChatRoomStatus, List<ChatRoomResDto>> rooms = chatService.getChatRoomsByStatusForReceiver(userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.GET_CHAT_ROOMS, rooms));
+    }
+
+    // 작성자가 채팅 수락
+    @PostMapping("/accept/{chatRoomId}")
+    public ResponseEntity<Response<ChatRoomResDto>> acceptChatRoom(
+            @PathVariable Long chatRoomId,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        ChatRoomResDto chatRoom = chatService.acceptChatRoom(chatRoomId, userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.ACCEPT_CHAT_ROOM, chatRoom));
+    }
+
+    // 작성자가 채팅 거절
+    @DeleteMapping("/reject/{chatRoomId}")
+    public ResponseEntity<Response<Void>> rejectChatRoom(
+            @PathVariable Long chatRoomId,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        chatService.rejectChatRoom(chatRoomId, userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.REJECT_CHAT_ROOM, null));
+    }
+
+    // 요청자가 자신의 채팅방 목록 조회 (상태별)
+    @GetMapping("/sender")
+    public ResponseEntity<Response<Map<ChatRoomStatus, List<ChatRoomResDto>>>> getMyChatRoomsByStatus(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Map<ChatRoomStatus, List<ChatRoomResDto>> rooms = chatService.getMyChatRoomsByStatus(userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.GET_CHAT_ROOMS, rooms));
+    }
+
+    // 채팅방 삭제
+    @DeleteMapping("/{chatRoomId}")
+    public ResponseEntity<Response<Void>> deleteChatRoom(
+            @PathVariable Long chatRoomId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        chatService.delete(chatRoomId, userDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.DELETE_CHAT_ROOM, null));
     }
 }
