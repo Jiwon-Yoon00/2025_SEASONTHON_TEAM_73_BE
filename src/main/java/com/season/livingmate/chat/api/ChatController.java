@@ -76,7 +76,7 @@ public class ChatController {
     }
 
     // 작성자가 채팅 거절
-    @Operation(summary = "게시글 생성 API")
+    @Operation(summary = "채팅 신청 거절 API")
     @DeleteMapping("/reject/{chatRoomId}")
     public ResponseEntity<Response<Void>> rejectChatRoom(
             @PathVariable Long chatRoomId,
