@@ -4,6 +4,10 @@ import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.ErrorStatus;
 import com.season.livingmate.exception.status.SuccessStatus;
+import com.season.livingmate.geo.api.dto.GeoResult;
+import com.season.livingmate.geo.api.dto.KakaoAddressRes;
+import com.season.livingmate.geo.application.GeoService;
+import com.season.livingmate.geo.support.RegionLabelSeoul;
 import com.season.livingmate.post.api.dto.req.PostCreateReq;
 import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.api.dto.req.PostUpdateReq;
@@ -30,12 +34,44 @@ import java.time.LocalDateTime;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final GeoService geoService;
 
     // 게시글 생성
     @Transactional
     public Response<Long> createPost(PostCreateReq req, User user) {
 
-        GeoPoint geo = new GeoPoint(req.latitude(), req.longitude());
+        // 주소, 좌표 확정
+        Double lat = req.latitude();
+        Double lng = req.longitude();
+        String address = req.location();
+
+        // 주소만 존재할 시 좌표로 변환
+        if((lat == null || lng == null) && address != null && !address.isBlank()){
+            GeoResult g = geoService.geocodeOne(address)
+                    .orElseThrow(() -> new CustomException(ErrorStatus.BAD_REQUEST, "주소를 좌표로 변환할 수 없습니다."));
+            lat = g.lat();
+            lng = g.lng();
+            address = g.address(); // 도로명 주소로 덮어씀
+        }
+
+        // 필수값 검증
+        if(address == null || address.isBlank() || lat == null || lng == null){
+            throw new CustomException(ErrorStatus.BAD_REQUEST, "location/latitude/longitude가 필요합니다.");
+        }
+
+        // 서울시 구 동 라벨 생성
+        KakaoAddressRes.Document doc = geoService.findFirstDocument(address).orElse(null);
+        String regionLabel = (doc != null)
+                ? RegionLabelSeoul.toSeoulGuDong(doc)                           // 주소검색 성공
+                : geoService.regionByCoord(lat, lng)                             // 주소검색 실패 → 좌표 폴백
+                .map(GeoService.RegionParts::regionLabel)
+                .orElse("");
+        if (regionLabel.isBlank()) {
+            throw new CustomException(ErrorStatus.BAD_REQUEST, "현재는 서울 지역만 지원합니다.");
+        }
+
+        GeoPoint geo = new GeoPoint(lat, lng);
+
         PaymentStructure payment = new PaymentStructure(
                 req.depositShare(),
                 req.rentShare(),
@@ -48,7 +84,7 @@ public class PostService {
                 .content(req.content())
                 .imageUrl(req.imageUrl())
                 .geoPoint(geo)
-                .location(req.location())
+                .location(address)
                 .roomType(req.roomType())
                 .deposit(req.deposit())
                 .monthlyRent(req.monthlyRent())
@@ -65,9 +101,10 @@ public class PostService {
                 .washroomCount(req.washroomCount())
                 .roomCount(req.roomCount())
                 .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .user(user)
                 .build();
+
+        post.applyRegionLabel(regionLabel); // 시 구 동
 
         Long id = postRepository.save(post).getPostId();
         return Response.success(SuccessStatus.CREATE_POST, id);
@@ -98,7 +135,32 @@ public class PostService {
             throw new CustomException(ErrorStatus.FORBIDDEN);
         }
 
-        GeoPoint geo = new GeoPoint(req.latitude(), req.longitude());
+        Double lat = req.latitude();
+        Double lng = req.longitude();
+        String address = req.location();
+
+        if ((lat == null || lng == null) && address != null && !address.isBlank()){
+            GeoResult g = geoService.geocodeOne(address)
+                    .orElseThrow(() -> new CustomException(ErrorStatus.BAD_REQUEST, "주소를 좌표로 변환할 수 없습니다."));
+            lat = g.lat();
+            lng = g.lng();
+            address = g.address(); // 도로명 주소로 덮어씀
+        }
+
+        GeoPoint geo = (lat != null && lng != null) ? new GeoPoint(lat, lng) : post.getGeoPoint();
+
+        // 주소 또는 좌표가 바뀌었다면 라벨 재계산
+        if ((lat != null && lng != null) || (address != null && !address.isBlank())) {
+            String newRegion = geoService.regionByCoord(geo.getLatitude(), geo.getLongitude())
+                    .map(GeoService.RegionParts::regionLabel)
+                    .orElse("");
+
+            if (newRegion.isBlank()) {
+                throw new CustomException(ErrorStatus.BAD_REQUEST, "현재는 서울 지역만 지원합니다.");
+            }
+            post.applyRegionLabel(newRegion);
+        }
+
         PaymentStructure payment = new PaymentStructure(
                 req.depositShare(),
                 req.rentShare(),
@@ -111,7 +173,7 @@ public class PostService {
                 req.content(),
                 req.imageUrl(),
                 geo,
-                req.location(),
+                (address != null && !address.isBlank()) ? address : post.getLocation(),
                 req.roomType(),
                 req.deposit(),
                 req.monthlyRent(),

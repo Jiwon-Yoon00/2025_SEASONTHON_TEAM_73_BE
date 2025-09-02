@@ -33,9 +33,8 @@ public class Post {
     @Column(nullable = false)
     private String location; // 실제 주소
 
-    // 추후 카카오맵 연결 후 활성화 예정
-//    @Column(nullable = false)
-//    private String dong; // 동 정보
+    @Column(name = "region_label", nullable = false)
+    private String regionLabel;
 
     @Column(name = "room_type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -99,6 +98,7 @@ public class Post {
                  String imageUrl,
                  GeoPoint geoPoint,
                  String location,
+                 String regionLabel,
                  RoomType roomType,
                  int deposit,
                  int monthlyRent,
@@ -115,13 +115,13 @@ public class Post {
                  int washroomCount,
                  int roomCount,
                  LocalDateTime createdAt,
-                 LocalDateTime updatedAt,
                  User user) {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
         this.geoPoint = geoPoint;
         this.location = location;
+        this.regionLabel = regionLabel;
         this.roomType = roomType;
         this.deposit = deposit;
         this.monthlyRent = monthlyRent;
@@ -138,7 +138,6 @@ public class Post {
         this.washroomCount = washroomCount;
         this.roomCount = roomCount;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.user = user;
     }
 
@@ -161,7 +160,8 @@ public class Post {
                        int minStayMonths,
                        int maxStayMonths,
                        int washroomCount,
-                       int roomCount) {
+                       int roomCount
+    ) {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -183,5 +183,13 @@ public class Post {
         this.washroomCount = washroomCount;
         this.roomCount = roomCount;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void applyRegionLabel(String label) {
+        this.regionLabel = label;
+    }
+
+    public String getRegionLabel() {
+        return regionLabel;
     }
 }
