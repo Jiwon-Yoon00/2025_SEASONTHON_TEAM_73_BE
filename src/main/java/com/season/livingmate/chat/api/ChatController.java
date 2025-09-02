@@ -1,14 +1,14 @@
 package com.season.livingmate.chat.api;
 
 import com.season.livingmate.auth.security.CustomUserDetails;
-import com.season.livingmate.chat.api.dto.request.ChatRoomReqDto;
 import com.season.livingmate.chat.api.dto.response.ChatMessageResDto;
 import com.season.livingmate.chat.api.dto.response.ChatRoomResDto;
 import com.season.livingmate.chat.application.ChatService;
 import com.season.livingmate.chat.domain.ChatRoomStatus;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,11 +20,13 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/chatrooms")
+@Tag(name = "채팅API")
 public class ChatController {
 
     private final ChatService chatService;
 
     // 채팅방 만들기
+    @Operation(summary = "채팅방 생성 API")
     @PostMapping("/{postId}")
     public ResponseEntity<Response<ChatRoomResDto>> createRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
         ChatRoomResDto chatRoomResDto =  chatService.createChatRoom(postId, userDetails);
@@ -32,6 +34,7 @@ public class ChatController {
     }
 
     // 채팅방 메세지 조회하기
+    @Operation(summary = "메세지 조회 API")
     @GetMapping("/{chatRoomId}/messages")
     public ResponseEntity<Response<List<ChatMessageResDto>>> getMessages(
             @PathVariable Long chatRoomId,
@@ -44,6 +47,7 @@ public class ChatController {
     }
 
     // 상대방에게 채팅 신청 걸기
+    @Operation(summary = "채팅 신청 API")
     @PostMapping("/apply/{postId}")
     public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
         ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(postId, userDetails);
@@ -51,6 +55,7 @@ public class ChatController {
     }
 
     // 작성자가 신청자 목록 조회
+    @Operation(summary = "작성자의 채팅 목록 조회 API")
     @GetMapping("/receiver")
     public ResponseEntity<Response<Map<ChatRoomStatus, List<ChatRoomResDto>>>> getChatRoomsByStatusForReceiver(
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -60,6 +65,7 @@ public class ChatController {
     }
 
     // 작성자가 채팅 수락
+    @Operation(summary = "채팅 신청 수락 API")
     @PostMapping("/accept/{chatRoomId}")
     public ResponseEntity<Response<ChatRoomResDto>> acceptChatRoom(
             @PathVariable Long chatRoomId,
@@ -70,6 +76,7 @@ public class ChatController {
     }
 
     // 작성자가 채팅 거절
+    @Operation(summary = "게시글 생성 API")
     @DeleteMapping("/reject/{chatRoomId}")
     public ResponseEntity<Response<Void>> rejectChatRoom(
             @PathVariable Long chatRoomId,
@@ -80,6 +87,7 @@ public class ChatController {
     }
 
     // 요청자가 자신의 채팅방 목록 조회 (상태별)
+    @Operation(summary = "요청자의 채팅방 목록 조회 API")
     @GetMapping("/sender")
     public ResponseEntity<Response<Map<ChatRoomStatus, List<ChatRoomResDto>>>> getMyChatRoomsByStatus(
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -89,6 +97,7 @@ public class ChatController {
     }
 
     // 채팅방 삭제
+    @Operation(summary = "채팅방 삭제 API")
     @DeleteMapping("/{chatRoomId}")
     public ResponseEntity<Response<Void>> deleteChatRoom(
             @PathVariable Long chatRoomId,
