@@ -41,8 +41,8 @@ public class ChatService {
 
     // 채팅방 생성
     @Transactional
-    public ChatRoomResDto createChatRoom(ChatRoomReqDto chatRoomReqDto, CustomUserDetails userDetails) {
-        Post post = postRepository.findById(chatRoomReqDto.getPostId())
+    public ChatRoomResDto createChatRoom(Long postId, CustomUserDetails userDetails) {
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
 
         User user = userDetails.getUser();
@@ -55,10 +55,21 @@ public class ChatService {
         // 채팅방 중복 체크
         Optional<ChatRoom> existRoom = chatRoomRepository.findByPost_PostIdAndSender_Id(post.getPostId(), user.getId());
         if (existRoom.isPresent()) {
+
+            ChatRoom room = existRoom.get();
+            if (room.getChatRoomStatus() == ChatRoomStatus.PENDING) {
+                // 상태가 PENDING이면 새 채팅 생성 불가
+                throw new CustomException(ErrorStatus.FORBIDDEN);
+            }
             return ChatRoomResDto.from(existRoom.get()); // 이미 존재하는 채팅방 반환
         }
 
-        ChatRoom chatRoom = chatRoomReqDto.toEntity(user, post);
+        ChatRoom chatRoom = ChatRoom.builder()
+                .post(post)
+                .sender(user)
+                .receiver(post.getUser())
+                .build();
+
         chatRoomRepository.save(chatRoom);
         return ChatRoomResDto.from(chatRoom);
     }
@@ -117,8 +128,8 @@ public class ChatService {
 
     // 요청자가 게시물 작성자에게 채팅 신청
     @Transactional
-    public ChatRoomResDto requestChatRoom(ChatRoomReqDto chatRoomReqDto, CustomUserDetails userDetails){
-        Post post = postRepository.findById(chatRoomReqDto.getPostId())
+    public ChatRoomResDto requestChatRoom(Long postId, CustomUserDetails userDetails){
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
 
         User user = userDetails.getUser();
@@ -132,9 +143,14 @@ public class ChatService {
             throw new CustomException(ErrorStatus.CHAT_ROOM_ALREADY_APPLIED); // 이미 신청한 경우 예외
         }
 
-        ChatRoom chatRoom = chatRoomReqDto.toEntity(user, post);
-        chatRoomRepository.save(chatRoom);
+        ChatRoom chatRoom = ChatRoom.builder()
+                .post(post)
+                .sender(user)
+                .receiver(post.getUser())
+                .chatRoomStatus(ChatRoomStatus.PENDING)
+                .build();
 
+        chatRoomRepository.save(chatRoom);
         return  ChatRoomResDto.from(chatRoom);
 
     }

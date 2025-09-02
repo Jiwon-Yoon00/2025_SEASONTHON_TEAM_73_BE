@@ -25,9 +25,9 @@ public class ChatController {
     private final ChatService chatService;
 
     // 채팅방 만들기
-    @PostMapping("")
-    public ResponseEntity<Response<ChatRoomResDto>> createRoom(@RequestBody @Valid ChatRoomReqDto chatRoomReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ChatRoomResDto chatRoomResDto =  chatService.createChatRoom(chatRoomReqDto, userDetails);
+    @PostMapping("/{postId}")
+    public ResponseEntity<Response<ChatRoomResDto>> createRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        ChatRoomResDto chatRoomResDto =  chatService.createChatRoom(postId, userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.CREATE_CHAT_ROOM, chatRoomResDto));
     }
 
@@ -44,9 +44,9 @@ public class ChatController {
     }
 
     // 상대방에게 채팅 신청 걸기
-    @PostMapping("/apply")
-    public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@RequestBody @Valid ChatRoomReqDto chatRoomReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(chatRoomReqDto, userDetails);
+    @PostMapping("/apply/{postId}")
+    public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(postId, userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.APPLY_CHAT_ROOM, chatRoomResDto));
     }
 
