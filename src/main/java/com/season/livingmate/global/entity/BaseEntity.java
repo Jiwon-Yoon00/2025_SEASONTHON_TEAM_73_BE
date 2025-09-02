@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
 
     @CreatedDate // 생성 시 날짜 자동 생성
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate // 수정 시 날짜 자동 생성
-    private LocalDateTime modifiedDate;
+    private LocalDateTime modifiedAt;
 }

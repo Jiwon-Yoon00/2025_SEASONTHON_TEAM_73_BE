@@ -68,6 +68,9 @@ dependencies {
 
     // 문자인증을 위한 라이브러리
     implementation 'net.nurigo:sdk:4.3.2'
+
+    // 실시간 채팅을 위한 웹소켓 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
