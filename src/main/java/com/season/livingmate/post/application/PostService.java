@@ -13,8 +13,6 @@ import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.api.dto.req.PostUpdateReq;
 import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
-import com.season.livingmate.post.api.dto.res.PostMapRes;
-import com.season.livingmate.post.api.dto.res.PostMapDetailRes;
 import com.season.livingmate.post.domain.GeoPoint;
 import com.season.livingmate.post.domain.PaymentStructure;
 import com.season.livingmate.post.domain.Post;
@@ -29,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -221,41 +218,5 @@ public class PostService {
                 .map(PostListRes::from);
 
         return Response.success(SuccessStatus.GET_POST_LIST, page);
-    }
-
-    // 지도용 게시글 목록 조회 (200m 반경 랜덤 좌표)
-    public Response<List<PostMapRes>> getMapPosts() {
-        List<Post> posts = postRepository.findAll();
-        List<PostMapRes> mapPosts = posts.stream()
-                .map(PostMapRes::from)
-                .toList();
-        
-        return Response.success(SuccessStatus.GET_POST_LIST, mapPosts);
-    }
-
-    // 지역별 지도용 게시글 목록 조회
-    public Response<List<PostMapRes>> getMapPostsByRegion(String region) {
-        List<Post> posts;
-        if (region == null || region.isBlank()) {
-            posts = postRepository.findAll();
-        } else {
-            // region이 포함된 게시글 검색
-            posts = postRepository.findByRegionLabelContaining(region);
-        }
-        
-        List<PostMapRes> mapPosts = posts.stream()
-                .map(PostMapRes::from)
-                .toList();
-        
-        return Response.success(SuccessStatus.GET_POST_LIST, mapPosts);
-    }
-
-    // 지도 마커 클릭 시 상세 정보 조회
-    public Response<PostMapDetailRes> getMapMarkerDetail(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
-        
-        PostMapDetailRes detailRes = PostMapDetailRes.from(post);
-        return Response.success(SuccessStatus.GET_POST, detailRes);
     }
 }

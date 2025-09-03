@@ -1,4 +1,4 @@
-package com.season.livingmate.post.api.dto.res;
+package com.season.livingmate.map.api.dto;
 
 import com.season.livingmate.post.domain.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
