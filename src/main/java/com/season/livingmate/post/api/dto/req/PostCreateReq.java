@@ -3,6 +3,7 @@ package com.season.livingmate.post.api.dto.req;
 import com.season.livingmate.post.domain.HeatingType;
 import com.season.livingmate.post.domain.RoomType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -14,9 +15,6 @@ public record PostCreateReq(
 
         @Schema(description = "내용", example = "반려동물 불가, 엘리베이터 있음, 관리비 5만")
         String content,
-
-        @Schema(description = "대표 이미지 URL", example = "https://img.example.com/room1.jpg")
-        String imageUrl,
 
         // 좌표
         @Schema(description = "위도", example = "37.4979")
