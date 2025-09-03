@@ -66,21 +66,21 @@ public class JwtProvider {
     }
 
     public Long getUserId(String token ) {
-        return jwtParser.parseSignedClaims(token)
+        return jwtParser.parseSignedClaims(token.trim())
                 .getPayload()
                 .get("userId", Long.class);
     }
 
 
     public Boolean isExpired(String token) {
-        return jwtParser.parseSignedClaims(token)
+        return jwtParser.parseSignedClaims(token.trim())
                 .getPayload()
                 .getExpiration().before(new Date());
     }
 
     public Boolean isAccessToken(String token) {
         try {
-            String type = jwtParser.parseSignedClaims(token)
+            String type = jwtParser.parseSignedClaims(token.trim())
                     .getPayload()
                     .get("type", String.class);
             return "accessToken".equals(type);
@@ -91,7 +91,7 @@ public class JwtProvider {
 
     public Boolean isRefreshToken(String token) {
         try {
-            String type = jwtParser.parseSignedClaims(token)
+            String type = jwtParser.parseSignedClaims(token.trim())
                     .getPayload()
                     .get("type", String.class);
             return "refreshToken".equals(type);

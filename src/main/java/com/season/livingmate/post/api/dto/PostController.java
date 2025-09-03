@@ -10,7 +10,7 @@ import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
 
 import com.season.livingmate.post.application.PostService;
-import com.season.livingmate.user.entity.User;
+import com.season.livingmate.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

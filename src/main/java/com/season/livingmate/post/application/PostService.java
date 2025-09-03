@@ -20,7 +20,7 @@ import com.season.livingmate.post.domain.PaymentStructure;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.repository.PostRepository;
 import com.season.livingmate.post.domain.repository.PostSpecs;
-import com.season.livingmate.user.entity.User;
+import com.season.livingmate.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

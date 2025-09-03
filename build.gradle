@@ -71,6 +71,9 @@ dependencies {
 
     // 카카오맵 WebClient를 쓰기 위해
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // 실시간 채팅을 위한 웹소켓 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {

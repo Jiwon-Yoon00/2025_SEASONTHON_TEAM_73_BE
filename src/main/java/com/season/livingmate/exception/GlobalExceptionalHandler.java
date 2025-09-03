@@ -21,4 +21,11 @@ public class GlobalExceptionalHandler {
                 .badRequest()
                 .body(Response.fail(ErrorStatus.INVALID_PARAMETER));
     }
+
+    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+    public ResponseEntity<Response<?>> handleValidationException(jakarta.validation.ConstraintViolationException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body(Response.fail(ErrorStatus.INVALID_PARAMETER));
+    }
 }
