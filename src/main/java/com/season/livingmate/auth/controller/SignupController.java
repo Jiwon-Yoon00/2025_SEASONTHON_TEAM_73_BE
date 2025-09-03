@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Singup", description = "sms문자인증을 통한 회원가입")
+@Tag(name = "Singup", description = "sms문자인증을 통한 회원가입 - singup > send-one > verify-otp")
 @RequestMapping("/auth")
 public class SignupController {
     private final SignupService signupService;

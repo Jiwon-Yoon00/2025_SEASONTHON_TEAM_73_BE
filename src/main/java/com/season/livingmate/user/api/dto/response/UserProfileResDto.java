@@ -123,8 +123,8 @@ public class UserProfileResDto {
                 userProfile.getPet(),
                 userProfile.getDisease(),
                 userProfile.getIntroduce(),
-                userProfile.getCreatedDate().toString(),
-                userProfile.getModifiedDate().toString()
+                userProfile.getCreatedAt().toString(),
+                userProfile.getModifiedAt().toString()
         );
     }
 }

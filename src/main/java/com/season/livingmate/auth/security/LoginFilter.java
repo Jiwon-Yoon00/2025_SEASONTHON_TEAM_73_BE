@@ -89,7 +89,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             IOException {
         log.info("❌ 로그인 실패");
         // 예: "이메일 또는 비밀번호가 잘못되었습니다"
-        ErrorStatus errorStatus = ErrorStatus.UNAUTHORIZED; // 기본값
+        ErrorStatus errorStatus = ErrorStatus.USER_NOT_FOUND; // 기본값
 
         Response<?> errorResponse = Response.fail(errorStatus);
 

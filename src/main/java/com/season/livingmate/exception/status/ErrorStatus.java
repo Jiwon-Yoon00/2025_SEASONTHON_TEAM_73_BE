@@ -30,7 +30,17 @@ public enum ErrorStatus {
     ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST,"TOKEN400","엑세스 토큰이 만료되었습니다."),
     INVALID_ACCESS_TOKEN(HttpStatus.BAD_REQUEST,"TOKEN400","유효하지 않은 토큰입니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST,"TOKEN400","엑세스 토큰이 만료되었습니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER500", "서버 오류가 발생했습니다.");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER500", "서버 오류가 발생했습니다."),
+
+    // 채팅방 권한 관련
+    ONLY_RECEIVER_CAN_ACCEPT(HttpStatus.FORBIDDEN, "CHAT403", "작성자만 수락할 수 있습니다."),
+    ONLY_RECEIVER_CAN_REJECT(HttpStatus.FORBIDDEN, "CHAT403", "작성자만 거절할 수 있습니다."),
+    CHAT_ROOM_DELETE_FORBIDDEN(HttpStatus.FORBIDDEN, "CHAT403", "채팅방 삭제 권한이 없습니다."),
+    ONLY_SENDER_CANNOT_CREATE(HttpStatus.FORBIDDEN, "CHAT403", "작성자는 스스로 채팅방을 생성할 수 없습니다."),
+
+    // 상태 관련
+    CHAT_ROOM_ALREADY_APPLIED(HttpStatus.CONFLICT, "CHAT409", "이미 신청된 채팅방입니다."),;
+
     private final HttpStatus status;
     private final String code;
     private final String message;
