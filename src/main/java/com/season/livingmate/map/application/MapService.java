@@ -4,6 +4,7 @@ import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.ErrorStatus;
 import com.season.livingmate.exception.status.SuccessStatus;
+import com.season.livingmate.map.api.dto.PostDetailMapRes;
 import com.season.livingmate.map.api.dto.PostMapDetailRes;
 import com.season.livingmate.map.api.dto.PostMapRes;
 import com.season.livingmate.map.domain.repository.MapRepository;
@@ -38,5 +39,14 @@ public class MapService {
         
         PostMapDetailRes detailRes = PostMapDetailRes.from(post);
         return Response.success(SuccessStatus.GET_POST, detailRes);
+    }
+
+    // 게시글 상세보기용 200m 반경 지도 정보 조회
+    public Response<PostDetailMapRes> getDetailMap(Long postId) {
+        Post post = mapRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
+
+        PostDetailMapRes mapRes = PostDetailMapRes.from(post);
+        return Response.success(SuccessStatus.GET_POST, mapRes);
     }
 }
