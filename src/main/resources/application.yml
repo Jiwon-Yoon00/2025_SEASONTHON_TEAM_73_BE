@@ -1,3 +1,6 @@
+springdoc:
+  show-login-endpoint: true
+
 spring:
   profiles:
     active: prod
@@ -22,3 +25,14 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
+
+
+solapi:
+  apiKey: ${SOLAPI_APIKEY}
+  secretkey: ${SOLAPI_SECRETKEY}
+
+jwt:
+  header: ${HEADER}
+  secret: ${SECRET-KEY}
+  expiration: ${EXPIRATION} # 1시간
+  refresh-token-expiration: ${REFRESH-EXPIRATION} # 7일
