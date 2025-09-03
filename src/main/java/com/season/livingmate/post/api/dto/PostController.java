@@ -19,8 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/posts")
@@ -31,10 +30,11 @@ public class PostController {
 
     @Operation(summary = "게시글 생성 API")
     @PostMapping
-    public ResponseEntity<Response<Long>> createPost(@RequestBody PostCreateReq req,
+    public ResponseEntity<Response<Long>> createPost(@RequestPart("data") PostCreateReq req,
+                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.createPost(req, user);
+        Response<Long> res = postService.createPost(req, imageFile, user);
         return ResponseEntity
                 .status(SuccessStatus.CREATE_POST.getStatus())
                 .body(res);
@@ -58,10 +58,11 @@ public class PostController {
     @Operation(summary = "게시글 수정 API")
     @PatchMapping("{postId}")
     public ResponseEntity<Response<Long>> updatePost(@PathVariable Long postId,
-                                                     @RequestBody PostUpdateReq req,
+                                                     @RequestPart("data") PostUpdateReq req,
+                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.updatePost(postId, req, user);
+        Response<Long> res = postService.updatePost(postId, req, imageFile, user);
         return ResponseEntity.ok(res);
     }
 
