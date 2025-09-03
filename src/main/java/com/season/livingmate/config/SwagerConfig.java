@@ -1,5 +1,6 @@
 package com.season.livingmate.config;
 
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+
+import java.util.List;
 
 @Configuration
 public class SwagerConfig {
@@ -40,7 +43,8 @@ public class SwagerConfig {
 						.description("Livingmate REST API 문서입니다.")
 				)
 				.components(components)
-				.addSecurityItem(securityRequirement);
+				.addSecurityItem(securityRequirement)
+				.servers(List.of(new Server().url("https://livingmate.store")));
 
 		PathItem logoutPath = new PathItem().post(new Operation()
 				.operationId("logout")
