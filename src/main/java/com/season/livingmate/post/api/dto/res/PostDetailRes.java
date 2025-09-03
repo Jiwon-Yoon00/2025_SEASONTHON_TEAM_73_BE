@@ -32,6 +32,9 @@ public record PostDetailRes(
         @Schema(description = "실제 주소", example = "서울특별시 강남구 테헤란로 123")
         String location,
 
+        @Schema(description = "지역(서울시 구 동)", example = "서울시 노원구 중계동")
+        String region,
+
         @Schema(description = "방 종류", example = "ONE_ROOM")
         RoomType roomType,
 
@@ -111,7 +114,8 @@ public record PostDetailRes(
                         p.getImageUrl(),
                         lat,
                         lng,
-                        p.getLocation(),
+                        p.getLocation(), // 보관용
+                        p.getRegionLabel(), // 서울시 구 동
                         p.getRoomType(),
                         p.getDeposit(),
                         p.getMonthlyRent(),

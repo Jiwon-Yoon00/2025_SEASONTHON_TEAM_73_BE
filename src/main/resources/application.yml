@@ -36,3 +36,8 @@ jwt:
   secret: ${SECRET-KEY}
   expiration: ${EXPIRATION} # 1시간
   refresh-token-expiration: ${REFRESH-EXPIRATION} # 7일
+
+kakao:
+  local:
+    base-url: https://dapi.kakao.com
+    rest-api-key: ${KAKAO_REST_API_KEY}
