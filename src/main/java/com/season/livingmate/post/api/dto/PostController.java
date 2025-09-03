@@ -8,8 +8,8 @@ import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.api.dto.req.PostUpdateReq;
 import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
+
 import com.season.livingmate.post.application.PostService;
-import com.season.livingmate.post.domain.RoomType;
 import com.season.livingmate.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
