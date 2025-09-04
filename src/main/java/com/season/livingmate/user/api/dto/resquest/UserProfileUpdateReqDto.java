@@ -3,6 +3,7 @@ package com.season.livingmate.user.api.dto.resquest;
 import com.season.livingmate.user.domain.*;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,9 +13,6 @@ import java.util.List;
 @Setter
 @Schema(description = "유저프로필 수정 요청 DTO (모든 필드 선택적)")
 public class UserProfileUpdateReqDto {
-
-    @Schema(description = "MBTI 유형", example = "INFJ")
-    private Mbti mbti;
 
     @Schema(description = "통근 유형", example = "OFFICE")
     private WorkType workType;
@@ -48,6 +46,18 @@ public class UserProfileUpdateReqDto {
 
     @Schema(description = "외출 횟수 범위", example = "ZERO")
     private CountRange outingCount;
+
+    @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    private CountRange cookingCount;
+
+    @Schema(description = "냄새 민감도", example = "HIGH",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    private SensitivityLevel smellLevel;
+
+    @Schema(description = "식기류 공유 여부", example = "SHARE",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    private DishShare dishShare;
+
+    @Schema(description = "배달 음식 주문 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    private CountRange deliveryCount;
 
     @Schema(description = "잠귀 민감도", example = "HIGH", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     private SensitivityLevel sleepLevel;

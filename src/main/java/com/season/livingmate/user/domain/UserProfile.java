@@ -24,10 +24,6 @@ public class UserProfile extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Mbti mbti;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private WorkType workType; // 통근 유형
 
     @Column(columnDefinition = "json", nullable = false)
@@ -52,6 +48,22 @@ public class UserProfile extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CountRange outingCount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CountRange cookingCount; // 요리 빈도
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SensitivityLevel smellLevel; // 냄새 민감도
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DishShare dishShare; // 식기류 공유 여부
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CountRange deliveryCount; // 배달 음식 주문 빈도
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -105,7 +117,6 @@ public class UserProfile extends BaseEntity {
     private User user;
 
     public void update(UserProfileUpdateReqDto dto) {
-        if (dto.getMbti() != null) this.mbti = dto.getMbti();
         if (dto.getWorkType() != null) this.workType = dto.getWorkType();
         if (dto.getWorkDays() != null && !dto.getWorkDays().isEmpty()) this.workDays = dto.getWorkDays();
         if (dto.getWakeUpTimeWorkday() != null) this.wakeUpTimeWorkday = dto.getWakeUpTimeWorkday();
@@ -117,6 +128,10 @@ public class UserProfile extends BaseEntity {
         if (dto.getAlarmCount() != null) this.alarmCount = dto.getAlarmCount();
         if (dto.getStudyCount() != null) this.studyCount = dto.getStudyCount();
         if (dto.getOutingCount() != null) this.outingCount = dto.getOutingCount();
+        if (dto.getCookingCount() != null) this.cookingCount = dto.getCookingCount();
+        if (dto.getSmellLevel() != null) this.smellLevel = dto.getSmellLevel();
+        if (dto.getDishShare() != null) this.dishShare = dto.getDishShare();
+        if (dto.getDeliveryCount() != null) this.deliveryCount = dto.getDeliveryCount();
         if (dto.getSleepLevel() != null) this.sleepLevel = dto.getSleepLevel();
         if (dto.getSleepHabit() != null && !dto.getSleepHabit().isEmpty()) this.sleepHabit = dto.getSleepHabit();
         if (dto.getPreferSound() != null && !dto.getPreferSound().isEmpty()) this.preferSound = dto.getPreferSound();
