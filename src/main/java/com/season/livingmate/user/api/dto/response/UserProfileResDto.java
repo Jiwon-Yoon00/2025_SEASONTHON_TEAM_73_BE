@@ -98,7 +98,7 @@ public class UserProfileResDto {
 
     public static UserProfileResDto from(UserProfile userProfile){
         return new UserProfileResDto(
-                userProfile.getId(),
+                userProfile.getUser().getId(),
                 userProfile.getMbti(),
                 userProfile.getWorkType(),
                 userProfile.getWorkDays(),
