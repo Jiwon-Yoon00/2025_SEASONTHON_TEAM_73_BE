@@ -70,6 +70,10 @@ public class RefreshTokenService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
+        // 기존 토큰이 있으면 삭제
+        refreshTokenRepository.findByUser_Id(userId)
+                .ifPresent(existingToken -> refreshTokenRepository.delete(existingToken));
+
         RefreshToken token = RefreshToken.builder()
                 .user(user)
                 .refreshToken(refreshToken)
