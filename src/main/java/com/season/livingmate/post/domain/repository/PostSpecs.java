@@ -58,12 +58,12 @@ public final class PostSpecs {
         };
     }
 
-    // 방형태
-    public static Specification<Post> roomTypes(Collection<RoomType> types) {
-        if(types == null || types.isEmpty()) return null;
-        return (root, query, cb) -> root.get("roomType").in(types);
+    // 방형태 (enum으로 받음)
+    public static Specification<Post> roomTypes(Collection<RoomType> roomTypes) {
+        if(roomTypes == null || roomTypes.isEmpty()) return null;
+        return (root, query, cb) -> root.get("roomType").in(roomTypes);
     }
-
+    
     // 주소
     public static Specification<Post> locationContainsDong(Collection<String> dongs) {
         if (dongs == null || dongs.isEmpty()) return null;
@@ -87,7 +87,6 @@ public final class PostSpecs {
         };
     }
 
-
     public static Specification<Post> build(PostSearchReq req) {
         return build(
                 req.keyword(),
@@ -95,7 +94,7 @@ public final class PostSpecs {
                 req.maxDeposit(),
                 req.minMonthlyCost(),
                 req.maxMonthlyCost(),
-                req.roomTypes(),
+                req.getRoomTypeEnums(), // 한국어를 enum으로 변환
                 req.dongs()
         );
     }
@@ -107,7 +106,7 @@ public final class PostSpecs {
             Integer maxDeposit,
             Integer minMonthlyCost,
             Integer maxMonthlyCost,
-            Collection<RoomType> roomTypes,
+            Collection<RoomType> roomTypes, // enum 리스트
             Collection<String> dongs
     ) {
         List<Specification<Post>> parts = new ArrayList<>();

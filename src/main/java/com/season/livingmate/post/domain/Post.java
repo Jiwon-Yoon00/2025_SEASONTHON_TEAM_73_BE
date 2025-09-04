@@ -1,7 +1,6 @@
 package com.season.livingmate.post.domain;
 
 import com.season.livingmate.chat.domain.ChatRoom;
-import com.season.livingmate.user.domain.Gender;
 import com.season.livingmate.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
