@@ -65,6 +65,7 @@ public class SecurityConfig {
 						.requestMatchers("/auth/**").permitAll() // 로그인 회원가입
 						.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll() // Swagger 허용
 						.requestMatchers("/images/**").permitAll() // 정적 이미지 파일 허용
+						.requestMatchers("/map/**", "posts/**").permitAll()
 						.anyRequest().permitAll()
 				)
 
