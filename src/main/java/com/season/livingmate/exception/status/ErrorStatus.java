@@ -37,7 +37,7 @@ public enum ErrorStatus {
     ONLY_RECEIVER_CAN_REJECT(HttpStatus.FORBIDDEN, "CHAT403", "작성자만 거절할 수 있습니다."),
     CHAT_ROOM_DELETE_FORBIDDEN(HttpStatus.FORBIDDEN, "CHAT403", "채팅방 삭제 권한이 없습니다."),
     ONLY_SENDER_CANNOT_CREATE(HttpStatus.FORBIDDEN, "CHAT403", "작성자는 스스로 채팅방을 생성할 수 없습니다."),
-
+    CHAT_ROOM_NOT_ACCEPTED(HttpStatus.FORBIDDEN, "CHAT403", "수락된 채팅방에서만 메시지를 보낼 수 있습니다."),
     // 상태 관련
     CHAT_ROOM_ALREADY_APPLIED(HttpStatus.CONFLICT, "CHAT409", "이미 신청된 채팅방입니다."),;
 

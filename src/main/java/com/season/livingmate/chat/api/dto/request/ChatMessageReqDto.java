@@ -16,7 +16,7 @@ import java.util.WeakHashMap;
 
 @Getter
 @Setter
-@Schema(description = "메세지 생성 DTO")
+@Schema(description = "메세지 요청 DTO")
 public class ChatMessageReqDto {
 
     @Schema(description = "메세지 타입", example = "TEXT", allowableValues = {"TEXT", "IMAGHE", "FILE", "SYSTEM"})
@@ -32,8 +32,10 @@ public class ChatMessageReqDto {
     private String content;
 
     @Schema(description = "채팅방아이디", example = "1")
-    @NotNull
     private Long chatRoomId;
+
+    @Schema(description = "게시물아이디", example = "1")
+    private Long postId;
 
     public Message toEntity(User user, ChatRoom chatRoom){
         return Message.builder()
