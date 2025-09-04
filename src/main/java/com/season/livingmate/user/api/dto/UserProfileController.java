@@ -8,6 +8,7 @@ import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
 import com.season.livingmate.user.application.UserProfileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/profile")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "유저프로필")
 public class UserProfileController {
 
     private final UserProfileService userProfileService;

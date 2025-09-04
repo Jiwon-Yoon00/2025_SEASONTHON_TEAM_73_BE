@@ -76,7 +76,7 @@ public class UserProfileResDto {
     private SensitivityLevel tidinessLevel;
 
     @Schema(description = "흡연 여부", example = "NONE")
-    private Smoking smoking;
+    private List<String> smoking;
 
     @Schema(description = "실내 흡연 허용 정도", example = "NO")
     private IndoorSmokingPreference indoorSmokingPreference;
@@ -98,7 +98,7 @@ public class UserProfileResDto {
 
     public static UserProfileResDto from(UserProfile userProfile){
         return new UserProfileResDto(
-                userProfile.getId(),
+                userProfile.getUser().getId(),
                 userProfile.getMbti(),
                 userProfile.getWorkType(),
                 userProfile.getWorkDays(),

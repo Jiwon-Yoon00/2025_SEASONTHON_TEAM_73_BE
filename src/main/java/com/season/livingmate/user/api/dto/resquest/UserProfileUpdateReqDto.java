@@ -71,7 +71,7 @@ public class UserProfileUpdateReqDto {
     private SensitivityLevel tidinessLevel;
 
     @Schema(description = "흡연 여부", example = "NO")
-    private Smoking smoking;
+    private List<String> smoking;
 
     @Schema(description = "실내 흡연 허용 정도", example = "NO")
     private IndoorSmokingPreference indoorSmokingPreference;

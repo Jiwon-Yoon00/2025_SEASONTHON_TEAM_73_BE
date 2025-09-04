@@ -81,9 +81,9 @@ public class UserProfile extends BaseEntity {
     @Column(nullable = false)
     private SensitivityLevel tidinessLevel; // 정리정돈 성향
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Smoking smoking; // 흡연 여부
+    @Column(columnDefinition = "json", nullable = false)
+    @Convert(converter = StringListJsonConverter.class)
+    private List<String> smoking; // 흡연 여부
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -124,7 +124,7 @@ public class UserProfile extends BaseEntity {
         if (dto.getCleaningLevel() != null) this.cleaningLevel = dto.getCleaningLevel();
         if (dto.getBathroomCleaningLevel() != null) this.bathroomCleaningLevel = dto.getBathroomCleaningLevel();
         if (dto.getTidinessLevel() != null) this.tidinessLevel = dto.getTidinessLevel();
-        if (dto.getSmoking() != null) this.smoking = dto.getSmoking();
+        if (dto.getSmoking() != null && !dto.getSmoking().isEmpty()) this.smoking = dto.getSmoking() ;
         if (dto.getIndoorSmokingPreference() != null) this.indoorSmokingPreference = dto.getIndoorSmokingPreference();
         if (dto.getPet() != null && !dto.getPet().isEmpty()) this.pet = dto.getPet();
         if (dto.getDisease() != null) this.disease = dto.getDisease();
