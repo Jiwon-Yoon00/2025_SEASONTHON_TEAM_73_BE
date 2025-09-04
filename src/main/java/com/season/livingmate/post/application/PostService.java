@@ -18,6 +18,7 @@ import com.season.livingmate.post.domain.PaymentStructure;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.repository.PostRepository;
 import com.season.livingmate.post.domain.repository.PostSpecs;
+import com.season.livingmate.user.domain.Gender;
 import com.season.livingmate.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -91,6 +93,10 @@ public class PostService {
                 req.utilitiesShare()
         );
 
+        String preferredGenderString = req.preferredGender().stream()
+                .map(Gender::name)
+                .collect(Collectors.joining(","));
+
         Post post = Post.builder()
                 .title(req.title())
                 .content(req.content())
@@ -112,6 +118,7 @@ public class PostService {
                 .maxStayMonths(req.maxStayMonths())
                 .washroomCount(req.washroomCount())
                 .roomCount(req.roomCount())
+                .preferredGender(preferredGenderString)
                 .createdAt(LocalDateTime.now())
                 .user(user)
                 .build();
@@ -227,6 +234,10 @@ public class PostService {
                 req.utilitiesShare()
         );
 
+        String preferredGenderString = req.preferredGender().stream()
+                .map(Gender::name)
+                .collect(Collectors.joining(","));
+
         post.update(
                 req.title(),
                 req.content(),
@@ -247,7 +258,8 @@ public class PostService {
                 req.minStayMonths(),
                 req.maxStayMonths(),
                 req.washroomCount(),
-                req.roomCount()
+                req.roomCount(),
+                preferredGenderString
         );
 
         return Response.success(SuccessStatus.UPDATE_POST, post.getPostId());

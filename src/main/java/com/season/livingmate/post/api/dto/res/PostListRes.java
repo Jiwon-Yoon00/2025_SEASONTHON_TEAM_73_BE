@@ -5,6 +5,8 @@ import com.season.livingmate.user.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 public record PostListRes(
 
@@ -22,11 +24,16 @@ public record PostListRes(
 
         String region,
 
-        Gender gender,
+        List<String> preferredGender,
 
         LocalDateTime availableDate
 ) {
         public static PostListRes from(Post p) {
+
+                List<String> genders = p.getPreferredGender() != null ?
+                        Arrays.asList(p.getPreferredGender().split(",")) :
+                        List.of();
+
                 return new PostListRes(
                         p.getPostId(),
                         p.getImageUrl(),
@@ -35,7 +42,7 @@ public record PostListRes(
                         p.getDeposit(),
                         p.getMonthlyRent(),
                         p.getRegionLabel(),
-                        p.getUser().getGender(),
+                        genders,
                         p.getAvailableDate());
         }
 }
