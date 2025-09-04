@@ -3,6 +3,9 @@ package com.season.livingmate.user.api.dto.response;
 import com.season.livingmate.user.domain.*;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +20,6 @@ public class UserProfileResDto {
 
     @Schema(description = "사용자 ID", example = "1")
     private Long userId;
-
-    @Schema(description = "MBTI 유형", example = "INFJ")
-    private Mbti mbti;
 
     @Schema(description = "통근 유형", example = "OFFICE")
     private WorkType workType;
@@ -53,6 +53,18 @@ public class UserProfileResDto {
 
     @Schema(description = "외출 횟수 범위", example = "ZERO")
     private CountRange outingCount;
+
+    @Schema(description = "요리 빈도", example = "ZERO")
+    private CountRange cookingCount; // 요리 빈도
+
+    @Schema(description = "냄새 민감도", example = "LOW")
+    private SensitivityLevel smellLevel; // 냄새 민감도
+
+    @Schema(description = "식기류 공유 여부", example = "SHARE")
+    private DishShare dishShare; // 식기류 공유 여부
+
+    @Schema(description = "외출 횟수 범위", example = "ZERO")
+    private CountRange deliveryCount; // 배달 음식 주문 빈도
 
     @Schema(description = "잠귀 민감도", example = "HIGH")
     private SensitivityLevel sleepLevel;
@@ -99,7 +111,6 @@ public class UserProfileResDto {
     public static UserProfileResDto from(UserProfile userProfile){
         return new UserProfileResDto(
                 userProfile.getUser().getId(),
-                userProfile.getMbti(),
                 userProfile.getWorkType(),
                 userProfile.getWorkDays(),
                 userProfile.getWakeUpTimeWorkday(),
@@ -111,6 +122,10 @@ public class UserProfileResDto {
                 userProfile.getAlarmCount(),
                 userProfile.getStudyCount(),
                 userProfile.getOutingCount(),
+                userProfile.getCookingCount(),
+                userProfile.getSmellLevel(),
+                userProfile.getDishShare(),
+                userProfile.getDeliveryCount(),
                 userProfile.getSleepLevel(),
                 userProfile.getSleepHabit(),
                 userProfile.getPreferSound(),
