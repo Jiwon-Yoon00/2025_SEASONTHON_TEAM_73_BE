@@ -45,7 +45,7 @@ public record PostMapDetailRes(
                 post.getRoomType().getKoreanName(),
                 post.getWashroomCount(),
                 user.getGender(),
-                userProfile != null ? userProfile.getSmoking().name() : null,
+                userProfile != null ? userProfile.getSmoking().toString() : null,
                 userProfile != null ? userProfile.getWorkDays() : null,
                 userProfile != null ? userProfile.getGoWorkTime() : null
         );
