@@ -2,10 +2,12 @@ package com.season.livingmate.post.api.dto.req;
 
 import com.season.livingmate.post.domain.HeatingType;
 import com.season.livingmate.post.domain.RoomType;
+import com.season.livingmate.user.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Schema(description = "게시글 작성 요청 DTO")
 public record PostCreateReq(
@@ -79,6 +81,9 @@ public record PostCreateReq(
         int washroomCount,
 
         @Schema(description = "방 개수", example = "2")
-        int roomCount
+        int roomCount,
+
+        @Schema(description = "모집 희망 성별", example = "MALE")
+        List<Gender> preferredGender
 ) {
 }

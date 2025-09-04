@@ -1,6 +1,7 @@
 package com.season.livingmate.post.domain;
 
 import com.season.livingmate.chat.domain.ChatRoom;
+import com.season.livingmate.user.domain.Gender;
 import com.season.livingmate.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -96,7 +97,10 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<ChatRoom> chatRoom = new ArrayList<>();;
+    private List<ChatRoom> chatRoom = new ArrayList<>();
+
+    @Column(name = "preferred_gender")
+    private String preferredGender;
 
     @Builder
     private Post(String title,
@@ -120,6 +124,7 @@ public class Post {
                  int maxStayMonths,
                  int washroomCount,
                  int roomCount,
+                 String preferredGender,
                  LocalDateTime createdAt,
                  User user) {
         this.title = title;
@@ -143,6 +148,7 @@ public class Post {
         this.maxStayMonths = maxStayMonths;
         this.washroomCount = washroomCount;
         this.roomCount = roomCount;
+        this.preferredGender = preferredGender;
         this.createdAt = createdAt;
         this.user = user;
     }
@@ -166,7 +172,8 @@ public class Post {
                        int minStayMonths,
                        int maxStayMonths,
                        int washroomCount,
-                       int roomCount
+                       int roomCount,
+                       String preferredGender
     ) {
         this.title = title;
         this.content = content;
@@ -188,6 +195,7 @@ public class Post {
         this.maxStayMonths = maxStayMonths;
         this.washroomCount = washroomCount;
         this.roomCount = roomCount;
+        this.preferredGender = preferredGender;
         this.updatedAt = LocalDateTime.now();
     }
 

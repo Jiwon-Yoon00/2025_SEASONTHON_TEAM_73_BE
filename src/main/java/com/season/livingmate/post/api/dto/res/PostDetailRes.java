@@ -4,9 +4,12 @@ import com.season.livingmate.post.domain.HeatingType;
 import com.season.livingmate.post.domain.PaymentStructure;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.RoomType;
+import com.season.livingmate.user.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Schema(description = "게시글 상세 조회 응답 DTO")
 public record PostDetailRes(
@@ -64,6 +67,8 @@ public record PostDetailRes(
 
         int roomCount,
 
+        List<String> preferredGender,
+
         LocalDateTime createdAt,
 
         LocalDateTime updatedAt
@@ -78,6 +83,10 @@ public record PostDetailRes(
                 boolean rentShare = ps != null && ps.isRentShare();
                 boolean maintenanceShare = ps != null && ps.isMaintenanceShare();
                 boolean utilitiesShare = ps != null && ps.isUtilitiesShare();
+
+                List<String> genders = p.getPreferredGender() != null ?
+                        Arrays.asList(p.getPreferredGender().split(",")) :
+                        List.of();
 
                 return new PostDetailRes(
                         p.getPostId(),
@@ -106,6 +115,7 @@ public record PostDetailRes(
                         p.getMaxStayMonths(),
                         p.getWashroomCount(),
                         p.getRoomCount(),
+                        genders,
                         p.getCreatedAt(),
                         p.getUpdatedAt()
                 );
