@@ -15,10 +15,6 @@ import java.util.List;
 @Schema(description = "유저프로필 생성 요청 DTO")
 public class UserProfileCreateReqDto {
 
-    @Schema(description = "MBTI 유형", example = "INFJ", allowableValues = {"ISTJ", "ISFJ", "INFJ", "INTJ", "ISTP", "ISFP", "INFP", "INTP", "ESTP", "ESFP", "ENFP", "ENTP", "ESTJ", "ESFJ", "ENFJ", "ENTJ"})
-    @NotNull
-    private Mbti mbti;
-
     @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "PREELANCER"})
     private WorkType workType;
 
@@ -53,13 +49,30 @@ public class UserProfileCreateReqDto {
     @NotNull
     private AlarmCount alarmCount;
 
-    @Schema(description = "공부 횟수 범위", example = "ZERO", allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE"})
+    @Schema(description = "공부 횟수 범위", example = "ZERO", allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
     @NotNull
     private CountRange studyCount;
 
-    @Schema(description = "외출 횟수 범위", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE"})
+    @Schema(description = "외출 횟수 범위", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
     @NotNull
     private CountRange outingCount;
+
+    @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    @NotNull
+    private CountRange cookingCount;
+
+    @Schema(description = "냄새 민감도", example = "HIGH",allowableValues = {"LOW", "MEDIUM", "HIGH"})
+    @NotNull
+    private SensitivityLevel smellLevel;
+
+    @Schema(description = "식기류 공유 여부", example = "SHARE",allowableValues = {"SHARE", "PERSONAL"})
+    @NotNull
+    private DishShare dishShare;
+
+    @Schema(description = "배달 음식 주문 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    @NotNull
+    private CountRange deliveryCount;
+
 
     @Schema(description = "잠귀 민감도", example = "HIGH", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     @NotNull
@@ -108,7 +121,6 @@ public class UserProfileCreateReqDto {
 
     public UserProfile toEntity(User user){
         return UserProfile.builder()
-                .mbti(mbti)
                 .workType(workType)
                 .workDays(workDays)
                 .wakeUpTimeWorkday(wakeUpTimeWorkday)
@@ -120,6 +132,10 @@ public class UserProfileCreateReqDto {
                 .alarmCount(alarmCount)
                 .studyCount(studyCount)
                 .outingCount(outingCount)
+                .cookingCount(cookingCount)
+                .smellLevel(smellLevel)
+                .dishShare(dishShare)
+                .deliveryCount(deliveryCount)
                 .sleepLevel(sleepLevel)
                 .sleepHabit(sleepHabit)
                 .preferSound(preferSound)
