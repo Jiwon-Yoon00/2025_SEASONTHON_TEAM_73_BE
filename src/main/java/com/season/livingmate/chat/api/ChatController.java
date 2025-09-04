@@ -46,13 +46,13 @@ public class ChatController {
         return ResponseEntity.ok(Response.success(SuccessStatus.GET_MESSAGES, messages));
     }
 
-    // 상대방에게 채팅 신청 걸기
-    @Operation(summary = "채팅 신청 API")
-    @PostMapping("/apply/post/{postId}")
-    public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(postId, userDetails);
-        return ResponseEntity.ok(Response.success(SuccessStatus.APPLY_CHAT_ROOM, chatRoomResDto));
-    }
+//    // 상대방에게 채팅 신청 걸기
+//    @Operation(summary = "채팅 신청 API")
+//    @PostMapping("/apply/post/{postId}")
+//    public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+//        ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(postId, userDetails);
+//        return ResponseEntity.ok(Response.success(SuccessStatus.APPLY_CHAT_ROOM, chatRoomResDto));
+//    }
 
     // 작성자가 신청자 목록 조회
     @Operation(summary = "작성자의 채팅 목록 조회 API")

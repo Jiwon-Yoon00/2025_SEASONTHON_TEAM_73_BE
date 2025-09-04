@@ -5,6 +5,7 @@ import com.season.livingmate.auth.security.CustomUserDetailService;
 import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.chat.api.dto.request.ChatMessageReqDto;
 import com.season.livingmate.chat.api.dto.response.ChatMessageResDto;
+import com.season.livingmate.chat.api.dto.response.ChatRoomResDto;
 import com.season.livingmate.chat.application.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
