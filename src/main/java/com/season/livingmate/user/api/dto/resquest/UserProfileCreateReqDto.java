@@ -89,7 +89,7 @@ public class UserProfileCreateReqDto {
 
     @Schema(description = "흡연 여부", example = "NONE", allowableValues = {"CIGARETTE", "VAPE", "NONE"})
     @NotNull
-    private Smoking smoking;
+    private List<@NotBlank String> smoking;
 
     @Schema(description = "실내 흡연 허용 정도", example = "NO", allowableValues = {"NOT_CARE", "NO", "CIGARETTE", "VAPE"  })
     @NotNull
