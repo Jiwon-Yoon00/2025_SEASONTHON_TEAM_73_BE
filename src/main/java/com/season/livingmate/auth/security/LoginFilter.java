@@ -88,6 +88,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws
             IOException {
         log.info("❌ 로그인 실패");
+        log.info("failed :" + failed.getMessage());
         // 예: "이메일 또는 비밀번호가 잘못되었습니다"
         ErrorStatus errorStatus = ErrorStatus.USER_NOT_FOUND; // 기본값
 

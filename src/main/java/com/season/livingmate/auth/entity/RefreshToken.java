@@ -20,7 +20,7 @@ public class RefreshToken {
 
     private Long expiredAt;
 
-    private boolean revoked;
+    private boolean revoked; // 사실상 안씀
 
     @ManyToOne
     @JoinColumn(name = "user_id")
