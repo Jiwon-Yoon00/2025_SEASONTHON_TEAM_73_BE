@@ -48,7 +48,7 @@ public class ChatService {
 
         // 게시글 작성자가 스스로 채팅방을 생성하려는 경우 예외 처리
         if (post.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorStatus.FORBIDDEN);
+            throw new CustomException(ErrorStatus.ONLY_SENDER_CANNOT_CREATE);
         }
 
         // 채팅방 중복 체크

@@ -41,6 +41,7 @@ public enum ErrorStatus {
     // 상태 관련
     CHAT_ROOM_ALREADY_APPLIED(HttpStatus.CONFLICT, "CHAT409", "이미 신청된 채팅방입니다."),;
 
+
     private final HttpStatus status;
     private final String code;
     private final String message;
