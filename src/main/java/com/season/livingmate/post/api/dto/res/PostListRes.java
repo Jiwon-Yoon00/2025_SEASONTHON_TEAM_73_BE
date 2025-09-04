@@ -1,6 +1,8 @@
 package com.season.livingmate.post.api.dto.res;
 
 import com.season.livingmate.post.domain.Post;
+import com.season.livingmate.user.domain.Gender;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

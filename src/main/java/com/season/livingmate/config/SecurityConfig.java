@@ -63,8 +63,7 @@ public class SecurityConfig {
 
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/auth/**").permitAll() // 로그인 회원가입
-						.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll() // Swagger 허용
-						.requestMatchers("/images/**").permitAll() // 정적 이미지 파일 허용
+						.requestMatchers("/posts/**", "/profile/**").authenticated() // 게시글 인증 필요
 						.anyRequest().permitAll()
 				)
 
