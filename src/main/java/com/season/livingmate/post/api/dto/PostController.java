@@ -50,8 +50,10 @@ public class PostController {
     @Operation(summary = "게시글 목록 조회 API")
     @GetMapping
     public ResponseEntity<Response<Page<PostListRes>>> getPostList(@RequestParam(defaultValue = "0") int page,
-                                                                   @RequestParam(defaultValue = "10") int size){
-        Response<Page<PostListRes>> res = postService.getList(PageRequest.of(page, size));
+                                                                   @RequestParam(defaultValue = "10") int size,
+                                                                   @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = userDetails.getUser();
+        Response<Page<PostListRes>> res = postService.getList(PageRequest.of(page, size), user);
         return ResponseEntity.ok(res);
     }
 
@@ -80,10 +82,12 @@ public class PostController {
     public ResponseEntity<Response<Page<PostListRes>>> searchPosts(
             @RequestBody PostSearchReq req,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
+        User user = userDetails.getUser();
         Pageable pageable = PageRequest.of(page, size);
-        Response<Page<PostListRes>> result = postService.searchPost(req, pageable);
+        Response<Page<PostListRes>> result = postService.searchPost(req, pageable, user);
         return ResponseEntity.ok(result);
     }
 }
