@@ -3,6 +3,7 @@ package com.season.livingmate.post.domain.repository;
 import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.RoomType;
+import com.season.livingmate.user.domain.Gender;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
@@ -63,7 +64,7 @@ public final class PostSpecs {
         if(roomTypes == null || roomTypes.isEmpty()) return null;
         return (root, query, cb) -> root.get("roomType").in(roomTypes);
     }
-    
+
     // 주소
     public static Specification<Post> locationContainsDong(Collection<String> dongs) {
         if (dongs == null || dongs.isEmpty()) return null;
@@ -87,7 +88,7 @@ public final class PostSpecs {
         };
     }
 
-    public static Specification<Post> build(PostSearchReq req) {
+    public static Specification<Post> build(PostSearchReq req, Gender userGender) {
         return build(
                 req.keyword(),
                 req.minDeposit(),
@@ -95,7 +96,8 @@ public final class PostSpecs {
                 req.minMonthlyCost(),
                 req.maxMonthlyCost(),
                 req.getRoomTypeEnums(), // 한국어를 enum으로 변환
-                req.dongs()
+                req.dongs(),
+                userGender
         );
     }
 
@@ -107,7 +109,8 @@ public final class PostSpecs {
             Integer minMonthlyCost,
             Integer maxMonthlyCost,
             Collection<RoomType> roomTypes, // enum 리스트
-            Collection<String> dongs
+            Collection<String> dongs,
+            Gender userGender
     ) {
         List<Specification<Post>> parts = new ArrayList<>();
         parts.add(keyword(keyword));
@@ -115,6 +118,7 @@ public final class PostSpecs {
         parts.add(totalMonthlyCostBetween(minMonthlyCost, maxMonthlyCost));
         parts.add(roomTypes(roomTypes));
         parts.add(locationContainsDong(dongs));
+        parts.add(matchUserGender(userGender));
 
         parts.removeIf(Objects::isNull);
 
@@ -122,4 +126,30 @@ public final class PostSpecs {
                 ? (root, q, cb) -> cb.conjunction()   // 전체 조회
                 : Specification.allOf(parts);
     }
+
+    // 성별 매칭 필터링
+    public static Specification<Post> matchUserGender(Gender userGender) {
+        if (userGender == null) return null;
+
+        return (root, query, cb) -> {
+            // 게시글의 선호 성별 필드
+            var preferredGenderField = root.<String>get("preferredGender");
+
+            // 사용자 성별이 게시글의 선호 성별에 포함되는지 확인
+            return cb.or(
+                    // 선호 성별이 없으면 모두 출력
+                    cb.or(
+                            cb.isNull(preferredGenderField),
+                            cb.equal(preferredGenderField, "")
+                    ),
+                    // 선호 성별에 사용자 성별이 포함된 경우
+                    cb.like(preferredGenderField, "%" + userGender.name() + "%"),
+                    // 선호 성별에 "MALE,FEMALE" 같은 형태로 포함된 경우
+                    cb.like(preferredGenderField, userGender.name() + ",%"),
+                    cb.like(preferredGenderField, "%," + userGender.name()),
+                    cb.like(preferredGenderField, "%," + userGender.name() + "%")
+            );
+        };
+    }
 }
+

@@ -179,8 +179,11 @@ public class PostService {
     }
 
     // 게시글 목록 조회
-    public Response<Page<PostListRes>> getList(Pageable pageable){
-        Page<PostListRes> page =  postRepository.findAll(pageable)
+    public Response<Page<PostListRes>> getList(Pageable pageable, User user){
+        // 사용자 성별로 필터링
+        Specification<Post> spec = PostSpecs.matchUserGender(user.getGender());
+
+        Page<PostListRes> page =  postRepository.findAll(spec, pageable)
                 .map(PostListRes::from);
         return Response.success(SuccessStatus.GET_POST_LIST, page);
     }
@@ -281,9 +284,12 @@ public class PostService {
 
     // 게시글 검색
     @Transactional(readOnly = true)
-    public Response<Page<PostListRes>> searchPost(PostSearchReq req, Pageable pageable){
+    public Response<Page<PostListRes>> searchPost(PostSearchReq req, Pageable pageable, User user) {
+        // 사용자 성별 가져오기
+        Gender userGender = user.getGender();
+
         // 입력된 값이 있으면 AND로, 없으면 전체 조회
-        Specification<Post> spec = PostSpecs.build(req);
+        Specification<Post> spec = PostSpecs.build(req, userGender);
 
         Page<PostListRes> page = postRepository.findAll(spec, pageable)
                 .map(PostListRes::from);

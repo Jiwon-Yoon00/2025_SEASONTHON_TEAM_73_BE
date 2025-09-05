@@ -2,11 +2,10 @@ package com.season.livingmate.post.api.dto.res;
 
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.user.domain.Gender;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.season.livingmate.user.domain.User;
+import com.season.livingmate.user.domain.UserProfile;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 public record PostListRes(
 
@@ -24,15 +23,16 @@ public record PostListRes(
 
         String region,
 
-        List<String> preferredGender,
+        Gender userGender,
+
+        String smoking,
 
         LocalDateTime availableDate
 ) {
         public static PostListRes from(Post p) {
 
-                List<String> genders = p.getPreferredGender() != null ?
-                        Arrays.asList(p.getPreferredGender().split(",")) :
-                        List.of();
+                User user = p.getUser();
+                UserProfile userProfile = user.getUserProfile();
 
                 return new PostListRes(
                         p.getPostId(),
@@ -42,7 +42,8 @@ public record PostListRes(
                         p.getDeposit(),
                         p.getMonthlyRent(),
                         p.getRegionLabel(),
-                        genders,
+                        user.getGender(),
+                        userProfile != null ? String.join(", ", userProfile.getSmoking()) : "정보 없음",
                         p.getAvailableDate());
         }
 }
