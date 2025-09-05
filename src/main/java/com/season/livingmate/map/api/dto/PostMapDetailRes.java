@@ -26,7 +26,7 @@ public record PostMapDetailRes(
 
         Gender userGender,
 
-        String smoking,
+        Object smoking,
 
         List<String> workDays,
 
@@ -45,7 +45,8 @@ public record PostMapDetailRes(
                 post.getRoomType().getKoreanName(),
                 post.getWashroomCount(),
                 user.getGender(),
-                userProfile != null ? String.join(", ", userProfile.getSmoking()) : "정보 없음",
+                userProfile == null ? "정보 없음"
+                        : (userProfile.isSmoking() ? "흡연" : "비흡연"),
                 userProfile != null ? userProfile.getWorkDays() : List.of(),
                 userProfile != null ? userProfile.getGoWorkTime() : "정보 없음"
         );
