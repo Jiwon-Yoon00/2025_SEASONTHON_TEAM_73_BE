@@ -26,8 +26,8 @@ public class UserProfileUpdateReqDto {
     @Schema(description = "출근 시간", example = "09:00")
     private String goWorkTime;
 
-    @Schema(description = "퇴근 시간", example = "18:00")
-    private String leaveWorkTime;
+    @Schema(description = "귀가 시간", example = "18:00")
+    private String comeHomeTime;
 
     @Schema(description = "출근일 취침 시간", example = "23:00")
     private String sleepTimeWorkday;
@@ -41,50 +41,43 @@ public class UserProfileUpdateReqDto {
     @Schema(description = "알람 듣는 횟수", example = "ONE")
     private AlarmCount alarmCount;
 
-    @Schema(description = "공부 횟수 범위", example = "ZERO")
-    private CountRange studyCount;
-
-    @Schema(description = "외출 횟수 범위", example = "ZERO")
-    private CountRange outingCount;
-
-    @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    // 식사 습관
+    @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONE_TO_THREE", "MORE_THAN_FOUR"})
     private CountRange cookingCount;
 
-    @Schema(description = "냄새 민감도", example = "HIGH",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    @Schema(description = "냄새 민감도", example = "LOW",allowableValues = {"LOW", "MEDIUM",  "HIGH"})
     private SensitivityLevel smellLevel;
 
-    @Schema(description = "식기류 공유 여부", example = "SHARE",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    @Schema(description = "주 음주 횟수", example = "ZERO")
+    private CountRange alcoholCount;
+
+    @Schema(description = "식기류 공유 여부", example = "SHARE")
     private DishShare dishShare;
 
-    @Schema(description = "배달 음식 주문 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
-    private CountRange deliveryCount;
 
+    // 소리 민감도
     @Schema(description = "잠귀 민감도", example = "HIGH", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     private SensitivityLevel sleepLevel;
 
-    @ArraySchema(schema = @Schema(description = "잠버릇 목록", example = "NONE"))
-    private List<String> sleepHabit;
+    @Schema(description = "잠버릇" , example = "NONE", allowableValues = {"NONE", "SNORING", "TEETH_GRINDING"})
+    private SleepHabit sleepHabit;
 
-    @ArraySchema(schema = @Schema(description = "선호하는 소리 목록", example = "ALAWAYS_SOUND"))
-    private List<String> preferSound;
+    @Schema(description = "나의 휴대폰 모드", example = "SILENT" , allowableValues = {"VIBRATION", "SILENT", "NONE"})
+    private PhoneMode phoneMode;
 
-    @Schema(description = "이어폰 사용 형태", example = "EARBUDS")
+    @Schema(description = "나의 이어폰 사용", example = "NIGHT_ONLY" , allowableValues = {"ALAWAYS", "NIGHT_ONLY", "NOT_CARE"})
     private EarphoneUsage earphoneUsage;
 
-    @Schema(description = "청소 빈도", example = "MEDIUM", allowableValues = {"LOW", "MEDIUM", "HIGH"})
-    private SensitivityLevel cleaningLevel;
 
+    // 청소 습관
     @Schema(description = "화장실 청소 빈도", example = "HIGH", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     private SensitivityLevel bathroomCleaningLevel;
 
     @Schema(description = "정리정돈 성향", example = "LOW", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     private SensitivityLevel tidinessLevel;
 
-    @Schema(description = "흡연 여부", example = "NO")
-    private List<String> smoking;
-
-    @Schema(description = "실내 흡연 허용 정도", example = "NO")
-    private IndoorSmokingPreference indoorSmokingPreference;
+    @Schema(description = "흡연 여부", example = "false")
+    private boolean smoking;
 
     @ArraySchema(schema = @Schema(description = "반려동물 종류 목록", example = "강아지, 고양이"))
     private List<String> pet;
