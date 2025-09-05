@@ -1,0 +1,77 @@
+package com.season.livingmate.auth.dto.request;
+
+import com.season.livingmate.user.domain.AlarmCount;
+import com.season.livingmate.user.domain.User;
+import com.season.livingmate.user.domain.UserProfile;
+import com.season.livingmate.user.domain.WorkType;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+
+import java.util.List;
+
+@Getter
+public class LifeRhythmReqDto {
+
+    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "PREELANCER"})
+    private WorkType workType;
+
+    @ArraySchema(schema = @Schema(description = "출근 요일 목록", example = "월,화,수,목,금"))
+    private List<String> workDays;
+
+    @Schema(description = "출근일 기상 시간", example = "07:00")
+    @NotBlank
+    private String wakeUpTimeWorkday;
+
+    @Schema(description = "출근 시간", example = "09:00")
+    @NotBlank
+    private String goWorkTime;
+
+    @Schema(description = "귀가 시간", example = "20:00")
+    @NotBlank
+    private String comeHomeTime;
+
+    @Schema(description = "출근일 취침 시간", example = "23:00")
+    @NotBlank
+    private String sleepTimeWorkday;
+
+    @Schema(description = "휴일 기상 시간", example = "08:00")
+    @NotBlank
+    private String wakeUpTimeHoliday;
+
+    @Schema(description = "휴일 취침 시간", example = "24:00")
+    @NotBlank
+    private String sleepTimeHoliday;
+
+    @Schema(description = "알람 듣는 횟수", example = "ONE", allowableValues = {"ONCE", "TWICE", "THREE_OR_MORE"})
+    @NotNull
+    private AlarmCount alarmCount;
+
+    public UserProfile toEntity(LifeRhythmReqDto dto, User user) {
+        WorkType workType = dto.getWorkType();
+        List<String> workDays = dto.getWorkDays();
+        String wakeUpTimeWorkday = dto.getWakeUpTimeWorkday();
+        String goWorkTime = dto.getGoWorkTime();
+        String comeHomeTime = dto.getComeHomeTime();
+        String sleepTimeWorkday = dto.getSleepTimeWorkday();
+        String wakeUpTimeHoliday = dto.getWakeUpTimeHoliday();
+        String sleepTimeHoliday = dto.getSleepTimeHoliday();
+        AlarmCount alarmCount = dto.getAlarmCount();
+
+        return UserProfile.builder()
+                .user(user)
+               .workType(workType)
+                .workDays(workDays)
+                .wakeUpTimeWorkday(wakeUpTimeWorkday)
+                .goWorkTime(goWorkTime)
+                .comeHomeTime(comeHomeTime)
+                .sleepTimeWorkday(sleepTimeWorkday)
+                .wakeUpTimeHoliday(wakeUpTimeHoliday)
+                .sleepTimeHoliday(sleepTimeHoliday)
+                .alarmCount(alarmCount)
+               .build();
+    }
+
+}

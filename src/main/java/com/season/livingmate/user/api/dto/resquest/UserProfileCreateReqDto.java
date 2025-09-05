@@ -15,49 +15,8 @@ import java.util.List;
 @Schema(description = "유저프로필 생성 요청 DTO")
 public class UserProfileCreateReqDto {
 
-    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "PREELANCER"})
-    private WorkType workType;
-
-    @ArraySchema(schema = @Schema(description = "출근 요일 목록", example = "월,화,수,목,금"))
-    private List<String> workDays;
-
-    @Schema(description = "출근일 기상 시간", example = "07:00")
-    @NotBlank
-    private String wakeUpTimeWorkday;
-
-    @Schema(description = "출근 시간", example = "09:00")
-    @NotBlank
-    private String goWorkTime;
-
-    @Schema(description = "퇴근 시간", example = "18:00")
-    @NotBlank
-    private String leaveWorkTime;
-
-    @Schema(description = "출근일 취침 시간", example = "23:00")
-    @NotBlank
-    private String sleepTimeWorkday;
-
-    @Schema(description = "휴일 기상 시간", example = "08:00")
-    @NotBlank
-    private String wakeUpTimeHoliday;
-
-    @Schema(description = "휴일 취침 시간", example = "24:00")
-    @NotBlank
-    private String sleepTimeHoliday;
-
-    @Schema(description = "알람 듣는 횟수", example = "ONE", allowableValues = {"ONCE", "TWICE", "THREE_OR_MORE"})
-    @NotNull
-    private AlarmCount alarmCount;
-
-    @Schema(description = "공부 횟수 범위", example = "ZERO", allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
-    @NotNull
-    private CountRange studyCount;
-
-    @Schema(description = "외출 횟수 범위", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
-    @NotNull
-    private CountRange outingCount;
-
-    @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
+    // 식사 습관
+    @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONE_TO_THREE", "MORE_THAN_FOUR"})
     @NotNull
     private CountRange cookingCount;
 
@@ -65,33 +24,33 @@ public class UserProfileCreateReqDto {
     @NotNull
     private SensitivityLevel smellLevel;
 
+    @Schema(description = "주 음주 횟수", example = "ZERO",allowableValues = {"ZERO", "ONE_TO_THREE", "MORE_THAN_FOUR"})
+    @NotNull
+    private CountRange alcoholCount;
+
     @Schema(description = "식기류 공유 여부", example = "SHARE",allowableValues = {"SHARE", "PERSONAL"})
     @NotNull
     private DishShare dishShare;
 
-    @Schema(description = "배달 음식 주문 빈도", example = "ZERO",allowableValues = {"ZERO", "ONT_TO_TWO", "TWO_TO_THREE", "THREE_TO_FOUR", "FOUR_TO_FIVE", "MORE_THAN_FIVE"})
-    @NotNull
-    private CountRange deliveryCount;
 
-
+    // 소리 민감도
     @Schema(description = "잠귀 민감도", example = "HIGH", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     @NotNull
     private SensitivityLevel sleepLevel;
 
-    @ArraySchema(schema = @Schema(description = "잠버릇 목록", example = "NONE"))
-    private List<@NotBlank String> sleepHabit;
+    @Schema(description = "잠버릇" , example = "NONE", allowableValues = {"NONE", "SNORING", "TEETH_GRINDING"})
 
-    @ArraySchema(schema = @Schema(description = "선호하는 소리 목록", example = "ALAWAYS_SOUND"))
-    private List<@NotBlank String> preferSound;
+    private List<String> sleepHabit;
 
-    @Schema(description = "이어폰 사용 형태", example = "NIGHT_ONLY" , allowableValues = {"ALAWAYS", "NIGHT_ONLY", "NOT_CARE"})
+    @Schema(description = "나의 휴대폰 모드", example = "SILENT" , allowableValues = {"VIBRATION", "SILENT", "NONE"})
+    @NotNull
+    private PhoneMode phoneMode;
+
+    @Schema(description = "나의 이어폰 사용", example = "NIGHT_ONLY" , allowableValues = {"ALAWAYS", "NIGHT_ONLY", "NOT_CARE"})
     @NotNull
     private EarphoneUsage earphoneUsage;
 
-    @Schema(description = "청소 빈도", example = "MEDIUM", allowableValues = {"LOW", "MEDIUM", "HIGH"})
-    @NotNull
-    private SensitivityLevel cleaningLevel;
-
+    // 청소 습관
     @Schema(description = "화장실 청소 빈도", example = "HIGH", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     @NotNull
     private SensitivityLevel bathroomCleaningLevel;
@@ -100,13 +59,10 @@ public class UserProfileCreateReqDto {
     @NotNull
     private SensitivityLevel tidinessLevel;
 
-    @Schema(description = "흡연 여부", example = "NONE", allowableValues = {"CIGARETTE", "VAPE", "NONE"})
+    @Schema(description = "흡연여부" , example = "false")
     @NotNull
-    private List<@NotBlank String> smoking;
+    private boolean smoking;
 
-    @Schema(description = "실내 흡연 허용 정도", example = "NO", allowableValues = {"NOT_CARE", "NO", "CIGARETTE", "VAPE"  })
-    @NotNull
-    private IndoorSmokingPreference indoorSmokingPreference;
 
     @ArraySchema(schema = @Schema(description = "반려동물 종류 목록", example = "강아지, 고양이"))
     private List<@NotBlank String> pet;
@@ -121,30 +77,17 @@ public class UserProfileCreateReqDto {
 
     public UserProfile toEntity(User user){
         return UserProfile.builder()
-                .workType(workType)
-                .workDays(workDays)
-                .wakeUpTimeWorkday(wakeUpTimeWorkday)
-                .goWorkTime(goWorkTime)
-                .leaveWorkTime(leaveWorkTime)
-                .wakeUpTimeHoliday(wakeUpTimeHoliday)
-                .sleepTimeWorkday(sleepTimeWorkday)
-                .sleepTimeHoliday(sleepTimeHoliday)
-                .alarmCount(alarmCount)
-                .studyCount(studyCount)
-                .outingCount(outingCount)
+                .alcoholCount(alcoholCount)
                 .cookingCount(cookingCount)
                 .smellLevel(smellLevel)
                 .dishShare(dishShare)
-                .deliveryCount(deliveryCount)
                 .sleepLevel(sleepLevel)
                 .sleepHabit(sleepHabit)
-                .preferSound(preferSound)
+                .phoneMode(phoneMode)
                 .earphoneUsage(earphoneUsage)
-                .cleaningLevel(cleaningLevel)
                 .bathroomCleaningLevel(bathroomCleaningLevel)
                 .tidinessLevel(tidinessLevel)
                 .smoking(smoking)
-                .indoorSmokingPreference(indoorSmokingPreference)
                 .pet(pet)
                 .disease(disease)
                 .user(user)

@@ -1,11 +1,7 @@
 package com.season.livingmate.user.api.dto.response;
 
 import com.season.livingmate.user.domain.*;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,128 +14,122 @@ import java.util.List;
 @Schema(description = "유저프로필 응답 DTO")
 public class UserProfileResDto {
 
-    @Schema(description = "사용자 ID", example = "1")
-    private Long userId;
+    private  Long userId;
+    private String nickname;
+    private int age;
+    private Gender gender;
 
-    @Schema(description = "통근 유형", example = "OFFICE")
-    private WorkType workType;
-
-    @ArraySchema(schema = @Schema(description = "출근 요일 목록", example = "월,화,수,목,금"))
-    private List<String> workDays;
-
-    @Schema(description = "출근일 기상 시간", example = "07:00")
-    private String wakeUpTimeWorkday;
-
-    @Schema(description = "출근 시간", example = "09:00")
-    private String goWorkTime;
-
-    @Schema(description = "퇴근 시간", example = "18:00")
-    private String leaveWorkTime;
-
-    @Schema(description = "출근일 취침 시간", example = "23:00")
-    private String sleepTimeWorkday;
-
-    @Schema(description = "휴일 기상 시간", example = "08:00")
-    private String wakeUpTimeHoliday;
-
-    @Schema(description = "휴일 취침 시간", example = "24:00")
-    private String sleepTimeHoliday;
-
-    @Schema(description = "알람 듣는 횟수", example = "ONE")
-    private AlarmCount alarmCount;
-
-    @Schema(description = "공부 횟수 범위", example = "ZERO")
-    private CountRange studyCount;
-
-    @Schema(description = "외출 횟수 범위", example = "ZERO")
-    private CountRange outingCount;
-
-    @Schema(description = "요리 빈도", example = "ZERO")
-    private CountRange cookingCount; // 요리 빈도
-
-    @Schema(description = "냄새 민감도", example = "LOW")
-    private SensitivityLevel smellLevel; // 냄새 민감도
-
-    @Schema(description = "식기류 공유 여부", example = "SHARE")
-    private DishShare dishShare; // 식기류 공유 여부
-
-    @Schema(description = "외출 횟수 범위", example = "ZERO")
-    private CountRange deliveryCount; // 배달 음식 주문 빈도
-
-    @Schema(description = "잠귀 민감도", example = "HIGH")
-    private SensitivityLevel sleepLevel;
-
-    @ArraySchema(schema = @Schema(description = "잠버릇 목록", example = "NONE"))
-    private List<String> sleepHabit;
-
-    @ArraySchema(schema = @Schema(description = "선호하는 소리 목록", example = "ALAWAYS_SOUND"))
-    private List<String> preferSound;
-
-    @Schema(description = "이어폰 사용 형태", example = "NIGHT_ONLY")
-    private EarphoneUsage earphoneUsage;
-
-    @Schema(description = "청소 빈도", example = "MEDIUM")
-    private SensitivityLevel cleaningLevel;
-
-    @Schema(description = "화장실 청소 빈도", example = "HIGH")
-    private SensitivityLevel bathroomCleaningLevel;
-
-    @Schema(description = "정리정돈 성향", example = "LOW")
-    private SensitivityLevel tidinessLevel;
-
-    @Schema(description = "흡연 여부", example = "NONE")
-    private List<String> smoking;
-
-    @Schema(description = "실내 흡연 허용 정도", example = "NO")
-    private IndoorSmokingPreference indoorSmokingPreference;
-
-    @ArraySchema(schema = @Schema(description = "반려동물 종류 목록", example = "강아지, 고양이"))
-    private List<String> pet;
-
-    @Schema(description = "질병 정보", example = "없음")
-    private String disease;
-
-    @Schema(description = "자기소개", example = "안녕하세요, 새로운 사용자입니다.")
+    private LifeHabitDto lifeHabit;
+    private MealHabitDto mealHabit;
+    private EtcDto etc;
+    private CleaningHabitDto cleaningHabit;
+    private SoundSensitivityDto soundSensitivity;
     private String introduce;
 
-    @Schema(description = "생성일시", example = "2025-08-31T12:00:00")
-    private String createdAt;
+    @Getter
+    @AllArgsConstructor
+    public static class LifeHabitDto {
+        private WorkType workType;
+        private List<String> workDays;
+        private String wakeUpTimeWorkday;
+        private String goWorkTime;
+        private String comeHomeTime;
+        private String sleepTimeWorkday;
+        private String wakeUpTimeHoliday;
+        private String sleepTimeHoliday;
+        private AlarmCount alarmCount;
+    }
 
-    @Schema(description = "수정일시", example = "2025-08-31T14:00:00")
-    private String updatedAt;
+    @Getter
+    @AllArgsConstructor
+    public static class MealHabitDto {
+        private CountRange cookingCount;
+        private SensitivityLevel smellLevel;
+        private CountRange alcoholCount;
+        private DishShare dishShare;
 
-    public static UserProfileResDto from(UserProfile userProfile){
-        return new UserProfileResDto(
-                userProfile.getUser().getId(),
-                userProfile.getWorkType(),
-                userProfile.getWorkDays(),
-                userProfile.getWakeUpTimeWorkday(),
-                userProfile.getGoWorkTime(),
-                userProfile.getLeaveWorkTime(),
-                userProfile.getSleepTimeWorkday(),
-                userProfile.getWakeUpTimeHoliday(),
-                userProfile.getSleepTimeHoliday(),
-                userProfile.getAlarmCount(),
-                userProfile.getStudyCount(),
-                userProfile.getOutingCount(),
-                userProfile.getCookingCount(),
-                userProfile.getSmellLevel(),
-                userProfile.getDishShare(),
-                userProfile.getDeliveryCount(),
-                userProfile.getSleepLevel(),
-                userProfile.getSleepHabit(),
-                userProfile.getPreferSound(),
-                userProfile.getEarphoneUsage(),
-                userProfile.getCleaningLevel(),
-                userProfile.getBathroomCleaningLevel(),
-                userProfile.getTidinessLevel(),
-                userProfile.getSmoking(),
-                userProfile.getIndoorSmokingPreference(),
-                userProfile.getPet(),
-                userProfile.getDisease(),
-                userProfile.getIntroduce(),
-                userProfile.getCreatedAt().toString(),
-                userProfile.getModifiedAt().toString()
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CleaningHabitDto {
+        private SensitivityLevel bathroomCleaningLevel;
+        private SensitivityLevel tidinessLevel;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class SoundSensitivityDto {
+        private SensitivityLevel sleepLevel;
+        private List<String> sleepHabit;
+        private PhoneMode phoneMode;
+        private EarphoneUsage earphoneUsage;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class EtcDto {
+        private boolean smoking;
+        private List<String> pet;
+    }
+
+    private boolean smoking;
+    private List<String> pet;
+
+    private String disease;
+
+    public static UserProfileResDto from(UserProfile profile) {
+        LifeHabitDto lifeHabit = new LifeHabitDto(
+                profile.getWorkType(),
+                profile.getWorkDays(),
+                profile.getWakeUpTimeWorkday(),
+                profile.getGoWorkTime(),
+                profile.getComeHomeTime(),
+                profile.getSleepTimeWorkday(),
+                profile.getWakeUpTimeHoliday(),
+                profile.getSleepTimeHoliday(),
+                profile.getAlarmCount()
         );
+
+        MealHabitDto mealHabit = new MealHabitDto(
+                profile.getCookingCount(),
+                profile.getSmellLevel(),
+                profile.getAlcoholCount(),
+                profile.getDishShare()
+        );
+
+        CleaningHabitDto cleaningHabit = new CleaningHabitDto(
+                profile.getBathroomCleaningLevel(),
+                profile.getTidinessLevel()
+        );
+
+        SoundSensitivityDto soundSensitivity = new SoundSensitivityDto(
+                profile.getSleepLevel(),
+                profile.getSleepHabit(),
+                profile.getPhoneMode(),
+                profile.getEarphoneUsage()
+        );
+
+        EtcDto etc = new EtcDto(
+                profile.isSmoking(),
+                profile.getPet()
+        );
+
+        return new UserProfileResDto(
+                profile.getUser().getId(),
+                profile.getUser().getNickname(),
+                profile.getUser().getAge(),
+                profile.getUser().getGender(),
+                lifeHabit,
+                mealHabit,
+                etc,
+                cleaningHabit,
+                soundSensitivity,
+                profile.getIntroduce(),
+                profile.isSmoking(),
+                profile.getPet(),
+                profile.getDisease()
+        );
+
     }
 }

@@ -25,7 +25,7 @@ public record PostListRes(
 
         Gender userGender,
 
-        String smoking,
+        Object smoking,
 
         LocalDateTime availableDate
 ) {
@@ -43,7 +43,8 @@ public record PostListRes(
                         p.getMonthlyRent(),
                         p.getRegionLabel(),
                         user.getGender(),
-                        userProfile != null ? String.join(", ", userProfile.getSmoking()) : "정보 없음",
+                        userProfile == null ? "정보 없음"
+                                : (userProfile.isSmoking() ? "흡연" : "비흡연"),
                         p.getAvailableDate());
         }
 }
