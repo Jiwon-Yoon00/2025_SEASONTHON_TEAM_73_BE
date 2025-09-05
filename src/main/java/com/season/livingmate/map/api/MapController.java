@@ -1,14 +1,17 @@
 package com.season.livingmate.map.api;
 
+import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.map.api.dto.PostDetailMapRes;
 import com.season.livingmate.map.api.dto.PostMapDetailRes;
 import com.season.livingmate.map.api.dto.PostMapRes;
 import com.season.livingmate.map.application.MapService;
+import com.season.livingmate.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +26,11 @@ public class MapController {
 
     @Operation(summary = "지도 핀 조회 API", description = "지도에 표시할 모든 게시글 핀들을 조회합니다. 실제 좌표에서 200m 반경 랜덤 좌표로 표시됩니다.")
     @GetMapping("/posts")
-    public ResponseEntity<Response<List<PostMapRes>>> getMapPosts() {
-        Response<List<PostMapRes>> res = mapService.getMapPosts();
+    public ResponseEntity<Response<List<PostMapRes>>> getMapPosts(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+            ) {
+        User user = userDetails.getUser();
+        Response<List<PostMapRes>> res = mapService.getMapPosts(user);
         return ResponseEntity.ok(res);
     }
 

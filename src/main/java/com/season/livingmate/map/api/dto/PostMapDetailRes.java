@@ -45,9 +45,9 @@ public record PostMapDetailRes(
                 post.getRoomType().getKoreanName(),
                 post.getWashroomCount(),
                 user.getGender(),
-                userProfile != null ? userProfile.getSmoking().toString() : null,
-                userProfile != null ? userProfile.getWorkDays() : null,
-                userProfile != null ? userProfile.getGoWorkTime() : null
+                userProfile != null ? String.join(", ", userProfile.getSmoking()) : "정보 없음",
+                userProfile != null ? userProfile.getWorkDays() : List.of(),
+                userProfile != null ? userProfile.getGoWorkTime() : "정보 없음"
         );
     }
 }

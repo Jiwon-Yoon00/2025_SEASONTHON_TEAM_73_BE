@@ -9,7 +9,10 @@ import com.season.livingmate.map.api.dto.PostMapDetailRes;
 import com.season.livingmate.map.api.dto.PostMapRes;
 import com.season.livingmate.map.domain.repository.MapRepository;
 import com.season.livingmate.post.domain.Post;
+import com.season.livingmate.post.domain.repository.PostSpecs;
+import com.season.livingmate.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +26,10 @@ public class MapService {
     private final MapRepository mapRepository;
 
     // 지도용 게시글 목록 조회 (200m 반경 랜덤 좌표)
-    public Response<List<PostMapRes>> getMapPosts() {
+    public Response<List<PostMapRes>> getMapPosts(User user) {
+        // 사용자 성별로 필터링
+        Specification<Post> spec = PostSpecs.matchUserGender(user.getGender());
+
         List<Post> posts = mapRepository.findAll();
         List<PostMapRes> mapPosts = posts.stream()
                 .map(PostMapRes::from)
