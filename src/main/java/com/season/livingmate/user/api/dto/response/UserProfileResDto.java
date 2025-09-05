@@ -14,6 +14,7 @@ import java.util.List;
 @Schema(description = "유저프로필 응답 DTO")
 public class UserProfileResDto {
 
+    private  Long userId;
     private String nickname;
     private int age;
     private Gender gender;
@@ -115,6 +116,7 @@ public class UserProfileResDto {
         );
 
         return new UserProfileResDto(
+                profile.getUser().getId(),
                 profile.getUser().getNickname(),
                 profile.getUser().getAge(),
                 profile.getUser().getGender(),
