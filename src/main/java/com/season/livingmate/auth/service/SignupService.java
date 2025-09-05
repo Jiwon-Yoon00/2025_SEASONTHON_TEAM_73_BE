@@ -1,12 +1,18 @@
 package com.season.livingmate.auth.service;
 
+import com.season.livingmate.auth.dto.request.LifeRhythmReqDto;
 import com.season.livingmate.auth.dto.request.SignupReqDto;
 import com.season.livingmate.auth.dto.request.VerifyOtpReqDto;
+import com.season.livingmate.auth.dto.response.LifeRhythmResDto;
 import com.season.livingmate.auth.dto.response.SignupResDto;
+import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.auth.security.JwtProvider;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.status.ErrorStatus;
+import com.season.livingmate.user.api.dto.response.UserProfileResDto;
 import com.season.livingmate.user.domain.User;
+import com.season.livingmate.user.domain.UserProfile;
+import com.season.livingmate.user.domain.repository.UserProfileRepository;
 import com.season.livingmate.user.domain.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -27,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SignupService {
 
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
     private final PasswordEncoder passwordEncoder;
     private DefaultMessageService messageService;
     private final Map<String, SignupService.OtpInfo> otpStore = new ConcurrentHashMap<>();
@@ -133,6 +140,18 @@ public class SignupService {
 
         return SignupResDto.from(user, accessToken, refreshToken);
     }
+
+    @Transactional
+    public LifeRhythmResDto createLifeRhythm(LifeRhythmReqDto dto, CustomUserDetails userDetails) throws Exception {
+        User user = userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
+
+        UserProfile updatedProfile = dto.toEntity(dto,user);
+        UserProfile savedProfile = userProfileRepository.save(updatedProfile);
+
+        return LifeRhythmResDto.from(savedProfile, user);
+    }
+
 
     // OTP 정보 record
     private record OtpInfo(String otp, long expireAt) {}

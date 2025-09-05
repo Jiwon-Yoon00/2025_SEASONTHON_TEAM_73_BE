@@ -1,9 +1,12 @@
 package com.season.livingmate.auth.controller;
 
+import com.season.livingmate.auth.dto.request.LifeRhythmReqDto;
 import com.season.livingmate.auth.dto.request.SendOtpReqDto;
 import com.season.livingmate.auth.dto.request.SignupReqDto;
 import com.season.livingmate.auth.dto.request.VerifyOtpReqDto;
+import com.season.livingmate.auth.dto.response.LifeRhythmResDto;
 import com.season.livingmate.auth.dto.response.SignupResDto;
+import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.auth.service.SignupService;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.Response;
@@ -19,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,5 +83,12 @@ public class SignupController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Response.fail(ErrorStatus.INTERNAL_SERVER_ERROR));
         }
+    }
+
+    @PostMapping("/life-rhythm")
+    @Operation(summary = "회원 가입 시 생활 리듬만 작성")
+    public ResponseEntity<Response<LifeRhythmResDto>> setLifeRhythm(@RequestBody @Valid LifeRhythmReqDto lifeRhythmReqDto, @AuthenticationPrincipal CustomUserDetails customUserDetails) throws Exception{
+        LifeRhythmResDto dto = signupService.createLifeRhythm(lifeRhythmReqDto, customUserDetails);
+        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }
 }

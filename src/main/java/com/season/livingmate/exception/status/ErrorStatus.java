@@ -39,7 +39,8 @@ public enum ErrorStatus {
     ONLY_SENDER_CANNOT_CREATE(HttpStatus.FORBIDDEN, "CHAT403", "작성자는 스스로 채팅방을 생성할 수 없습니다."),
     CHAT_ROOM_NOT_ACCEPTED(HttpStatus.FORBIDDEN, "CHAT403", "수락된 채팅방에서만 메시지를 보낼 수 있습니다."),
     // 상태 관련
-    CHAT_ROOM_ALREADY_APPLIED(HttpStatus.CONFLICT, "CHAT409", "이미 신청된 채팅방입니다."),;
+    CHAT_ROOM_ALREADY_APPLIED(HttpStatus.CONFLICT, "CHAT409", "이미 신청된 채팅방입니다."),
+    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PROFILE400", "프로필이 존재하지 않습니다."),;
 
 
     private final HttpStatus status;

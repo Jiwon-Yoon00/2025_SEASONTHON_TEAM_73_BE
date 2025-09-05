@@ -59,8 +59,8 @@ public class UserProfileUpdateReqDto {
     @Schema(description = "잠귀 민감도", example = "HIGH", allowableValues = {"LOW", "MEDIUM", "HIGH"})
     private SensitivityLevel sleepLevel;
 
-    @Schema(description = "잠버릇" , example = "NONE", allowableValues = {"NONE", "SNORING", "TEETH_GRINDING"})
-    private SleepHabit sleepHabit;
+    @ArraySchema(schema = @Schema(description = "잠버릇 목록", example = "NONE"))
+    private List<String> sleepHabit;
 
     @Schema(description = "나의 휴대폰 모드", example = "SILENT" , allowableValues = {"VIBRATION", "SILENT", "NONE"})
     private PhoneMode phoneMode;

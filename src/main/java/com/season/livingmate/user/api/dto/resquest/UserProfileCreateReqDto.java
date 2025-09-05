@@ -15,41 +15,6 @@ import java.util.List;
 @Schema(description = "유저프로필 생성 요청 DTO")
 public class UserProfileCreateReqDto {
 
-    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "PREELANCER"})
-    private WorkType workType;
-
-    @ArraySchema(schema = @Schema(description = "출근 요일 목록", example = "월,화,수,목,금"))
-    private List<String> workDays;
-
-    @Schema(description = "출근일 기상 시간", example = "07:00")
-    @NotBlank
-    private String wakeUpTimeWorkday;
-
-    @Schema(description = "출근 시간", example = "09:00")
-    @NotBlank
-    private String goWorkTime;
-
-    @Schema(description = "귀가 시간", example = "20:00")
-    @NotBlank
-    private String comeHomeTime;
-
-    @Schema(description = "출근일 취침 시간", example = "23:00")
-    @NotBlank
-    private String sleepTimeWorkday;
-
-    @Schema(description = "휴일 기상 시간", example = "08:00")
-    @NotBlank
-    private String wakeUpTimeHoliday;
-
-    @Schema(description = "휴일 취침 시간", example = "24:00")
-    @NotBlank
-    private String sleepTimeHoliday;
-
-    @Schema(description = "알람 듣는 횟수", example = "ONE", allowableValues = {"ONCE", "TWICE", "THREE_OR_MORE"})
-    @NotNull
-    private AlarmCount alarmCount;
-
-
     // 식사 습관
     @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONE_TO_THREE", "MORE_THAN_FOUR"})
     @NotNull
@@ -74,7 +39,8 @@ public class UserProfileCreateReqDto {
     private SensitivityLevel sleepLevel;
 
     @Schema(description = "잠버릇" , example = "NONE", allowableValues = {"NONE", "SNORING", "TEETH_GRINDING"})
-    private SleepHabit sleepHabit;
+
+    private List<String> sleepHabit;
 
     @Schema(description = "나의 휴대폰 모드", example = "SILENT" , allowableValues = {"VIBRATION", "SILENT", "NONE"})
     @NotNull
@@ -111,15 +77,6 @@ public class UserProfileCreateReqDto {
 
     public UserProfile toEntity(User user){
         return UserProfile.builder()
-                .workType(workType)
-                .workDays(workDays)
-                .wakeUpTimeWorkday(wakeUpTimeWorkday)
-                .goWorkTime(goWorkTime)
-                .comeHomeTime(comeHomeTime)
-                .wakeUpTimeHoliday(wakeUpTimeHoliday)
-                .sleepTimeWorkday(sleepTimeWorkday)
-                .sleepTimeHoliday(sleepTimeHoliday)
-                .alarmCount(alarmCount)
                 .alcoholCount(alcoholCount)
                 .cookingCount(cookingCount)
                 .smellLevel(smellLevel)

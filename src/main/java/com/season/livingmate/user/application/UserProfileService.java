@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
@@ -28,14 +30,10 @@ public class UserProfileService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
 
-        // 이미 프로필이 있으면 예외 처리
-        if (userProfileRepository.existsByUser(user)) {
-            throw new CustomException(ErrorStatus.DUPLICATE_RESOURCE);
-        }
-
-        UserProfile userProfile = userProfileCreateReqDto.toEntity(user);
-        UserProfile savedProfile = userProfileRepository.save(userProfile);
-        return UserProfileResDto.from(savedProfile);
+        UserProfile userProfile = userProfileRepository.findByUser(user)
+                .orElseThrow(() -> new CustomException(ErrorStatus.PROFILE_NOT_FOUND));
+        userProfile.updateFromCreateDto(userProfileCreateReqDto);
+        return  UserProfileResDto.from(userProfile);
     }
 
     @Transactional
@@ -54,6 +52,7 @@ public class UserProfileService {
         return UserProfileResDto.from(userProfile);
     }
 
+    // 조회 - 내 프로필
     @Transactional(readOnly = true)
     public UserProfileResDto getMyProfile(CustomUserDetails userDetails) {
         UserProfile profile = userProfileRepository.findByUserId(userDetails.getUserId())
