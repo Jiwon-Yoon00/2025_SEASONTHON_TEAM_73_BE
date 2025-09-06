@@ -18,6 +18,7 @@ public class UserProfileResDto {
     private String nickname;
     private int age;
     private Gender gender;
+    private boolean isCertified;
 
     private LifeHabitDto lifeHabit;
     private MealHabitDto mealHabit;
@@ -43,7 +44,7 @@ public class UserProfileResDto {
     @Getter
     @AllArgsConstructor
     public static class MealHabitDto {
-        private CountRange cookingCount;
+        private MealWay cookingCount;
         private SensitivityLevel smellLevel;
         private CountRange alcoholCount;
         private DishShare dishShare;
@@ -69,18 +70,18 @@ public class UserProfileResDto {
     @Getter
     @AllArgsConstructor
     public static class EtcDto {
-        private boolean smoking;
+        private String smoking;
         private List<String> pet;
     }
 
-    private boolean smoking;
     private List<String> pet;
 
     private String disease;
 
+
     public static UserProfileResDto from(UserProfile profile) {
         LifeHabitDto lifeHabit = new LifeHabitDto(
-                profile.getWorkType(),
+                profile.getWorkType() != null ? WorkType.fromString(profile.getWorkType().getDescription()) : null,
                 profile.getWorkDays(),
                 profile.getWakeUpTimeWorkday(),
                 profile.getGoWorkTime(),
@@ -88,30 +89,30 @@ public class UserProfileResDto {
                 profile.getSleepTimeWorkday(),
                 profile.getWakeUpTimeHoliday(),
                 profile.getSleepTimeHoliday(),
-                profile.getAlarmCount()
+                profile.getAlarmCount() != null ? AlarmCount.fromString(profile.getAlarmCount().getDescription()) : null
         );
 
         MealHabitDto mealHabit = new MealHabitDto(
-                profile.getCookingCount(),
-                profile.getSmellLevel(),
-                profile.getAlcoholCount(),
-                profile.getDishShare()
+                profile.getCookingCount() != null ? MealWay.fromString(profile.getCookingCount().getDescription()) : null,
+                profile.getSmellLevel() != null ? SensitivityLevel.fromString(profile.getSmellLevel().getDescription()) : null,
+                profile.getAlcoholCount() != null ? CountRange.fromString(profile.getAlcoholCount().getDescription()) : null,
+                profile.getDishShare() != null ? DishShare.fromString(profile.getDishShare().getDescription()) : null
         );
 
         CleaningHabitDto cleaningHabit = new CleaningHabitDto(
-                profile.getBathroomCleaningLevel(),
-                profile.getTidinessLevel()
+                profile.getBathroomCleaningLevel() != null ? SensitivityLevel.fromString(profile.getBathroomCleaningLevel().getDescription()) : null,
+                profile.getTidinessLevel() != null ? SensitivityLevel.fromString(profile.getTidinessLevel().getDescription()) : null
         );
 
         SoundSensitivityDto soundSensitivity = new SoundSensitivityDto(
-                profile.getSleepLevel(),
-                profile.getSleepHabit(),
-                profile.getPhoneMode(),
-                profile.getEarphoneUsage()
+                profile.getSleepLevel() != null ? SensitivityLevel.fromString(profile.getSleepLevel().getDescription()) : null,
+                profile.getSleepHabit() != null ? profile.getSleepHabit() : null,
+                profile.getPhoneMode() != null ? PhoneMode.fromString(profile.getPhoneMode().getDescription()) : null,
+                profile.getEarphoneUsage() != null ? EarphoneUsage.fromString(profile.getEarphoneUsage().getDescription()) : null
         );
 
         EtcDto etc = new EtcDto(
-                profile.isSmoking(),
+                profile.isSmoking() ? "흡연" : "비흡연",
                 profile.getPet()
         );
 
@@ -120,13 +121,13 @@ public class UserProfileResDto {
                 profile.getUser().getNickname(),
                 profile.getUser().getAge(),
                 profile.getUser().getGender(),
+                profile.getUser().isCertified(),
                 lifeHabit,
                 mealHabit,
                 etc,
                 cleaningHabit,
                 soundSensitivity,
                 profile.getIntroduce(),
-                profile.isSmoking(),
                 profile.getPet(),
                 profile.getDisease()
         );
