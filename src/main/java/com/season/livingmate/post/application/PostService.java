@@ -33,6 +33,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,12 +48,12 @@ public class PostService {
 
     // 게시글 생성
     @Transactional
-    public Response<Long> createPost(PostCreateReq req, MultipartFile imageFile, User user) {
+    public Response<Long> createPost(PostCreateReq req, List<MultipartFile> imageFiles, User user) {
 
         // 이미지 파일 처리
-        String imageUrl = null;
-        if(imageFile != null && !imageFile.isEmpty()){
-            imageUrl = uploadImage(imageFile);
+        List<String> imageUrls = new ArrayList<>();
+        if(imageFiles != null && !imageFiles.isEmpty()){
+            imageUrls = uploadImages(imageFiles);
         }
 
         // 주소, 좌표 확정
@@ -100,7 +102,7 @@ public class PostService {
         Post post = Post.builder()
                 .title(req.title())
                 .content(req.content())
-                .imageUrl(imageUrl)
+                .imageUrls(imageUrls)
                 .geoPoint(geo)
                 .location(address)
                 .roomType(req.roomType())
@@ -129,7 +131,21 @@ public class PostService {
         return Response.success(SuccessStatus.CREATE_POST, id);
     }
 
-    // 이미지 업로드 메서드
+    // 다중 이미지 업로드 메서드
+    private List<String> uploadImages(List<MultipartFile> files) {
+        List<String> imageUrls = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            if (file != null && !file.isEmpty()) {
+                String imageUrl = uploadImage(file);
+                imageUrls.add(imageUrl);
+            }
+        }
+
+        return imageUrls;
+    }
+
+    // 단일 이미지 업로드 메서드
     private String uploadImage(MultipartFile file) {
         try {
             // 파일 타입 검증
@@ -190,7 +206,7 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Response<Long> updatePost(Long postId, PostUpdateReq req, MultipartFile imageFile, User currentUser) {
+    public Response<Long> updatePost(Long postId, PostUpdateReq req, List<MultipartFile> imageFiles, User currentUser) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
 
@@ -199,9 +215,9 @@ public class PostService {
         }
 
         // 이미지 파일 처리
-        String imageUrl = post.getImageUrl(); // 기존 이미지 URL 유지
-        if (imageFile != null && !imageFile.isEmpty()) {
-            imageUrl = uploadImage(imageFile);
+        List<String> imageUrls = post.getImageUrls(); // 기존 이미지 URL 유지
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            imageUrls = uploadImages(imageFiles);
         }
 
         Double lat = req.latitude();
@@ -244,7 +260,7 @@ public class PostService {
         post.update(
                 req.title(),
                 req.content(),
-                imageUrl,
+                imageUrls,
                 geo,
                 (address != null && !address.isBlank()) ? address : post.getLocation(),
                 req.roomType(),

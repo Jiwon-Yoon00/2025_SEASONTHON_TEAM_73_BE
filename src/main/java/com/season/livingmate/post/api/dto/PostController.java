@@ -22,6 +22,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -32,10 +34,10 @@ public class PostController {
     @Operation(summary = "게시글 생성 API")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Response<Long>> createPost(@RequestPart("data") PostCreateReq req,
-                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+                                                     @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.createPost(req, imageFile, user);
+        Response<Long> res = postService.createPost(req, imageFiles, user);
         return ResponseEntity
                 .status(SuccessStatus.CREATE_POST.getStatus())
                 .body(res);
@@ -62,10 +64,10 @@ public class PostController {
     @PatchMapping("{postId}")
     public ResponseEntity<Response<Long>> updatePost(@PathVariable Long postId,
                                                      @RequestPart("data") PostUpdateReq req,
-                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+                                                     @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.updatePost(postId, req, imageFile, user);
+        Response<Long> res = postService.updatePost(postId, req, imageFiles, user);
         return ResponseEntity.ok(res);
     }
 
