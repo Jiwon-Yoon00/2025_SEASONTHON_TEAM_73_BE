@@ -16,7 +16,7 @@ import java.util.List;
 public class UserProfileCreateReqDto {
 
     // 식사 습관
-    @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONE_TO_THREE", "MORE_THAN_FOUR"})
+    @Schema(description = "요리 빈도", example = "COOK",allowableValues = {"COOK", "ORDER"})
     @NotNull
     private MealWay cookingCount;
 
@@ -38,15 +38,14 @@ public class UserProfileCreateReqDto {
     @NotNull
     private SensitivityLevel sleepLevel;
 
-    @Schema(description = "잠버릇" , example = "NONE", allowableValues = {"NONE", "SNORING", "TEETH_GRINDING"})
+    @ArraySchema(schema = @Schema(description = "잠버릇", example = "SNORING, TEETH_GRINDING"))
+    private List<@NotBlank String> sleepHabit;
 
-    private List<String> sleepHabit;
-
-    @Schema(description = "나의 휴대폰 모드", example = "SILENT" , allowableValues = {"VIBRATION", "SILENT", "NONE"})
+    @Schema(description = "나의 휴대폰 모드", example = "SILENT" , allowableValues = {"VIBRATION", "SILENT", "SOUND"})
     @NotNull
     private PhoneMode phoneMode;
 
-    @Schema(description = "나의 이어폰 사용", example = "NIGHT_ONLY" , allowableValues = {"ALAWAYS", "NIGHT_ONLY", "NOT_CARE"})
+    @Schema(description = "나의 이어폰 사용", example = "NIGHT_ONLY" , allowableValues = {"ALAWAYS", "NIGHT_ONLY", "NONE"})
     @NotNull
     private EarphoneUsage earphoneUsage;
 
