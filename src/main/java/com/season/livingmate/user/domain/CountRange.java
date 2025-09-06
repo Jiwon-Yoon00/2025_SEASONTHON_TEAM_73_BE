@@ -22,7 +22,7 @@ public enum CountRange {
 	public static CountRange fromString(String value) {
 		if (value == null) return null;
 		for (CountRange type : CountRange.values()) {
-			if (type.name().equalsIgnoreCase(value) || type.getDescription().equals(value)) {
+			if (type.name().equalsIgnoreCase(value)) {
 				return type;
 			}
 		}

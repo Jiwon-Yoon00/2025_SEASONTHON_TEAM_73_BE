@@ -20,7 +20,7 @@ public enum DishShare {
     public static DishShare fromString(String value) {
         if (value == null) return null;
         for (DishShare type : DishShare.values()) {
-            if (type.name().equalsIgnoreCase(value) || type.getDescription().equals(value)) {
+            if (type.name().equalsIgnoreCase(value)) {
                 return type;
             }
         }

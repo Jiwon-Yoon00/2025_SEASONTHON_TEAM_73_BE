@@ -20,7 +20,7 @@ public enum MealWay {
     public static MealWay fromString(String value) {
         if (value == null) return null;
         for (MealWay type : MealWay.values()) {
-            if (type.name().equalsIgnoreCase(value) || type.getDescription().equals(value)) {
+            if (type.name().equalsIgnoreCase(value)) {
                 return type;
             }
         }

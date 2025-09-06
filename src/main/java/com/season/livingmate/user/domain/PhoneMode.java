@@ -23,7 +23,7 @@ public enum PhoneMode {
     public static PhoneMode fromString(String value) {
         if (value == null) return null;
         for (PhoneMode type : PhoneMode.values()) {
-            if (type.name().equalsIgnoreCase(value) || type.getDescription().equals(value)) {
+            if (type.name().equalsIgnoreCase(value)) {
                 return type;
             }
         }

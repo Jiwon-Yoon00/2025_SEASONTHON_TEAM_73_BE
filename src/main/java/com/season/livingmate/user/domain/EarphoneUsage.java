@@ -22,7 +22,7 @@ public enum EarphoneUsage {
 	public static EarphoneUsage fromString(String value) {
 		if (value == null) return null;
 		for (EarphoneUsage type : EarphoneUsage.values()) {
-			if (type.name().equalsIgnoreCase(value) || type.getDescription().equals(value)) {
+			if (type.name().equalsIgnoreCase(value) ) {
 				return type;
 			}
 		}
