@@ -1,5 +1,6 @@
 package com.season.livingmate.post.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.ErrorStatus;
@@ -45,10 +46,19 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final GeoService geoService;
+    private final ObjectMapper objectMapper;
 
     // 게시글 생성
     @Transactional
-    public Response<Long> createPost(PostCreateReq req, List<MultipartFile> imageFiles, User user) {
+    public Response<Long> createPost(String dataJson, List<MultipartFile> imageFiles, User user) {
+
+        // JSON 문자열을 PostCreateReq로 변환
+        PostCreateReq req;
+        try {
+            req = objectMapper.readValue(dataJson, PostCreateReq.class);
+        } catch (Exception e) {
+            throw new CustomException(ErrorStatus.BAD_REQUEST, "잘못된 JSON 형식입니다.");
+        }
 
         // 이미지 파일 처리
         List<String> imageUrls = new ArrayList<>();
@@ -206,7 +216,16 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Response<Long> updatePost(Long postId, PostUpdateReq req, List<MultipartFile> imageFiles, User currentUser) {
+    public Response<Long> updatePost(Long postId, String dataJson, List<MultipartFile> imageFiles, User currentUser) {
+
+        // JSON 문자열을 PostUpdateReq로 변환
+        PostUpdateReq req;
+        try {
+            req = objectMapper.readValue(dataJson, PostUpdateReq.class);
+        } catch (Exception e) {
+            throw new CustomException(ErrorStatus.BAD_REQUEST, "잘못된 JSON 형식입니다.");
+        }
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
 
