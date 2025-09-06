@@ -18,6 +18,7 @@ public class UserProfileResDto {
     private String nickname;
     private int age;
     private Gender gender;
+    private boolean isCertified;
 
     private LifeHabitDto lifeHabit;
     private MealHabitDto mealHabit;
@@ -120,6 +121,7 @@ public class UserProfileResDto {
                 profile.getUser().getNickname(),
                 profile.getUser().getAge(),
                 profile.getUser().getGender(),
+                profile.getUser().isCertified(),
                 lifeHabit,
                 mealHabit,
                 etc,
