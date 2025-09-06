@@ -34,9 +34,11 @@ public record PostListRes(
                 User user = p.getUser();
                 UserProfile userProfile = user.getUserProfile();
 
+                String firstImageUrl = p.getImageUrls().isEmpty() ? null : p.getImageUrls().get(0);
+
                 return new PostListRes(
                         p.getPostId(),
-                        p.getImageUrl(),
+                        firstImageUrl,
                         p.getTitle(),
                         p.getRoomType().getKoreanName(),
                         p.getDeposit(),
