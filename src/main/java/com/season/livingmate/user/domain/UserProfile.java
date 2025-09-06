@@ -47,7 +47,7 @@ public class UserProfile extends BaseEntity {
     * */
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
-    private CountRange cookingCount; // 요리 빈도
+    private MealWay cookingCount; // 요리 빈도
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
