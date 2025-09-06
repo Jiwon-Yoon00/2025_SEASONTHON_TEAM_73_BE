@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = header.replace("Bearer ", "");
-        log.info("🔐 Token received: {}", token);
+        log.info("Token received: {}", token);
 
         if (!request.getRequestURI().equals("/auth/refresh")) {
             setAuthentication(token);

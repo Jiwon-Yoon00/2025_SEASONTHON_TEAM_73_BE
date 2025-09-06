@@ -76,8 +76,8 @@ public class PostService {
         // 서울시 구 동 라벨 생성
         KakaoAddressRes.Document doc = geoService.findFirstDocument(address).orElse(null);
         String regionLabel = (doc != null)
-                ? RegionLabelSeoul.toSeoulGuDong(doc)                           // 주소검색 성공
-                : geoService.regionByCoord(lat, lng)                             // 주소검색 실패 → 좌표 폴백
+                ? RegionLabelSeoul.toSeoulGuDong(doc) // 주소검색 성공
+                : geoService.regionByCoord(lat, lng) // 주소검색 실패
                 .map(GeoService.RegionParts::regionLabel)
                 .orElse("");
         if (regionLabel.isBlank()) {

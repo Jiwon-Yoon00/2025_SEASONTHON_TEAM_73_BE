@@ -55,7 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws
             IOException {
-        log.info("💡 로그인 성공");
+        log.info("로그인 성공");
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
@@ -87,7 +87,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws
             IOException {
-        log.info("❌ 로그인 실패");
+        log.info("로그인 실패");
         log.info("failed :" + failed.getMessage());
         // 예: "이메일 또는 비밀번호가 잘못되었습니다"
         ErrorStatus errorStatus = ErrorStatus.USER_NOT_FOUND; // 기본값
