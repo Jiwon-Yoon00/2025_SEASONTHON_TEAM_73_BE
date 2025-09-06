@@ -19,11 +19,10 @@ public enum MealWay {
     @JsonCreator
     public static MealWay fromString(String value) {
         if (value == null) return null;
-        for (MealWay type : MealWay.values()) {
-            if (type.name().equalsIgnoreCase(value)) {
-                return type;
-            }
+        try {
+            return MealWay.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid EarphoneUsage: " + value);
         }
-        throw new IllegalArgumentException("Invalid CountRange: " + value);
     }
 }

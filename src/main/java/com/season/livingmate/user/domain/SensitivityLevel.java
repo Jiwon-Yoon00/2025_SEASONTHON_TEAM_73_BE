@@ -20,11 +20,10 @@ public enum SensitivityLevel {
 	@JsonCreator
 	public static SensitivityLevel fromString(String value) {
 		if (value == null) return null;
-		for (SensitivityLevel type : SensitivityLevel.values()) {
-			if (type.name().equalsIgnoreCase(value)) {
-				return type;
-			}
+		try {
+			return SensitivityLevel.valueOf(value.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid EarphoneUsage: " + value);
 		}
-		throw new IllegalArgumentException("Invalid CountRange: " + value);
 	}
 }

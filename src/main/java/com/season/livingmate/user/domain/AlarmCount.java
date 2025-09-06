@@ -22,11 +22,10 @@ public enum AlarmCount {
 	@JsonCreator
 	public static AlarmCount fromString(String value) {
 		if (value == null) return null;
-		for (AlarmCount type : AlarmCount.values()) {
-			if (type.name().equalsIgnoreCase(value)) {
-				return type;
-			}
+		try {
+			return AlarmCount.valueOf(value.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid EarphoneUsage: " + value);
 		}
-		throw new IllegalArgumentException("Invalid AlarmCount: " + value);
 	}
 }

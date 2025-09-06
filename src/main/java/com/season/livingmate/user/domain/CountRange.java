@@ -18,14 +18,14 @@ public enum CountRange {
 	public String getDescription() {
 		return description;
 	}
+
 	@JsonCreator
 	public static CountRange fromString(String value) {
 		if (value == null) return null;
-		for (CountRange type : CountRange.values()) {
-			if (type.name().equalsIgnoreCase(value)) {
-				return type;
-			}
+		try {
+			return CountRange.valueOf(value.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid EarphoneUsage: " + value);
 		}
-		throw new IllegalArgumentException("Invalid CountRange: " + value);
 	}
 }

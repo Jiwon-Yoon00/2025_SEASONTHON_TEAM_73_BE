@@ -16,14 +16,14 @@ public enum DishShare {
     public String getDescription() {
         return description;
     }
+
     @JsonCreator
     public static DishShare fromString(String value) {
         if (value == null) return null;
-        for (DishShare type : DishShare.values()) {
-            if (type.name().equalsIgnoreCase(value)) {
-                return type;
-            }
+        try {
+            return DishShare.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid EarphoneUsage: " + value);
         }
-        throw new IllegalArgumentException("Invalid CountRange: " + value);
     }
 }
