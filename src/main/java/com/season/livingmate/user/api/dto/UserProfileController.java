@@ -26,7 +26,7 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
 
     @Operation(summary = "유저프로필 생성")
-    @PostMapping
+    @PatchMapping("/init")
     public ResponseEntity<Response<UserProfileResDto>> create(@RequestBody @Valid UserProfileCreateReqDto userProfileCreateReqDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
         UserProfileResDto userProfileResDto = userProfileService.create(userProfileCreateReqDto, userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.CREATE_PROFILE, userProfileResDto));
