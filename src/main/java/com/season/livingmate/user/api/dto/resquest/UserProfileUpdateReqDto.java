@@ -43,7 +43,7 @@ public class UserProfileUpdateReqDto {
 
     // 식사 습관
     @Schema(description = "요리 빈도", example = "ZERO",allowableValues = {"ZERO", "ONE_TO_THREE", "MORE_THAN_FOUR"})
-    private CountRange cookingCount;
+    private MealWay cookingCount;
 
     @Schema(description = "냄새 민감도", example = "LOW",allowableValues = {"LOW", "MEDIUM",  "HIGH"})
     private SensitivityLevel smellLevel;
