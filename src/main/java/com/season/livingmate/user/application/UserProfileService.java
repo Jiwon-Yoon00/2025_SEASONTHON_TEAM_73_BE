@@ -44,7 +44,7 @@ public class UserProfileService {
         User user = userRepository.findById(userDetails.getUser().getId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
-        UserProfile userProfile = userProfileRepository.findById(user.getId())
+        UserProfile userProfile = userProfileRepository.findByUser(user)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
         userProfile.update(userProfileUpdateReqDto);
