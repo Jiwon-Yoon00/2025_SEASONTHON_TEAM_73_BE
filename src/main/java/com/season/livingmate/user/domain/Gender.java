@@ -1,5 +1,6 @@
 package com.season.livingmate.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Gender {
@@ -16,6 +17,7 @@ public enum Gender {
         return description;
     }
 
+    @JsonCreator
     public static Gender fromString(String value) {
         if (value == null) return null;
         for (Gender type : Gender.values()) {

@@ -1,5 +1,6 @@
 package com.season.livingmate.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MealWay {
@@ -15,6 +16,7 @@ public enum MealWay {
     public String getDescription() {
         return description;
     }
+    @JsonCreator
     public static MealWay fromString(String value) {
         if (value == null) return null;
         for (MealWay type : MealWay.values()) {

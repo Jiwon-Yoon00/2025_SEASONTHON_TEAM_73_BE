@@ -1,5 +1,6 @@
 package com.season.livingmate.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AlarmCount {
@@ -17,6 +18,7 @@ public enum AlarmCount {
 		return description;
 	}
 
+	@JsonCreator
 	public static AlarmCount fromString(String value) {
 		if (value == null) return null;
 		for (AlarmCount type : AlarmCount.values()) {

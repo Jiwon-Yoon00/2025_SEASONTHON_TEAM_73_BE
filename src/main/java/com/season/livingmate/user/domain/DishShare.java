@@ -1,5 +1,6 @@
 package com.season.livingmate.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum DishShare {
@@ -15,7 +16,7 @@ public enum DishShare {
     public String getDescription() {
         return description;
     }
-
+    @JsonCreator
     public static DishShare fromString(String value) {
         if (value == null) return null;
         for (DishShare type : DishShare.values()) {

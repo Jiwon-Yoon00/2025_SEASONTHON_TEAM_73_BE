@@ -1,5 +1,6 @@
 package com.season.livingmate.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum PhoneMode {
@@ -18,6 +19,7 @@ public enum PhoneMode {
         return description;
     }
 
+    @JsonCreator
     public static PhoneMode fromString(String value) {
         if (value == null) return null;
         for (PhoneMode type : PhoneMode.values()) {

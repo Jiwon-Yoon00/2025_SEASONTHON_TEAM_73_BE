@@ -77,15 +77,16 @@ public class ChatService {
     // 메세지 생성(저장)
     @Transactional
     public ChatMessageResDto createMessage(ChatMessageReqDto chatMessageReqDto, CustomUserDetails userDetails) {
+        User user = userDetails.getUser();
+
         ChatRoom chatRoom = chatRoomRepository.findById(chatMessageReqDto.getChatRoomId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
 
-//        // 채팅방 수락 상태 확인 -> PENDING 상태에서도 메세지 보내도록 변경
-//        if (chatRoom.getChatRoomStatus() != ChatRoomStatus.ACCEPTED) {
-//            throw new CustomException(ErrorStatus.CHAT_ROOM_NOT_ACCEPTED);
-//        }
-
-        User user = userDetails.getUser();
+        // 내가 속한 채팅방인지 확인
+        if (!chatRoom.getSender().getId().equals(userDetails.getUserId()) &&
+                !chatRoom.getReceiver().getId().equals(userDetails.getUserId())) {
+            throw new CustomException(ErrorStatus.FORBIDDEN);
+        }
 
         Message message = chatMessageReqDto.toEntity(user, chatRoom);
         messageRepository.save(message);

@@ -22,6 +22,7 @@ public enum WorkType {
         return description;
     }
 
+    @JsonCreator
     public static WorkType fromString(String value) {
         if (value == null) return null;
         for (WorkType type : WorkType.values()) {

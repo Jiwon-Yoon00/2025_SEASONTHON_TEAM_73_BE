@@ -1,5 +1,6 @@
 package com.season.livingmate.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EarphoneUsage {
@@ -17,7 +18,7 @@ public enum EarphoneUsage {
 		return description;
 	}
 
-
+	@JsonCreator
 	public static EarphoneUsage fromString(String value) {
 		if (value == null) return null;
 		for (EarphoneUsage type : EarphoneUsage.values()) {
