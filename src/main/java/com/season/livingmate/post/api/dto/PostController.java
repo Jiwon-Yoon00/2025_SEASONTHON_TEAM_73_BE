@@ -6,6 +6,8 @@ import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
+import com.season.livingmate.post.api.dto.req.PostCreateReq;
+import com.season.livingmate.post.api.dto.req.PostUpdateReq;
 
 import com.season.livingmate.post.application.PostService;
 import com.season.livingmate.user.domain.User;
@@ -31,11 +33,11 @@ public class PostController {
 
     @Operation(summary = "게시글 생성 API")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Response<Long>> createPost(@RequestPart(value = "data", required = true) String dataJson,
-                                                     @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+    public ResponseEntity<Response<Long>> createPost(@RequestPart("data") PostCreateReq req,
+                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.createPost(dataJson, imageFiles, user);
+        Response<Long> res = postService.createPost(req, imageFile, user);
         return ResponseEntity
                 .status(SuccessStatus.CREATE_POST.getStatus())
                 .body(res);
@@ -59,13 +61,13 @@ public class PostController {
     }
 
     @Operation(summary = "게시글 수정 API")
-    @PatchMapping(value = "{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping("{postId}")
     public ResponseEntity<Response<Long>> updatePost(@PathVariable Long postId,
-                                                     @RequestPart(value = "data", required = true) String dataJson,
-                                                     @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+                                                     @RequestPart("data") PostUpdateReq req,
+                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.updatePost(postId, dataJson, imageFiles, user);
+        Response<Long> res = postService.updatePost(postId, req, imageFile, user);
         return ResponseEntity.ok(res);
     }
 
