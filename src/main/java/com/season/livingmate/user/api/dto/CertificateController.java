@@ -5,6 +5,7 @@ import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.user.application.CertificateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ public class CertificateController {
 
     private final CertificateService certificateService;
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Response<String>> upload(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
         certificateService.create(file, userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, null));
