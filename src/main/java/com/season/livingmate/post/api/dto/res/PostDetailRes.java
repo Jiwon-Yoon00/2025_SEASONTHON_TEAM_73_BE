@@ -69,6 +69,12 @@ public record PostDetailRes(
 
         List<String> preferredGender,
 
+        Long userId,
+
+        String userName,
+
+        Boolean isCertified,
+
         LocalDateTime createdAt,
 
         LocalDateTime updatedAt
@@ -87,6 +93,10 @@ public record PostDetailRes(
                 List<String> genders = p.getPreferredGender() != null ?
                         Arrays.asList(p.getPreferredGender().split(",")) :
                         List.of();
+
+                Long userId = p.getUser().getId();
+                String userName = p.getUser().getNickname();
+                boolean isCertified = p.getUser().isCertified();
 
                 return new PostDetailRes(
                         p.getPostId(),
@@ -116,6 +126,9 @@ public record PostDetailRes(
                         p.getWashroomCount(),
                         p.getRoomCount(),
                         genders,
+                        userId,
+                        userName,
+                        isCertified,
                         p.getCreatedAt(),
                         p.getUpdatedAt()
                 );
