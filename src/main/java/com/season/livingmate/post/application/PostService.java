@@ -34,8 +34,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,24 +44,15 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final GeoService geoService;
-    private final ObjectMapper objectMapper;
 
     // 게시글 생성
     @Transactional
-    public Response<Long> createPost(String dataJson, List<MultipartFile> imageFiles, User user) {
-
-        // JSON 문자열을 PostCreateReq로 변환
-        PostCreateReq req;
-        try {
-            req = objectMapper.readValue(dataJson, PostCreateReq.class);
-        } catch (Exception e) {
-            throw new CustomException(ErrorStatus.BAD_REQUEST, "잘못된 JSON 형식입니다.");
-        }
+    public Response<Long> createPost(PostCreateReq req, MultipartFile imageFile, User user) {
 
         // 이미지 파일 처리
-        List<String> imageUrls = new ArrayList<>();
-        if(imageFiles != null && !imageFiles.isEmpty()){
-            imageUrls = uploadImages(imageFiles);
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = uploadImage(imageFile);
         }
 
         // 주소, 좌표 확정
@@ -72,7 +61,7 @@ public class PostService {
         String address = req.location();
 
         // 주소만 존재할 시 좌표로 변환
-        if((lat == null || lng == null) && address != null && !address.isBlank()){
+        if ((lat == null || lng == null) && address != null && !address.isBlank()) {
             GeoResult g = geoService.geocodeOne(address)
                     .orElseThrow(() -> new CustomException(ErrorStatus.BAD_REQUEST, "주소를 좌표로 변환할 수 없습니다."));
             lat = g.lat();
@@ -81,7 +70,7 @@ public class PostService {
         }
 
         // 필수값 검증
-        if(address == null || address.isBlank() || lat == null || lng == null){
+        if (address == null || address.isBlank() || lat == null || lng == null) {
             throw new CustomException(ErrorStatus.BAD_REQUEST, "location/latitude/longitude가 필요합니다.");
         }
 
@@ -112,7 +101,7 @@ public class PostService {
         Post post = Post.builder()
                 .title(req.title())
                 .content(req.content())
-                .imageUrls(imageUrls)
+                .imageUrl(imageUrl)
                 .geoPoint(geo)
                 .location(address)
                 .roomType(req.roomType())
@@ -139,20 +128,6 @@ public class PostService {
 
         Long id = postRepository.save(post).getPostId();
         return Response.success(SuccessStatus.CREATE_POST, id);
-    }
-
-    // 다중 이미지 업로드 메서드
-    private List<String> uploadImages(List<MultipartFile> files) {
-        List<String> imageUrls = new ArrayList<>();
-
-        for (MultipartFile file : files) {
-            if (file != null && !file.isEmpty()) {
-                String imageUrl = uploadImage(file);
-                imageUrls.add(imageUrl);
-            }
-        }
-
-        return imageUrls;
     }
 
     // 단일 이미지 업로드 메서드
@@ -197,7 +172,7 @@ public class PostService {
     }
 
     // 게시글 단건 조회
-    public Response<PostDetailRes> getDetail(Long postId){
+    public Response<PostDetailRes> getDetail(Long postId) {
         Post p = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
 
@@ -205,45 +180,37 @@ public class PostService {
     }
 
     // 게시글 목록 조회
-    public Response<Page<PostListRes>> getList(Pageable pageable, User user){
+    public Response<Page<PostListRes>> getList(Pageable pageable, User user) {
         // 사용자 성별로 필터링
         Specification<Post> spec = PostSpecs.matchUserGender(user.getGender());
 
-        Page<PostListRes> page =  postRepository.findAll(spec, pageable)
+        Page<PostListRes> page = postRepository.findAll(spec, pageable)
                 .map(PostListRes::from);
         return Response.success(SuccessStatus.GET_POST_LIST, page);
     }
 
     // 게시글 수정
     @Transactional
-    public Response<Long> updatePost(Long postId, String dataJson, List<MultipartFile> imageFiles, User currentUser) {
-
-        // JSON 문자열을 PostUpdateReq로 변환
-        PostUpdateReq req;
-        try {
-            req = objectMapper.readValue(dataJson, PostUpdateReq.class);
-        } catch (Exception e) {
-            throw new CustomException(ErrorStatus.BAD_REQUEST, "잘못된 JSON 형식입니다.");
-        }
+    public Response<Long> updatePost(Long postId, PostUpdateReq req, MultipartFile imageFile, User currentUser) {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
 
-        if(!post.getUser().getId().equals(currentUser.getId())){
+        if (!post.getUser().getId().equals(currentUser.getId())) {
             throw new CustomException(ErrorStatus.FORBIDDEN);
         }
 
         // 이미지 파일 처리
-        List<String> imageUrls = post.getImageUrls(); // 기존 이미지 URL 유지
-        if (imageFiles != null && !imageFiles.isEmpty()) {
-            imageUrls = uploadImages(imageFiles);
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = uploadImage(imageFile);
         }
 
         Double lat = req.latitude();
         Double lng = req.longitude();
         String address = req.location();
 
-        if ((lat == null || lng == null) && address != null && !address.isBlank()){
+        if ((lat == null || lng == null) && address != null && !address.isBlank()) {
             GeoResult g = geoService.geocodeOne(address)
                     .orElseThrow(() -> new CustomException(ErrorStatus.BAD_REQUEST, "주소를 좌표로 변환할 수 없습니다."));
             lat = g.lat();
@@ -279,7 +246,7 @@ public class PostService {
         post.update(
                 req.title(),
                 req.content(),
-                imageUrls,
+                imageUrl,
                 geo,
                 (address != null && !address.isBlank()) ? address : post.getLocation(),
                 req.roomType(),

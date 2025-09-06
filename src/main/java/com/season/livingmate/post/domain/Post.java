@@ -27,10 +27,8 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "post_images", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "image_url")
-    private List<String> imageUrls = new ArrayList<>();
+    private String imageUrl;
 
     @Embedded
     private GeoPoint geoPoint;
@@ -106,7 +104,7 @@ public class Post {
     @Builder
     private Post(String title,
                  String content,
-                 List<String> imageUrls,
+                 String imageUrl,
                  GeoPoint geoPoint,
                  String location,
                  String regionLabel,
@@ -130,7 +128,7 @@ public class Post {
                  User user) {
         this.title = title;
         this.content = content;
-        this.imageUrls = imageUrls != null ? imageUrls : new ArrayList<>();
+        this.imageUrl = imageUrl;
         this.geoPoint = geoPoint;
         this.location = location;
         this.regionLabel = regionLabel;
@@ -156,7 +154,7 @@ public class Post {
 
     public void update(String title,
                        String content,
-                       List<String> imageUrls,
+                       String imageUrl,
                        GeoPoint geoPoint,
                        String location,
                        RoomType roomType,
@@ -178,7 +176,7 @@ public class Post {
     ) {
         this.title = title;
         this.content = content;
-        this.imageUrls = imageUrls != null ? imageUrls : new ArrayList<>();
+        this.imageUrl = imageUrl;
         this.geoPoint = geoPoint;
         this.location = location;
         this.roomType = roomType;

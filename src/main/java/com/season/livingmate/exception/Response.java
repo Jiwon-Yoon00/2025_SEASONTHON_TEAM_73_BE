@@ -27,8 +27,4 @@ public class Response<T> {
     public static <T> Response<T> fail(ErrorStatus status) {
         return new Response<>(false, status.getCode(), status.getMessage(), null);
     }
-
-    public static <T> Response<T> fail(ErrorStatus status, String customMessage) {
-        return new Response<>(false, status.getCode(), customMessage, null);
-    }
 }
