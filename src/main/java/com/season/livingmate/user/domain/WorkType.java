@@ -22,14 +22,14 @@ public enum WorkType {
         return description;
     }
 
+    @JsonCreator
     public static WorkType fromString(String value) {
         if (value == null) return null;
-        for (WorkType type : WorkType.values()) {
-            if (type.name().equalsIgnoreCase(value) || type.getDescription().equals(value)) {
-                return type;
-            }
+        try {
+            return WorkType.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid EarphoneUsage: " + value);
         }
-        throw new IllegalArgumentException("Invalid WorkType: " + value);
     }
 
 }

@@ -81,7 +81,7 @@ public class UserProfileResDto {
 
     public static UserProfileResDto from(UserProfile profile) {
         LifeHabitDto lifeHabit = new LifeHabitDto(
-                profile.getWorkType() != null ? WorkType.fromString(profile.getWorkType().getDescription()) : null,
+                profile.getWorkType(),
                 profile.getWorkDays(),
                 profile.getWakeUpTimeWorkday(),
                 profile.getGoWorkTime(),
@@ -89,26 +89,26 @@ public class UserProfileResDto {
                 profile.getSleepTimeWorkday(),
                 profile.getWakeUpTimeHoliday(),
                 profile.getSleepTimeHoliday(),
-                profile.getAlarmCount() != null ? AlarmCount.fromString(profile.getAlarmCount().getDescription()) : null
+                profile.getAlarmCount()
         );
 
         MealHabitDto mealHabit = new MealHabitDto(
-                profile.getCookingCount() != null ? MealWay.fromString(profile.getCookingCount().getDescription()) : null,
-                profile.getSmellLevel() != null ? SensitivityLevel.fromString(profile.getSmellLevel().getDescription()) : null,
-                profile.getAlcoholCount() != null ? CountRange.fromString(profile.getAlcoholCount().getDescription()) : null,
-                profile.getDishShare() != null ? DishShare.fromString(profile.getDishShare().getDescription()) : null
+                profile.getCookingCount(),
+                profile.getSmellLevel(),
+                profile.getAlcoholCount(),
+                profile.getDishShare()
         );
 
         CleaningHabitDto cleaningHabit = new CleaningHabitDto(
-                profile.getBathroomCleaningLevel() != null ? SensitivityLevel.fromString(profile.getBathroomCleaningLevel().getDescription()) : null,
-                profile.getTidinessLevel() != null ? SensitivityLevel.fromString(profile.getTidinessLevel().getDescription()) : null
+                profile.getBathroomCleaningLevel(),
+                profile.getTidinessLevel()
         );
 
         SoundSensitivityDto soundSensitivity = new SoundSensitivityDto(
-                profile.getSleepLevel() != null ? SensitivityLevel.fromString(profile.getSleepLevel().getDescription()) : null,
-                profile.getSleepHabit() != null ? profile.getSleepHabit() : null,
-                profile.getPhoneMode() != null ? PhoneMode.fromString(profile.getPhoneMode().getDescription()) : null,
-                profile.getEarphoneUsage() != null ? EarphoneUsage.fromString(profile.getEarphoneUsage().getDescription()) : null
+                profile.getSleepLevel(),
+                profile.getSleepHabit(),
+                profile.getPhoneMode(),
+                profile.getEarphoneUsage()
         );
 
         EtcDto etc = new EtcDto(

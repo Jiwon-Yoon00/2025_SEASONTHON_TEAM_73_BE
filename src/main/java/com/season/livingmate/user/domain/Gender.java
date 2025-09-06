@@ -1,5 +1,6 @@
 package com.season.livingmate.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Gender {
@@ -11,18 +12,19 @@ public enum Gender {
     Gender(String description) {
         this.description = description;
     }
+
     @JsonValue
     public String getDescription() {
         return description;
     }
 
+    @JsonCreator
     public static Gender fromString(String value) {
         if (value == null) return null;
-        for (Gender type : Gender.values()) {
-            if (type.name().equalsIgnoreCase(value) || type.getDescription().equals(value)) {
-                return type;
-            }
+        try {
+            return Gender.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid EarphoneUsage: " + value);
         }
-        throw new IllegalArgumentException("Invalid CountRange: " + value);
     }
 }
