@@ -32,19 +32,19 @@ public class CustomLogoutFilter extends OncePerRequestFilter {
 
         String accessToken = logoutService.resolveAccessToken(request);
 
-        // 1️⃣ 블랙리스트 체크
+        // 블랙리스트 체크
         if (accessToken != null && logoutService.isBlacklisted(accessToken)) {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorStatus.UNAUTHORIZED);
             return;
         }
 
-        // 2️⃣ 로그아웃 요청 처리
+        // 로그아웃 요청 처리
         if ("/auth/logout".equals(request.getRequestURI()) && "POST".equalsIgnoreCase(request.getMethod())) {
             logoutService.logout(accessToken, response);
             return;
         }
 
-        // 3️⃣ 그 외 요청은 다음 필터로
+        // 그 외 요청은 다음 필터로
         filterChain.doFilter(request, response);
     }
 
