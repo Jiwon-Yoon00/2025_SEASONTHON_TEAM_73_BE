@@ -121,6 +121,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 }
                 // 문제 생긴 세션만 정리
                 try { s.close(); } catch (Exception ignored) {}
+
             }
         }
     }
