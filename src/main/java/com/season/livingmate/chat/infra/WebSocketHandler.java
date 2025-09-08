@@ -115,6 +115,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
         for (WebSocketSession s : sessions) {
             if (!s.equals(senderSession)) {  // 메시지 보낸 사람 제외
                 sendMessageSafe(s, message);
+
+
+
+
             }
         }
     }
