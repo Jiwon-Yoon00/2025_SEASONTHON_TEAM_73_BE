@@ -114,14 +114,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Set<WebSocketSession> sessions = chatRooms.getOrDefault(roomId, Collections.emptySet());
         for (WebSocketSession s : sessions) {
             if (!s.equals(senderSession)) {  // 메시지 보낸 사람 제외
-                try{
-                    sendMessageSafe(s, message);
-                } catch (Exception e){
-                    log.error("메시지 전송 실패: sessionId={}, reason={}", s.getId(), e.getMessage(), e);
-                }
-                // 문제 생긴 세션만 정리
-                try { s.close(); } catch (Exception ignored) {}
-
+                sendMessageSafe(s, message);
             }
         }
     }
