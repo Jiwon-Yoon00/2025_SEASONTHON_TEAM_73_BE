@@ -38,11 +38,6 @@ public class SignupReqDto {
     @Schema(description = "사용자가 방을 가지고 있는지 여부", example = "true")
     private boolean isRoom;
 
-    @AssertTrue(message = "비밀번호와 비밀번호 확인이 일치하지 않습니다.")
-    public boolean isPasswordMatching() {
-        return password != null && password.equals(confirmPassword);
-    }
-
     public User toEntity(String encodedPassword){
         return User.builder()
                 .nickname(nickname)

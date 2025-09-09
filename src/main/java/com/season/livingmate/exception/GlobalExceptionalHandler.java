@@ -29,11 +29,4 @@ public class GlobalExceptionalHandler {
                 .badRequest()
                 .body(Response.fail(ErrorStatus.INVALID_PARAMETER));
     }
-
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<Response<?>> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex) {
-        return ResponseEntity
-                .badRequest()
-                .body(Response.fail(ErrorStatus.BAD_REQUEST, "지원하지 않는 Content-Type입니다. multipart/form-data를 사용해주세요."));
-    }
 }

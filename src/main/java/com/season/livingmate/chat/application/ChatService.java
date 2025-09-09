@@ -35,7 +35,6 @@ public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final MessageRepository messageRepository;
-    private final UserRepository userRepository;
     private final PostRepository postRepository;
 
     // 채팅방 생성

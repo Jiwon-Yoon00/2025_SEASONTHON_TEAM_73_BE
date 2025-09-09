@@ -36,11 +36,9 @@ public record PostMapDetailRes(
         User user = post.getUser();
         UserProfile userProfile = user.getUserProfile();
 
-        String firstImageUrl = post.getImageUrls().isEmpty() ? null : post.getImageUrls().get(0);
-
         return new PostMapDetailRes(
                 post.getPostId(),
-                firstImageUrl,
+                post.getImageUrl(),
                 post.getDeposit(),
                 post.getMonthlyRent(),
                 post.getRegionLabel(),

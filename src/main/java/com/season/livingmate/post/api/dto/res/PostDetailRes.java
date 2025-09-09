@@ -20,7 +20,7 @@ public record PostDetailRes(
 
         String content,
 
-        List<String> imageUrl,
+        String imageUrl,
 
         Double latitude,
 
@@ -102,7 +102,7 @@ public record PostDetailRes(
                         p.getPostId(),
                         p.getTitle(),
                         p.getContent(),
-                        p.getImageUrls(),
+                        p.getImageUrl(),
                         lat,
                         lng,
                         p.getLocation(), // 보관용

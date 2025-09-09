@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,22 +40,25 @@ public class CertificateService {
                 throw new IllegalArgumentException("파일이 비어있습니다.");
             }
 
-            // 파일 타입 검증
-            String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                throw new RuntimeException("이미지 파일만 업로드 가능합니다.");
-            }
+            // 허용할 파일 확장자 리스트
+            List<String> allowedExtensions = List.of(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".pdf", ".txt", ".doc", ".docx");
+
+            String originalFilename = file.getOriginalFilename();
+            String extension = "";
 
             // 파일 크기 검증 (5MB 제한)
             if (file.getSize() > 5 * 1024 * 1024) {
                 throw new RuntimeException("이미지 파일 크기는 5MB 이하여야 합니다.");
             }
 
-            String originalFilename = file.getOriginalFilename();
-            String extension = "";
             if (originalFilename != null && originalFilename.contains(".")) {
                 extension = originalFilename.substring(originalFilename.lastIndexOf("."));
             }
+
+            if(!allowedExtensions.contains(extension.toLowerCase())) {
+                throw new RuntimeException("허용되지 않는 파일 형식입니다.");
+            }
+
             String filename = UUID.randomUUID() + extension;
 
             Path uploadPath = Paths.get(uploadDir);
