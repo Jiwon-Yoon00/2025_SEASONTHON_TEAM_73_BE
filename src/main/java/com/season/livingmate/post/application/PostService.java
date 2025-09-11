@@ -1,6 +1,5 @@
 package com.season.livingmate.post.application;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.ErrorStatus;
@@ -27,14 +26,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,13 +40,9 @@ public class PostService {
 
     // 게시글 생성
     @Transactional
-    public Response<Long> createPost(PostCreateReq req, MultipartFile imageFile, User user) {
-
-        // 이미지 파일 처리
-        String imageUrl = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            imageUrl = uploadImage(imageFile);
-        }
+    public Response<Long> createPost(PostCreateReq req, User user) {
+        // 이미지 없이 게시글 생성
+        String firstImageUrl = null; // 항상 null
 
         // 주소, 좌표 확정
         Double lat = req.latitude();
@@ -101,7 +90,7 @@ public class PostService {
         Post post = Post.builder()
                 .title(req.title())
                 .content(req.content())
-                .imageUrl(imageUrl)
+                .imageUrl(firstImageUrl) // 항상 null
                 .geoPoint(geo)
                 .location(address)
                 .roomType(req.roomType())
@@ -130,47 +119,6 @@ public class PostService {
         return Response.success(SuccessStatus.CREATE_POST, id);
     }
 
-    // 단일 이미지 업로드 메서드
-    private String uploadImage(MultipartFile file) {
-        try {
-            // 파일 타입 검증
-            String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                throw new CustomException(ErrorStatus.BAD_REQUEST, "이미지 파일만 업로드 가능합니다.");
-            }
-
-            // 파일 크기 검증 (5mb 제한)
-            if (file.getSize() > 5 * 1024 * 1024) {
-                throw new CustomException(ErrorStatus.BAD_REQUEST, "이미지 파일 크기는 5MB 이하여야 합니다.");
-            }
-
-            // 업로드 디렉토리 생성
-            String uploadDir = "uploads/images/";
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            // 파일명 생성
-            String originalFilename = file.getOriginalFilename();
-            String extension = "";
-            if (originalFilename != null && originalFilename.contains(".")) {
-                extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            }
-            String filename = UUID.randomUUID().toString() + extension;
-
-            // 파일 저장
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(file.getInputStream(), filePath);
-
-            // URL 반환
-            return "https://livingmate.store/images/" + filename;
-
-        } catch (IOException e) {
-            throw new CustomException(ErrorStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
-        }
-    }
-
     // 게시글 단건 조회
     public Response<PostDetailRes> getDetail(Long postId) {
         Post p = postRepository.findById(postId)
@@ -191,19 +139,15 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Response<Long> updatePost(Long postId, PostUpdateReq req, MultipartFile imageFile, User currentUser) {
+    public Response<Long> updatePost(Long postId, PostUpdateReq req, User currentUser) {
+        // 이미지 없이 게시글 수정
+        String firstImageUrl = null; // 항상 null
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_POST));
 
         if (!post.getUser().getId().equals(currentUser.getId())) {
             throw new CustomException(ErrorStatus.FORBIDDEN);
-        }
-
-        // 이미지 파일 처리
-        String imageUrl = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            imageUrl = uploadImage(imageFile);
         }
 
         Double lat = req.latitude();
@@ -246,7 +190,7 @@ public class PostService {
         post.update(
                 req.title(),
                 req.content(),
-                imageUrl,
+                firstImageUrl,
                 geo,
                 (address != null && !address.isBlank()) ? address : post.getLocation(),
                 req.roomType(),

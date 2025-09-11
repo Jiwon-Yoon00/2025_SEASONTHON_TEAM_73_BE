@@ -80,7 +80,7 @@ public record PostUpdateReq(
         @Schema(description = "방 개수", example = "2")
         Integer roomCount,
 
-        @Schema(description = "모집 희망 성별", example = "MALE")
+        @Schema(description = "모집 희망 성별", example = "[\"MALE\"]")
         List<Gender> preferredGender
 ) {
 }
