@@ -155,8 +155,17 @@ public class S3Manager {
     }
 
     // 프로필별 파일 업로드
-    public S3UploadResult uploadProfileFile(MultipartFile file, Long profileId) {
+    public S3UploadResult uploadProfileFile(MultipartFile file, Long profileId, String existingFileUrl) {
+        validateFile(file);
+
         try{
+            // 기존 파일이 있으면 삭제
+            if(existingFileUrl != null && !existingFileUrl.isEmpty()){
+                String existingKey = existingFileUrl.substring(existingFileUrl.indexOf(bucket) + bucket.length() + 1);
+                delete(existingKey);
+            }
+
+
             String fileName = generateFileName(file.getOriginalFilename());
             String key = S3Folder.PROFILE.getPrefix() + profileId + "/" + fileName; // 프로필별 폴더
 
@@ -189,10 +198,16 @@ public class S3Manager {
     }
 
     // 인증서 파일 업로드(userId별)
-    public S3UploadResult uploadCertificate(MultipartFile file, Long userId) {
+    public S3UploadResult uploadCertificate(MultipartFile file, Long userId, String existingFileUrl) {
         validateFile(file);
 
         try{
+            // 기존 파일이 있으면 삭제
+            if(existingFileUrl != null && !existingFileUrl.isEmpty()){
+                String existingKey = existingFileUrl.substring(existingFileUrl.indexOf(bucket) + bucket.length() + 1);
+                delete(existingKey);
+            }
+
             String fileName = generateFileName(file.getOriginalFilename());
             String key = S3Folder.CERTIFICATE.getPrefix() + userId + "/" + fileName; // 사용자별 폴더
 

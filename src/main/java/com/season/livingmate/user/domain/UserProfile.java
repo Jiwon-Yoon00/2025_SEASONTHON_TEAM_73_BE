@@ -118,6 +118,12 @@ public class UserProfile extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
+    @Column(nullable = true)
+    private String profileImageUrl;
+
+    @Column(nullable = true)
+    private String certificateImageUrl;
+
     public void update(UserProfileUpdateReqDto dto) {
         if (dto.getWorkType() != null) this.workType = dto.getWorkType();
         if (dto.getWorkDays() != null && !dto.getWorkDays().isEmpty()) this.workDays = dto.getWorkDays();
