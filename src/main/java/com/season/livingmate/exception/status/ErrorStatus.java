@@ -40,8 +40,12 @@ public enum ErrorStatus {
     CHAT_ROOM_NOT_ACCEPTED(HttpStatus.FORBIDDEN, "CHAT403", "수락된 채팅방에서만 메시지를 보낼 수 있습니다."),
     // 상태 관련
     CHAT_ROOM_ALREADY_APPLIED(HttpStatus.CONFLICT, "CHAT409", "이미 신청된 채팅방입니다."),
-    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PROFILE400", "프로필이 존재하지 않습니다."),;
+    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PROFILE400", "프로필이 존재하지 않습니다."),
 
+    // user profile like
+    ALREADY_LIKED(HttpStatus.BAD_REQUEST, "LIKE400", "이미 좋아요를 눌렀습니다."),
+    SELF_LIKE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "LIKE400", "자기 자신은 좋아요할 수 없습니다."),
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "LIKE404", "좋아요를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;

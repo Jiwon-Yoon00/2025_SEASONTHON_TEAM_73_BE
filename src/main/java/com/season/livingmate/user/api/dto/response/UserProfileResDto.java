@@ -78,6 +78,8 @@ public class UserProfileResDto {
 
     private String disease;
 
+    private String userProfileImage;
+
 
     public static UserProfileResDto from(UserProfile profile) {
         LifeHabitDto lifeHabit = new LifeHabitDto(
@@ -129,7 +131,8 @@ public class UserProfileResDto {
                 soundSensitivity,
                 profile.getIntroduce(),
                 profile.getPet(),
-                profile.getDisease()
+                profile.getDisease(),
+                profile.getProfileImageUrl()
         );
 
     }

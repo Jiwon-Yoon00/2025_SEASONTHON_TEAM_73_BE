@@ -4,14 +4,12 @@ import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.user.application.CertificateService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,14 +17,19 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/certificate")
+@Tag(name = "증명서 조회", description = "내가 제출한 증명서 확인하기")
 public class CertificateController {
 
     private final CertificateService certificateService;
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Response<String>> upload(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
-        certificateService.create(file, userDetails);
-        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, null));
+    @GetMapping(value = "/upload/certificate")
+    public ResponseEntity<Response<String>> upload(@AuthenticationPrincipal CustomUserDetails userDetails){
+        String certificateUrl = certificateService.getCertificate(userDetails);
+
+        if (certificateUrl == null) {
+            return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, "제출된 증명서가 없습니다."));
+        }
+
+        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, certificateUrl));
     }
 }
