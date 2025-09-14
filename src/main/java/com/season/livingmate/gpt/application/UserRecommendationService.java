@@ -55,7 +55,10 @@ public class UserRecommendationService {
 
             // 후보자 프로필 텍스트 변환
             List<String> candidateProfiles = candidates.stream()
-                    .map(user -> String.format("사용자 ID: %d\n%s", user.getId(), buildUserProfileText(user.getUserProfile())))
+                    .map(user -> String.format("사용자 ID: %d\n%s",
+                            user.getId(),
+                            user.getNickname(),
+                            buildUserProfileText(user.getUserProfile())))
                     .collect(Collectors.toList());
 
             // 가중치 텍스트 변환
