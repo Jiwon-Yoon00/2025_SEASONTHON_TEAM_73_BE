@@ -18,7 +18,7 @@ public record UserRecommendationResDto(
             return new UserBasicInfo(
                     user.getId(),
                     user.getNickname(),
-                    null // 나중에 추가
+                    user.getUserProfile() != null ? user.getUserProfile().getProfileImageUrl() : null
             );
         }
     }
