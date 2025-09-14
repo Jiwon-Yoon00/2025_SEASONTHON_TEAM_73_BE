@@ -27,7 +27,7 @@ public class UserResDto {
     private Gender gender;
 
     @Schema(description = "증명서 제출 여부", example = "false")
-    private boolean certified;
+    private boolean isCertified;
 
     @Schema(description = "방 소유 여부", example = "true")
     private boolean room;
