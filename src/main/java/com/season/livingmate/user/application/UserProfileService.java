@@ -33,6 +33,10 @@ public class UserProfileService {
         UserProfile userProfile = userProfileRepository.findByUser(user)
                 .orElseThrow(() -> new CustomException(ErrorStatus.PROFILE_NOT_FOUND));
         userProfile.updateFromCreateDto(userProfileCreateReqDto);
+
+        user.setPersonalitySurveyCompleted(true);
+        userRepository.save(user); // 변경된 USER 엔티티 저장
+
         return  UserProfileResDto.from(userProfile);
     }
 
