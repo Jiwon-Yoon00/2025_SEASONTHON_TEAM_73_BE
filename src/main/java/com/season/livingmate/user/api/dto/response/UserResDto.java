@@ -32,6 +32,9 @@ public class UserResDto {
     @Schema(description = "방 소유 여부", example = "true")
     private boolean room;
 
+    @Schema(description = "흡연 여부", example = "false")
+    private boolean smoking;
+
     public static UserResDto from(User user) {
         return new UserResDto(
                 user.getId(),
@@ -40,7 +43,8 @@ public class UserResDto {
                 user.isVerified(),
                 user.getGender(),
                 user.isCertified(),
-                user.isRoom()
+                user.isRoom(),
+                user.getUserProfile().isSmoking()
         );
     }
 }
