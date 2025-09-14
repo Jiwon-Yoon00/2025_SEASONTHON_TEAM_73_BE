@@ -67,40 +67,22 @@ public class UserProfileController {
 
     @Operation(summary = "모든 유저 프로필 조회")
     @GetMapping("/all")
-    public ResponseEntity<Response<Map<String, Object>>> getAllUserProfiles(@AuthenticationPrincipal CustomUserDetails userDetails, Pageable pageable) {
+    public ResponseEntity<Response<Page<UserResDto>>> getAllUserProfiles(@AuthenticationPrincipal CustomUserDetails userDetails, Pageable pageable) {
 
         Page<UserResDto> dto = userProfileService.getAllUserProfiles(userDetails, pageable);
 
-        Map<String, Object> responseData = Map.of(
-                "content", dto.getContent(),
-                "pageNumber", dto.getNumber(),
-                "pageSize", dto.getSize(),
-                "totalPages", dto.getTotalPages(),
-                "totalElements", dto.getTotalElements(),
-                "last", dto.isLast()
-        );
-
-        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, responseData));
+        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }
 
     @Operation(summary = "필터링된 유저 프로필 조회")
     @PostMapping ("/filter")
-    public ResponseEntity<Response<Map<String, Object>>> filterUsers(
+    public ResponseEntity<Response<Page<UserResDto>>> filterUsers(
             @RequestBody UserFilterReqDto userFilterReqDto,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             Pageable pageable
     ) {
         Page<UserResDto> dto = userProfileService.filterUsers(userFilterReqDto, userDetails, pageable);
 
-        Map<String, Object> responseData = Map.of(
-                "content", dto.getContent(),
-                "pageNumber", dto.getNumber(),
-                "pageSize", dto.getSize(),
-                "totalPages", dto.getTotalPages(),
-                "totalElements", dto.getTotalElements(),
-                "last", dto.isLast()
-        );
-
-        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, responseData));
+        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }
 }
