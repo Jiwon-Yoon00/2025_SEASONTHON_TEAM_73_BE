@@ -1,5 +1,7 @@
 package com.season.livingmate.user.api.dto.response;
 
+import com.season.livingmate.post.api.dto.res.PostListRes;
+import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.user.domain.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -78,8 +80,12 @@ public class UserProfileResDto {
 
     private String disease;
 
+    private String userProfileImage;
 
-    public static UserProfileResDto from(UserProfile profile) {
+    private List<PostListRes> posts;
+
+
+    public static UserProfileResDto from(UserProfile profile, List<Post> posts) {
         LifeHabitDto lifeHabit = new LifeHabitDto(
                 profile.getWorkType(),
                 profile.getWorkDays(),
@@ -116,6 +122,10 @@ public class UserProfileResDto {
                 profile.getPet()
         );
 
+        List<PostListRes> postList = posts.stream()
+                .map(PostListRes::from)
+                .toList();
+
         return new UserProfileResDto(
                 profile.getUser().getId(),
                 profile.getUser().getNickname(),
@@ -129,7 +139,9 @@ public class UserProfileResDto {
                 soundSensitivity,
                 profile.getIntroduce(),
                 profile.getPet(),
-                profile.getDisease()
+                profile.getDisease(),
+                profile.getProfileImageUrl(),
+                postList
         );
 
     }

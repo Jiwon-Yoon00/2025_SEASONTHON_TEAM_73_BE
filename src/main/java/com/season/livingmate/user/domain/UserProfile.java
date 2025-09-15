@@ -10,7 +10,6 @@ import lombok.*;
 
 import java.util.List;
 
-// 나중에 json 검증 코드 작성하기!!
 @Entity
 @Builder
 @AllArgsConstructor
@@ -117,6 +116,12 @@ public class UserProfile extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
+    @Column(nullable = true)
+    private String profileImageUrl;
+
+    @Column(nullable = true)
+    private String certificateImageUrl;
 
     public void update(UserProfileUpdateReqDto dto) {
         if (dto.getWorkType() != null) this.workType = dto.getWorkType();

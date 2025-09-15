@@ -54,6 +54,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean isCertified; // 증명서 제출 여부
 
+    @Column(nullable = false)
+    private boolean isPersonalitySurveyCompleted; // 성향조사 완료 여부
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens;
 }

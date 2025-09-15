@@ -74,6 +74,13 @@ dependencies {
 
     // 실시간 채팅을 위한 웹소켓 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // ai
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 }
 
 tasks.named('test') {

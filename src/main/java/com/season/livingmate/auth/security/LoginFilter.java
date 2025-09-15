@@ -73,6 +73,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         map.put("username", username);
         map.put("accessToken", accessToken);
         map.put("refreshToken", refreshToken);
+        map.put("verified", userDetails.getUser().isVerified());
+        map.put("isCertified", userDetails.getUser().isCertified());
+        map.put("isRoom", userDetails.getUser().isRoom());
+        map.put("isPersonalitySurveyCompleted", userDetails.getUser().isPersonalitySurveyCompleted());
 
         Response<Map<String, Object>> apiRes = Response.success(SuccessStatus.SUCCESS,map);
 
