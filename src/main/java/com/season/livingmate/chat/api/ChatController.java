@@ -46,24 +46,6 @@ public class ChatController {
         return ResponseEntity.ok(Response.success(SuccessStatus.GET_MESSAGES, messages));
     }
 
-//    // 상대방에게 채팅 신청 걸기
-//    @Operation(summary = "채팅 신청 API")
-//    @PostMapping("/apply/post/{postId}")
-//    public ResponseEntity<Response<ChatRoomResDto>> applyChatRoom(@PathVariable Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
-//        ChatRoomResDto chatRoomResDto = chatService.requestChatRoom(postId, userDetails);
-//        return ResponseEntity.ok(Response.success(SuccessStatus.APPLY_CHAT_ROOM, chatRoomResDto));
-//    }
-
-    // 작성자가 신청자 목록 조회
-    @Operation(summary = "작성자의 채팅 목록 조회 API")
-    @GetMapping("/receiver")
-    public ResponseEntity<Response<Map<ChatRoomStatus, List<ChatRoomResDto>>>> getChatRoomsByStatusForReceiver(
-            @AuthenticationPrincipal CustomUserDetails userDetails
-    ) {
-        Map<ChatRoomStatus, List<ChatRoomResDto>> rooms = chatService.getChatRoomsByStatusForReceiver(userDetails);
-        return ResponseEntity.ok(Response.success(SuccessStatus.GET_CHAT_ROOMS, rooms));
-    }
-
     // 작성자가 채팅 수락
     @Operation(summary = "채팅 신청 수락 API")
     @PostMapping("/accept/{chatRoomId}")
@@ -87,8 +69,8 @@ public class ChatController {
     }
 
     // 요청자가 자신의 채팅방 목록 조회 (상태별)
-    @Operation(summary = "요청자의 채팅방 목록 조회 API")
-    @GetMapping("/sender")
+    @Operation(summary = "채팅방 목록 조회 API")
+    @GetMapping("/lists")
     public ResponseEntity<Response<Map<ChatRoomStatus, List<ChatRoomResDto>>>> getMyChatRoomsByStatus(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
