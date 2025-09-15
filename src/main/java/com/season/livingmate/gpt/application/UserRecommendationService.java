@@ -45,17 +45,17 @@ public class UserRecommendationService {
         Map<String, Integer> weights = calculateWeights(request.selectedItems());
 
         // 추천 (10명만)
-        return recommendWithGpt(currentProfile, candidates, weights);
+        return recommendWithGpt(currentProfile, candidates, weights, request.selectedItems());
     }
 
-    private List<UserRecommendationResDto> recommendWithGpt(UserProfile currentProfile, List<User> candidates, Map<String, Integer> weights) {
+    private List<UserRecommendationResDto> recommendWithGpt(UserProfile currentProfile, List<User> candidates, Map<String, Integer> weights, List<String> selectedItems) {
         try {
             // 현재 사용자 프로필 텍스트로 변환
             String currentUserProfile = buildUserProfileText(currentProfile);
 
             // 후보자 프로필 텍스트 변환
             List<String> candidateProfiles = candidates.stream()
-                    .map(user -> String.format("사용자 ID: %d\n%s",
+                    .map(user -> String.format("사용자 ID: %d\n닉네임: %s\n%s",
                             user.getId(),
                             user.getNickname(),
                             buildUserProfileText(user.getUserProfile())))
@@ -65,7 +65,7 @@ public class UserRecommendationService {
             String weightsText = buildWeightsText(weights);
 
             // gpt api 호출
-            String gptResponse = gptService.recommendUsers(currentUserProfile, candidateProfiles, weightsText);
+            String gptResponse = gptService.recommendUsers(currentUserProfile, candidateProfiles, weightsText, selectedItems);
 
             // gpt 응답으로 추천 결과 생성
             return parseGptResponse(gptResponse, candidates);
@@ -257,10 +257,11 @@ public class UserRecommendationService {
                         User user = userMap.get(userId);
                         
                         if(user != null){
+                            String combinedReason = combineReasonByItem(recNode.get("reasonByItem"));
                             recommendations.add(new UserRecommendationResDto(
                                     UserRecommendationResDto.UserBasicInfo.from(user),
                                     recNode.get("score").asText(),
-                                    recNode.get("reason").asText()
+                                    combinedReason
                             ));
                         }
                     } catch (NumberFormatException e) {
@@ -298,5 +299,23 @@ public class UserRecommendationService {
             // 방이 있으면 -> 방 없는 사용자 추천
             return userRepository.findByIsRoomAndIdNot(true, currentUser.getId());
         }
+    }
+
+    private String combineReasonByItem(JsonNode reasonByItemNode) {
+        if (reasonByItemNode == null || !reasonByItemNode.isObject()) {
+            return "추천 이유를 생성할 수 없습니다.";
+        }
+
+        StringBuilder combinedReason = new StringBuilder();
+        reasonByItemNode.fields().forEachRemaining(entry -> {
+            String key = entry.getKey();
+            String value = entry.getValue().asText();
+            
+            // 필드명을 한국어로 변환
+            String koreanFieldName = getFieldDisplayName(key);
+            combinedReason.append("• ").append(koreanFieldName).append(": ").append(value).append(" ");
+        });
+
+        return combinedReason.toString().trim();
     }
 }
