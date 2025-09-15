@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import jakarta.persistence.criteria.Predicate;
 
 
 public final class UserSpec {
@@ -15,29 +16,33 @@ public final class UserSpec {
     }
 
     // 반려동물 여부에 따른 필터링
-    public static Specification<UserProfile> petAllowed(Boolean hasPet) {
-        if (hasPet == null) return null;
-        return (root, query, cb) -> hasPet
-                ? cb.isNotNull(root.get("pet"))
-                : cb.isNull(root.get("pet"));
+    public static Specification<UserProfile> petAllowed(List<String> pets) {
+        if (pets == null || pets.isEmpty()) return null;
+        return (root, query, cb) -> {
+            var petField = root.get("pet").as(String.class);
+            Predicate[] predicates = pets.stream()
+                    .map(pet -> cb.like(petField, "%" + pet + "%"))
+                    .toArray(Predicate[]::new);
+            return cb.or(predicates);
+        };
     }
 
     // 주 음주 횟수에 따른 필터링
-    public static Specification<UserProfile> drinkingFrequency(CountRange frequency) {
-        if (frequency == null) return null;
-        return (root, query, cb) -> cb.equal(root.get("alcoholCount"), frequency);
+    public static Specification<UserProfile> drinkingFrequency(List<CountRange> frequency) {
+        if (frequency == null || frequency.isEmpty()) return null;
+        return (root, query, cb) -> root.get("alcoholCount").in(frequency);
     }
 
     // 정리정돈 성향에 따른 필터링
-    public static Specification<UserProfile> cleanlinessLevel(SensitivityLevel level) {
+    public static Specification<UserProfile> cleanlinessLevel(List<SensitivityLevel> level) {
         if (level == null) return null;
-        return (root, query, cb) -> cb.equal(root.get("tidinessLevel"), level);
+        return (root, query, cb) -> root.get("tidinessLevel").in(level);
     }
 
     // 잠귀 민감도에 따른 필터링
-    public static Specification<UserProfile> lightSleepLevel(SensitivityLevel level) {
-        if (level == null) return null;
-        return (root, query, cb) -> cb.equal(root.get("sleepLevel"), level);
+    public static Specification<UserProfile> lightSleepLevel(List<SensitivityLevel> level) {
+        if (level == null || level.isEmpty()) return null;
+        return (root, query, cb) -> root.get("sleepLevel").in(level);
     }
 
     // 성별 매칭
@@ -64,19 +69,19 @@ public final class UserSpec {
               dto.isSmoking(),
               dto.getAlcoholCount(),
               dto.getSleepLevel(),
-              dto.getPet() != null && !dto.getPet().isEmpty() ? true : null,
+              dto.getPet(),
               dto.getTidinessLevel(),
               gender,
-                loggedInUserId
+              loggedInUserId
       );
     }
 
     public static Specification<UserProfile> build(
             Boolean smoking,
-            CountRange alcoholCount,
-            SensitivityLevel sleepLevel,
-            Boolean hasPet,
-            SensitivityLevel tidinessLevel,
+            List<CountRange> alcoholCount,
+            List<SensitivityLevel> sleepLevel,
+            List<String> pets,
+            List<SensitivityLevel> tidinessLevel,
             Gender userGender,
             Long loggedInUserId
     ) {
@@ -84,7 +89,7 @@ public final class UserSpec {
         parts.add(smokingAllowed(smoking));
         parts.add(drinkingFrequency(alcoholCount));
         parts.add(lightSleepLevel(sleepLevel));
-        parts.add(petAllowed(hasPet));
+        parts.add(petAllowed(pets));
         parts.add(cleanlinessLevel(tidinessLevel));
         parts.add(matchUserGender(userGender));
         parts.add(excludeUser(loggedInUserId));

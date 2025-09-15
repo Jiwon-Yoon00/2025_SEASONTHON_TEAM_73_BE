@@ -28,7 +28,7 @@ public class SignupReqDto {
     @Schema(description = "비밀번호 확인", example = "password123", required = true)
     private String confirmPassword;
 
-    @NotBlank(message = "이메일은 필수입니다.")
+    @NotBlank(message = "닉네임은 필수입니다.")
     @Schema(description = "사용자 닉네임", example = "nickname123", required = true)
     private String nickname;
 

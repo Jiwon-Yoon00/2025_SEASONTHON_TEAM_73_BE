@@ -85,7 +85,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         // 본인에게 전송 확인
         session.sendMessage(new TextMessage(mapper.writeValueAsString(
-                Map.of("event", "send", "roomId", dto.getChatRoomId(), "messageId", resDto.getMessageId(), "status", "sent")
+                Map.of("event", "send",
+                        "roomId", dto.getChatRoomId(),
+                        "messageId", resDto.getMessageId(),
+                        "content", resDto.getContent(),
+                        "sender", resDto.getSenderId(),
+                        "senderName", resDto.getSenderName(),
+                        "senderProfile", resDto.getSenderProfile(),
+                        "status", "sent")
         )));
 
         // 상대방에게 전달
