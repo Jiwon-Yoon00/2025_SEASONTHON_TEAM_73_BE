@@ -35,6 +35,9 @@ public class UserResDto {
     @Schema(description = "흡연 여부", example = "false")
     private boolean smoking;
 
+    @Schema(description = "부스터 사용 여부", example = "true")
+    private boolean isBoosted;
+
     public static UserResDto from(User user) {
         return new UserResDto(
                 user.getId(),
@@ -44,7 +47,8 @@ public class UserResDto {
                 user.getGender(),
                 user.isCertified(),
                 user.isRoom(),
-                user.getUserProfile().isSmoking()
+                user.getUserProfile().isSmoking(),
+                user.getUserBoost() != null
         );
     }
 }
