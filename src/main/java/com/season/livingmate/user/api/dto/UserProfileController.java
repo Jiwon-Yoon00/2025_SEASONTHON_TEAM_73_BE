@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -79,8 +80,10 @@ public class UserProfileController {
     public ResponseEntity<Response<Page<UserResDto>>> filterUsers(
             @RequestBody UserFilterReqDto userFilterReqDto,
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            Pageable pageable
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<UserResDto> dto = userProfileService.filterUsers(userFilterReqDto, userDetails, pageable);
 
         return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));

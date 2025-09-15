@@ -31,11 +31,17 @@ public class ChatRoomResDto {
     @Schema(description = "게시물 제목")
     private String postTitle;
 
+    @Schema(description = "보낸 사람 프로필")
+    private String senderProfile;
+
     @Schema(description = "보낸 사람 ID")
     private Long senderId;
 
     @Schema(description = "보낸 사람 닉네임")
     private String senderName;
+
+    @Schema(description = "받는 사람 프로필")
+    private String receiverProfile;
 
     @Schema(description = "받는 사람 ID")
     private Long receiverId;
@@ -75,10 +81,12 @@ public class ChatRoomResDto {
                 .chatRoomId(chatRoom.getId())
                 .postId(chatRoom.getPost().getPostId())
                 .postTitle(chatRoom.getPost().getTitle())
-                .senderId(chatRoom.getSender().getId())
-                .senderName(chatRoom.getSender().getUsername())
+                .senderProfile(chatRoom.getSender().getUserProfile().getProfileImageUrl()) // 프로필
+                .senderId(chatRoom.getSender().getId()) // 아이디
+                .senderName(chatRoom.getSender().getNickname()) // 닉네임
+                .receiverProfile(chatRoom.getSender().getUserProfile().getProfileImageUrl())
                 .receiverId(chatRoom.getReceiver().getId())
-                .receiverName(chatRoom.getReceiver().getUsername())
+                .receiverName(chatRoom.getReceiver().getNickname())
                 .unreadCount(unreadCount)
                 .lastMessage(lastMessage)
                 .chatRoomStatus(chatRoom.getChatRoomStatus())

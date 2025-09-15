@@ -84,8 +84,8 @@ public class UserProfileService {
     public UserProfileResDto getOtherProfile(Long userId) {
         UserProfile profile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
-
-        return UserProfileResDto.from(profile, Collections.emptyList());
+        List<Post> getPosts = postRepository.findAllByUserId(userId);
+        return UserProfileResDto.from(profile, getPosts);
     }
 
     // 모든 유저의 프로필 정보를 조회하는 메서드
