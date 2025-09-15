@@ -10,7 +10,6 @@ import lombok.*;
 
 import java.util.List;
 
-// 나중에 json 검증 코드 작성하기!!
 @Entity
 @Builder
 @AllArgsConstructor

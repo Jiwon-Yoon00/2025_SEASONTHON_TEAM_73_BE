@@ -6,6 +6,10 @@ import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.user.api.dto.response.LikeGetResDto;
 import com.season.livingmate.user.application.UserProfileLikeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,18 +45,10 @@ public class UserProfileLikeController {
 
     @GetMapping("")
     @Operation(summary = "좋아요한 유저프로필 목록 조회 (페이지네이션)")
-    public ResponseEntity<Response<Map<String, Object>>> getLike(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<Response<Page<LikeGetResDto>>> getLike(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                  Pageable pageable) {
         Page<LikeGetResDto> likedProfiles = userProfileLikeService.getLike(userDetails, pageable);
 
-        Map<String, Object> responseData = Map.of(
-                "content", likedProfiles.getContent(),
-                "pageNumber", likedProfiles.getNumber(),
-                "pageSize", likedProfiles.getSize(),
-                "totalPages", likedProfiles.getTotalPages(),
-                "totalElements", likedProfiles.getTotalElements(),
-                "last", likedProfiles.isLast()
-        );
-        return ResponseEntity.ok(Response.success(SuccessStatus.READ_LIKE, responseData));
+        return ResponseEntity.ok(Response.success(SuccessStatus.READ_LIKE, likedProfiles));
     }
 }
