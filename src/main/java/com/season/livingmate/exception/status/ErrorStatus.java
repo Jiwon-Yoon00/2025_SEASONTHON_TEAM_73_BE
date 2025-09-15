@@ -42,6 +42,17 @@ public enum ErrorStatus {
     CHAT_ROOM_ALREADY_APPLIED(HttpStatus.CONFLICT, "CHAT409", "이미 신청된 채팅방입니다."),
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PROFILE400", "프로필이 존재하지 않습니다."),
 
+    // ai
+    GPT_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "GPT500", "GPT API 호출에 실패했습니다."),
+    USER_SURVEY_NOT_COMPLETED(HttpStatus.BAD_REQUEST, "USER400", "성향조사가 완료되지 않은 사용자입니다."),
+    RECOMMENDATION_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "RECOMMEND500", "추천 서비스에 오류가 발생했습니다."),
+    INVALID_WEIGHT_COUNT(HttpStatus.BAD_REQUEST, "WEIGHT400", "정확히 3개의 성향조사 항목을 선택해주세요."),
+    INVALID_WEIGHT_SUM(HttpStatus.BAD_REQUEST, "WEIGHT400", "가중치의 합이 100이 되어야 합니다."),
+    INVALID_SURVEY_FIELD(HttpStatus.BAD_REQUEST, "SURVEY4003", "유효하지 않은 성향조사 항목입니다."),
+    INVALID_SELECTED_ITEMS_COUNT(HttpStatus.BAD_REQUEST, "SELECT400", "3개의 항목을 선택해야 합니다."),
+    INVALID_SELECTED_ITEMS_FIELD(HttpStatus.BAD_REQUEST, "SELECT400", "유효하지 않은 성향조사 항목입니다."),
+    DUPLICATE_SELECTED_ITEMS(HttpStatus.BAD_REQUEST, "SELECT400", "중복된 항목을 선택할 수 없습니다."),
+
     // user profile like
     ALREADY_LIKED(HttpStatus.BAD_REQUEST, "LIKE400", "이미 좋아요를 눌렀습니다."),
     SELF_LIKE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "LIKE400", "자기 자신은 좋아요할 수 없습니다."),
