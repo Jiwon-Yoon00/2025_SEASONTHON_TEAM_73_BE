@@ -63,7 +63,7 @@ public class UserProfileService {
         UserProfile userProfile = userProfileRepository.findByUser(user)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
-        userProfile.update(userProfileUpdateReqDto);
+        userProfile.update(userProfileUpdateReqDto, user);
         List<Post> myPosts = postRepository.findAllByUserId(userDetails.getUserId());
         return UserProfileResDto.from(userProfile, myPosts);
     }
