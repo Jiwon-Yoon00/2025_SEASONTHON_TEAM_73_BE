@@ -84,7 +84,7 @@ public class ChatRoomResDto {
                 .senderProfile(chatRoom.getSender().getUserProfile().getProfileImageUrl()) // 프로필
                 .senderId(chatRoom.getSender().getId()) // 아이디
                 .senderName(chatRoom.getSender().getNickname()) // 닉네임
-                .receiverProfile(chatRoom.getSender().getUserProfile().getProfileImageUrl())
+                .receiverProfile(chatRoom.getReceiver().getUserProfile().getProfileImageUrl())
                 .receiverId(chatRoom.getReceiver().getId())
                 .receiverName(chatRoom.getReceiver().getNickname())
                 .unreadCount(unreadCount)
