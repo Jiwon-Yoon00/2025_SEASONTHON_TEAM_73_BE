@@ -87,4 +87,13 @@ public class UserProfileUpdateReqDto {
 
     @Schema(description = "자기소개", example = "안녕하세요, 새로운 사용자입니다.")
     private String introduce;
+
+    @Schema(description = "프로필 이미지 URL", example = "http://example.com/profile.jpg")
+    private String profileImageUrl;
+
+    @Schema(description = "나이", example = "25")
+    private int age;
+
+    @Schema(description = "닉네임", example = "user123")
+    private String nickname;
 }
