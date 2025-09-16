@@ -9,9 +9,6 @@ import com.season.livingmate.user.api.dto.resquest.UserFilterReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
 import com.season.livingmate.user.application.UserProfileService;
-import com.season.livingmate.user.domain.Gender;
-import com.season.livingmate.user.domain.UserProfile;
-import com.season.livingmate.user.domain.repository.UserSpec;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,14 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/profile")
