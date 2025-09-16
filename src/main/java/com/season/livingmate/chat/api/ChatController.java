@@ -68,7 +68,7 @@ public class ChatController {
         return ResponseEntity.ok(Response.success(SuccessStatus.REJECT_CHAT_ROOM, null));
     }
 
-    // 요청자가 자신의 채팅방 목록 조회 (상태별)
+    // 채팅방 목록 조회
     @Operation(summary = "채팅방 목록 조회 API")
     @GetMapping("/lists")
     public ResponseEntity<Response<Map<ChatRoomStatus, List<ChatRoomResDto>>>> getMyChatRoomsByStatus(
