@@ -73,6 +73,8 @@ public record PostDetailRes(
 
         String userName,
 
+        String userProfileImageUrl, // 유저 프로필 이미지 추가
+
         Boolean isCertified,
 
         LocalDateTime createdAt,
@@ -96,6 +98,7 @@ public record PostDetailRes(
 
                 Long userId = p.getUser().getId();
                 String userName = p.getUser().getNickname();
+                String userProfileImageUrl = p.getUser().getUserProfile() != null ? p.getUser().getUserProfile().getProfileImageUrl() : null;
                 boolean isCertified = p.getUser().isCertified();
 
                 return new PostDetailRes(
@@ -128,6 +131,7 @@ public record PostDetailRes(
                         genders,
                         userId,
                         userName,
+                        userProfileImageUrl,
                         isCertified,
                         p.getCreatedAt(),
                         p.getUpdatedAt()

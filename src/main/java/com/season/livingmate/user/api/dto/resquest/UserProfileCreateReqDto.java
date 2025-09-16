@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -74,6 +75,10 @@ public class UserProfileCreateReqDto {
     @NotBlank
     private String introduce;
 
+    @ArraySchema(schema = @Schema(description = "추천 가중치 항목 3개", example = "[\"smellLevel\", \"sleepLevel\", \"tidinessLevel\"]"))
+    @Size(min = 3, max = 3, message = "정확히 3개의 항목을 선택해야 합니다.")
+    private List<@NotBlank String> recommendationWeights;
+
     public UserProfile toEntity(User user){
         return UserProfile.builder()
                 .alcoholCount(alcoholCount)
@@ -91,6 +96,7 @@ public class UserProfileCreateReqDto {
                 .disease(disease)
                 .user(user)
                 .introduce(introduce)
+                .recommendationWeights(recommendationWeights)
                 .build();
     }
 }

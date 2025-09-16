@@ -28,6 +28,9 @@ public class UserProfileResDto {
     private CleaningHabitDto cleaningHabit;
     private SoundSensitivityDto soundSensitivity;
     private String introduce;
+    
+    // 가중치 추가
+    private List<String> recommendationWeights;
 
     @Getter
     @AllArgsConstructor
@@ -138,6 +141,7 @@ public class UserProfileResDto {
                 cleaningHabit,
                 soundSensitivity,
                 profile.getIntroduce(),
+                profile.getRecommendationWeights(), // 가중치 추가
                 profile.getPet(),
                 profile.getDisease(),
                 profile.getProfileImageUrl(),

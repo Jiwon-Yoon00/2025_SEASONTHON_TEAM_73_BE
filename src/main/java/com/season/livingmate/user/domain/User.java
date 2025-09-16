@@ -45,6 +45,9 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserProfile userProfile;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserBoost userBoost;
+
     @OneToMany(mappedBy = "sender") // 사용자가 보낸 채팅방 목록
     private List<ChatRoom> sentChatRooms = new ArrayList<>();
 
