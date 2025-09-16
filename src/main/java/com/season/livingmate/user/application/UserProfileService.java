@@ -10,11 +10,11 @@ import com.season.livingmate.user.api.dto.response.UserResDto;
 import com.season.livingmate.user.api.dto.resquest.UserFilterReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
+import com.season.livingmate.user.domain.CountRange;
+import com.season.livingmate.user.domain.SensitivityLevel;
 import com.season.livingmate.user.domain.User;
 import com.season.livingmate.user.domain.UserProfile;
-import com.season.livingmate.user.domain.repository.UserProfileRepository;
-import com.season.livingmate.user.domain.repository.UserRepository;
-import com.season.livingmate.user.domain.repository.UserSpec;
+import com.season.livingmate.user.domain.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,7 +32,9 @@ public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
     private final UserRepository userRepository;
+    private final UserProfileRepositoryImpl userProfileRepositoryImpl;
     private final PostRepository postRepository;
+    private final UserBoostRepository  userBoostRepository;
 
     @Transactional
     public UserProfileResDto create(UserProfileCreateReqDto userProfileCreateReqDto, CustomUserDetails userDetails) {
@@ -91,12 +93,21 @@ public class UserProfileService {
     public Page<UserResDto> getAllUserProfiles(CustomUserDetails userDetails, Pageable pageable) {
         Long loggedInUserId = userDetails.getUserId();
 
-        // 같은 성별, 본인 제외
-        Specification<UserProfile> spec = UserSpec.matchUserGender(userDetails.getUser().getGender())
-                .and(UserSpec.excludeUser(loggedInUserId));
+        // 부스트 유저 아이디 리스트
+        List<Long> boostUserIds = userBoostRepository.findBoostUserIds();
+        if (boostUserIds.isEmpty()) {
+            boostUserIds = Collections.singletonList(-1L);
+        }
 
-        Page<UserProfile> userProfiles = userProfileRepository.findAll(spec, pageable);
-        return userProfiles.map(profiles -> UserResDto.from(profiles.getUser()));
+        Page<UserProfile> profiles = userProfileRepositoryImpl.filterWithBoostFirst(
+                null,
+                userDetails.getUser().getGender(),
+                loggedInUserId,
+                boostUserIds,
+                pageable
+        );
+
+        return profiles.map(profile -> UserResDto.from(profile.getUser()));
     }
 
     // 필터링된 유저 프로필 조회
@@ -104,8 +115,19 @@ public class UserProfileService {
     public Page<UserResDto> filterUsers(UserFilterReqDto dto, CustomUserDetails userDetails, Pageable pageable) {
         Long loggedInUserId = userDetails.getUserId();
 
-        Specification<UserProfile> spec = UserSpec.build(dto, userDetails.getUser().getGender(), loggedInUserId);
-        Page<UserProfile> profiles = userProfileRepository.findAll(spec, pageable);
+        List<Long> boostUserIds = userBoostRepository.findBoostUserIds();
+        if (boostUserIds.isEmpty()) {
+            boostUserIds = Collections.singletonList(-1L);
+        }
+
+        Page<UserProfile> profiles = userProfileRepositoryImpl.filterWithBoostFirst(
+                dto,
+                userDetails.getUser().getGender(),
+                loggedInUserId,
+                boostUserIds,
+                pageable
+        );
+
         return profiles.map(profile -> UserResDto.from(profile.getUser()));
     }
 }
