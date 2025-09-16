@@ -1,5 +1,6 @@
 package com.season.livingmate.user.api.dto.response;
 
+import com.season.livingmate.user.domain.Gender;
 import com.season.livingmate.user.domain.UserProfileLike;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,15 @@ public class LikeGetResDto {
     @Schema(description = "좋아요 받은 유저 닉네임", example = "하마")
     private String nickname;
 
-//    @Schema(description = "좋아요 받은 유저 정보", example = "형식미정..")
-//    private  String info;
+    @Schema(description = "성별", example = "여자")
+    private Gender gender;
+
+    @Schema(description = "나이", example = "25")
+    private int age;
+
+    @Schema(description = "흡연유무", example = "false")
+    private boolean isSmoking;
+
 
     @Schema(description = "좋아요 받은 유저 프로필 이미지", example = "url")
     private String profileImageUrl;
@@ -35,6 +43,9 @@ public class LikeGetResDto {
                 userProfileLike.getLikedUser().getId(),
                 userProfileLike.getLikedUser().getNickname(),
                 // userProfileLike.getLikedUserId().getBio(),
+                userProfileLike.getLikedUser().getGender(),
+                userProfileLike.getLikedUser().getAge(),
+                userProfileLike.getLikedUser().getUserProfile().isSmoking(),
                 userProfileLike.getLikedUser().getUserProfile().getProfileImageUrl()
         );
     }

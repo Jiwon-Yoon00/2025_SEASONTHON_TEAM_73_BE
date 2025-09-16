@@ -55,8 +55,6 @@ public class UserProfileService {
     @Transactional
     public UserProfileResDto update (UserProfileUpdateReqDto userProfileUpdateReqDto, CustomUserDetails userDetails){
 
-        System.out.println("유저프로필 수정" + userDetails.getUser().getId());
-
         User user = userRepository.findById(userDetails.getUser().getId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
