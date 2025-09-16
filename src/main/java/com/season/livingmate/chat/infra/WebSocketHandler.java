@@ -35,13 +35,18 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Long userId = (Long) session.getAttributes().get("userId");
         if (userId == null) {
             log.warn("WebSocket 연결 실패: 인증 정보 없음");
+            session.sendMessage(new TextMessage(mapper.writeValueAsString(
+                    Map.of("event", "error", "message", "인증되지 않은 사용자입니다.")
+            )));
             session.close();
             return;
         }
 
         log.info("WebSocket 연결 성공: {}, userId={}", session.getId(), userId);
         session.sendMessage(new TextMessage(mapper.writeValueAsString(
-                Map.of("event", "connect", "message", "WebSocket 연결 완료")
+                Map.of("event", "connect",
+                        "message", "WebSocket 연결 완료",
+                        "userId", userId)
         )));
     }
 
