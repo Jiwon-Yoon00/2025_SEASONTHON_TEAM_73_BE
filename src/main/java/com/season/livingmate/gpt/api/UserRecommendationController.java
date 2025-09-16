@@ -3,7 +3,6 @@ package com.season.livingmate.gpt.api;
 import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
-import com.season.livingmate.gpt.api.dto.request.UserRecommendationReqDto;
 import com.season.livingmate.gpt.api.dto.response.UserRecommendationResDto;
 import com.season.livingmate.gpt.application.UserRecommendationService;
 import com.season.livingmate.user.domain.User;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
