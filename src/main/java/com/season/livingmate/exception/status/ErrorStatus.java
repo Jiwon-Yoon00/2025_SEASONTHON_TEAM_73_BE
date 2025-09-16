@@ -52,6 +52,7 @@ public enum ErrorStatus {
     INVALID_SELECTED_ITEMS_COUNT(HttpStatus.BAD_REQUEST, "SELECT400", "3개의 항목을 선택해야 합니다."),
     INVALID_SELECTED_ITEMS_FIELD(HttpStatus.BAD_REQUEST, "SELECT400", "유효하지 않은 성향조사 항목입니다."),
     DUPLICATE_SELECTED_ITEMS(HttpStatus.BAD_REQUEST, "SELECT400", "중복된 항목을 선택할 수 없습니다."),
+    RECOMMENDATION_WEIGHTS_NOT_SET(HttpStatus.BAD_REQUEST, "WEIGHT400", "추천 가중치가 설정되지 않았습니다."),
 
     // user profile like
     ALREADY_LIKED(HttpStatus.BAD_REQUEST, "LIKE400", "이미 좋아요를 눌렀습니다."),

@@ -30,10 +30,9 @@ public class UserRecommendationController {
     @Operation(summary = "사용자 추천", description = "GPT를 이용한 성향조사 기반 사용자 추천(10명)")
     @PostMapping("/recommend")
     public ResponseEntity<Response<List<UserRecommendationResDto>>> recommendUsers(
-            @RequestBody UserRecommendationReqDto request,
             @AuthenticationPrincipal CustomUserDetails userDetails){
         User currentUser = userDetails.getUser();
-        List<UserRecommendationResDto> recommendations = userRecommendationService.recommendUsers(currentUser, request);
+        List<UserRecommendationResDto> recommendations = userRecommendationService.recommendUsers(currentUser);
 
         return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, recommendations));
     }

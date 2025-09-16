@@ -88,6 +88,9 @@ public class UserProfileUpdateReqDto {
     @Schema(description = "자기소개", example = "안녕하세요, 새로운 사용자입니다.")
     private String introduce;
 
+    @ArraySchema(schema = @Schema(description = "추천 가중치 항목 3개", example = "[\"smellLevel\", \"sleepLevel\", \"tidinessLevel\"]"))
+    private List<String> recommendationWeights;
+
     @Schema(description = "프로필 이미지 URL", example = "http://example.com/profile.jpg")
     private String profileImageUrl;
 

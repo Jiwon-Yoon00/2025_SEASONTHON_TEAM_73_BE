@@ -28,24 +28,30 @@ public class UserRecommendationService {
     private final GptService gptService;
     private final ObjectMapper objectMapper;
 
-    public List<UserRecommendationResDto> recommendUsers(User currentUser, UserRecommendationReqDto request) {
+    public List<UserRecommendationResDto> recommendUsers(User currentUser) {
         // 현재 사용자 프로필(성향조사) 확인
         UserProfile currentProfile = currentUser.getUserProfile();
         if(currentProfile == null) {
             throw new CustomException(ErrorStatus.USER_SURVEY_NOT_COMPLETED);
         }
 
+        // 사용자 프로필에서 가중치 가져오기
+        List<String> selectedItems = currentProfile.getRecommendationWeights();
+        if(selectedItems == null || selectedItems.isEmpty()) {
+            throw new CustomException(ErrorStatus.RECOMMENDATION_WEIGHTS_NOT_SET);
+        }
+
         // 추천 대상자 필터링 (isRoom 으로)
         List<User> candidates = getCandidates(currentUser);
 
         // 가중치 검증
-        validateSelectedItems(request.selectedItems());
+        validateSelectedItems(selectedItems);
 
         // 선택된 3개는 높은 가중치 나머지 9개는 낮은 가중치
-        Map<String, Integer> weights = calculateWeights(request.selectedItems());
+        Map<String, Integer> weights = calculateWeights(selectedItems);
 
         // 추천 (10명만)
-        return recommendWithGpt(currentProfile, candidates, weights, request.selectedItems());
+        return recommendWithGpt(currentProfile, candidates, weights, selectedItems);
     }
 
     private List<UserRecommendationResDto> recommendWithGpt(UserProfile currentProfile, List<User> candidates, Map<String, Integer> weights, List<String> selectedItems) {
