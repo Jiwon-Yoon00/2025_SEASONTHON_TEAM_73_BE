@@ -299,10 +299,10 @@ public class UserRecommendationService {
     private List<User> getCandidates(User currentUser) {
         // isRoom 조건 필터링
         if(currentUser.isRoom()){
-            // 방이 없으면 -> 방 있는 사용자 추천
+            // 방이 있으면 -> 방 없는 사용자 추천
             return userRepository.findByIsRoomAndIdNot(false, currentUser.getId());
         } else {
-            // 방이 있으면 -> 방 없는 사용자 추천
+            // 방이 없으면 -> 방 있는 사용자 추천
             return userRepository.findByIsRoomAndIdNot(true, currentUser.getId());
         }
     }
