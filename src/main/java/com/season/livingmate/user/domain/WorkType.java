@@ -7,7 +7,8 @@ public enum WorkType {
     OFFICE("회사원"),
     STUDENT("학생"),
     REMOTE("재택근무"),
-    FREELANCER("프리랜서");
+    FREELANCER("프리랜서"),
+    UNEMPLOYED("무직");
 
 
     private final String description;
