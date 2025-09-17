@@ -52,7 +52,7 @@ public class UserProfileRepositoryImpl {
                 builder.and(UserProfilePredicate.drinkingFrequency(dto.getAlcoholCount()));
             }
 
-            builder.and(UserProfilePredicate.smokingAllowed(dto.isSmoking()));
+            builder.and(UserProfilePredicate.smokingAllowed(dto.getSmoking()));
             builder.and(UserProfilePredicate.genderEqual(gender));
         }
         builder.and(UserProfilePredicate.excludeUser(loggedInUserId));

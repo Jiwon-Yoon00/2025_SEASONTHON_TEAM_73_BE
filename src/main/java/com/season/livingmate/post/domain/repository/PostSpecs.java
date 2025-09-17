@@ -3,8 +3,12 @@ package com.season.livingmate.post.domain.repository;
 import com.season.livingmate.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.RoomType;
+import com.season.livingmate.user.api.dto.resquest.UserFilterReqDto;
 import com.season.livingmate.user.domain.Gender;
+import com.season.livingmate.user.domain.User;
+import com.season.livingmate.user.domain.UserProfile;
 import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -151,5 +155,49 @@ public final class PostSpecs {
             );
         };
     }
+
+    public static Specification<Post> withUserFilter(UserFilterReqDto filter) {
+        if (filter == null) {
+            return null;
+        }
+
+        return (root, query, cb) -> {
+            Join<Post, User> userJoin = root.join("user");                // Post → User
+            Join<User, UserProfile> profileJoin = userJoin.join("userProfile"); // User → UserProfile
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            // 흡연 여부
+            if (filter.getSmoking() != null) {
+                predicates.add(cb.equal(profileJoin.get("smoking"), filter.getSmoking()));
+            }
+
+            // 음주 횟수
+            if (filter.getAlcoholCount() != null && !filter.getAlcoholCount().isEmpty()) {
+                predicates.add(profileJoin.get("alcoholCount").in(filter.getAlcoholCount()));
+            }
+
+            // 잠귀 민감도
+            if (filter.getSleepLevel() != null && !filter.getSleepLevel().isEmpty()) {
+                predicates.add(profileJoin.get("sleepLevel").in(filter.getSleepLevel()));
+            }
+
+            // 반려동물 (LIKE 검색, 리스트 OR)
+            if (filter.getPet() != null && !filter.getPet().isEmpty()) {
+                List<Predicate> petPredicates = filter.getPet().stream()
+                        .map(p -> cb.like(profileJoin.get("pet"), "%" + p + "%"))
+                        .toList();
+                predicates.add(cb.or(petPredicates.toArray(new Predicate[0])));
+            }
+
+            // 정리정돈 성향
+            if (filter.getTidinessLevel() != null && !filter.getTidinessLevel().isEmpty()) {
+                predicates.add(profileJoin.get("tidinessLevel").in(filter.getTidinessLevel()));
+            }
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+
 }
 
