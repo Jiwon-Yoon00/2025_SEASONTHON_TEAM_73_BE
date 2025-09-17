@@ -39,7 +39,19 @@ public record DashboardResDto(
             String nickname,
 
             @Schema(description = "프로필 이미지 URL")
-            String profileImageUrl
+            String profileImageUrl,
+
+            @Schema(description = "매칭 스코어")
+            Integer matchScore,
+
+            @Schema(description = "성별")
+            String gender,
+
+            @Schema(description = "나이")
+            int age,
+
+            @Schema(description = "흡연 여부")
+            boolean smoking
     ){}
 
     @Schema(description = "찜한 사용자 카드")
