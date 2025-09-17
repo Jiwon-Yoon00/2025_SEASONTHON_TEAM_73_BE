@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static com.season.livingmate.user.domain.QUserProfileLike.userProfileLike;
+
 @AllArgsConstructor
 @Schema(description = "유저프로필 응답 DTO")
 @Getter
@@ -63,18 +65,19 @@ public class UserListResDto {
     }
 
     public static UserListResDto from(UserProfileLike user) {
+        User likedUser = user.getLikedUser();
         return new UserListResDto(
-                user.getId(),
-                user.getUser().getUserProfile().getProfileImageUrl(),
-                user.getUser().getNickname(),
-                user.getUser().getAge(),
-                user.getUser().isVerified(),
-                user.getUser().getGender(),
-                user.getUser().isCertified(),
-                user.getUser().isRoom(),
-                user.getUser().getUserProfile().isSmoking(),
-                user.getUser().getUserBoost() != null,
-                user.getUser().getUserProfile().getWorkType()
+                likedUser.getId(),
+                likedUser.getUserProfile().getProfileImageUrl(),
+                likedUser.getNickname(),
+                likedUser.getAge(),
+                likedUser.isVerified(),
+                likedUser.getGender(),
+                likedUser.isCertified(),
+                likedUser.isRoom(),
+                likedUser.getUserProfile().isSmoking(),
+                likedUser.getUserBoost() != null,
+                likedUser.getUserProfile().getWorkType()
         );
     }
 }
