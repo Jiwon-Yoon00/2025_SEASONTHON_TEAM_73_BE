@@ -2,18 +2,24 @@ package com.season.livingmate.user.api.dto.response;
 
 import com.season.livingmate.user.domain.Gender;
 import com.season.livingmate.user.domain.User;
+import com.season.livingmate.user.domain.UserProfileLike;
 import com.season.livingmate.user.domain.WorkType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static com.season.livingmate.user.domain.QUserProfileLike.userProfileLike;
+
 @AllArgsConstructor
 @Schema(description = "유저프로필 응답 DTO")
 @Getter
-public class UserResDto {
+public class UserListResDto {
 
     @Schema(description = "유저 ID", example = "1")
     private Long id;
+
+    @Schema(description = "유저이미지", example = "url")
+    private String userProfileImage;
 
     @Schema(description = "닉네임", example = "홍길동")
     private String nickname;
@@ -42,9 +48,10 @@ public class UserResDto {
     @Schema(description = "근무형태", example = "무직")
     private WorkType workType;
 
-    public static UserResDto from(User user) {
-        return new UserResDto(
+    public static UserListResDto from(User user) {
+        return new UserListResDto(
                 user.getId(),
+                user.getUserProfile().getProfileImageUrl(),
                 user.getNickname(),
                 user.getAge(),
                 user.isVerified(),
@@ -54,6 +61,23 @@ public class UserResDto {
                 user.getUserProfile().isSmoking(),
                 user.getUserBoost() != null,
                 user.getUserProfile().getWorkType()
+        );
+    }
+
+    public static UserListResDto from(UserProfileLike user) {
+        User likedUser = user.getLikedUser();
+        return new UserListResDto(
+                likedUser.getId(),
+                likedUser.getUserProfile().getProfileImageUrl(),
+                likedUser.getNickname(),
+                likedUser.getAge(),
+                likedUser.isVerified(),
+                likedUser.getGender(),
+                likedUser.isCertified(),
+                likedUser.isRoom(),
+                likedUser.getUserProfile().isSmoking(),
+                likedUser.getUserBoost() != null,
+                likedUser.getUserProfile().getWorkType()
         );
     }
 }
