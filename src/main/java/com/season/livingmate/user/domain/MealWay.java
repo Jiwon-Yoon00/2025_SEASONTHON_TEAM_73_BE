@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MealWay {
-    COOK("주로 해 먹어요"), ORDER("주로 외식/배달음식 먹어요");
+    COOK("주로 해 먹어요"), ORDER("주로 외식/배달음식 먹어요"), UNKNOWN("미작성");
 
     private final String description;
 

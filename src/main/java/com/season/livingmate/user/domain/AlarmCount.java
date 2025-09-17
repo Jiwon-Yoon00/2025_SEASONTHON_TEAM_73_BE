@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AlarmCount {
 	ONCE("1회"),  TWICE("2회"),
-	THREE_OR_MORE("3회 이상");
+	THREE_OR_MORE("3회 이상"), UNKNOWN("미작성");
 
 	private final String description;
 
