@@ -121,7 +121,11 @@ public class MainDashboardService {
             return new DashboardResDto.RecommendedUserCard(
                     recommendation.user().id(),
                     recommendation.user().nickname(),
-                    recommendation.user().profileImageUrl()
+                    recommendation.user().profileImageUrl(),
+                    recommendation.matchScore(),
+                    recommendation.user().gender(),
+                    recommendation.user().age(),
+                    recommendation.user().smoking()
             );
         }
 }

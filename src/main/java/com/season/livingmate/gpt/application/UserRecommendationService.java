@@ -266,7 +266,7 @@ public class UserRecommendationService {
                             String combinedReason = combineReasonByItem(recNode.get("reasonByItem"));
                             recommendations.add(new UserRecommendationResDto(
                                     UserRecommendationResDto.UserBasicInfo.from(user),
-                                    recNode.get("score").asText(),
+                                    recNode.get("score").asInt(),
                                     combinedReason
                             ));
                         }
