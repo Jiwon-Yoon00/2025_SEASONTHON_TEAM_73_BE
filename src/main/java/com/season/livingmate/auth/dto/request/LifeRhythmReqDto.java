@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class LifeRhythmReqDto {
 
-    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "FREELANCER"})
+    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "FREELANCER", "UNEMPLOYED"})
     private WorkType workType;
 
     @ArraySchema(schema = @Schema(description = "출근 요일 목록", example = "월,화,수,목,금"))

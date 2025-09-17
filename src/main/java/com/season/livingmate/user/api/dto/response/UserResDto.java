@@ -2,6 +2,7 @@ package com.season.livingmate.user.api.dto.response;
 
 import com.season.livingmate.user.domain.Gender;
 import com.season.livingmate.user.domain.User;
+import com.season.livingmate.user.domain.WorkType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,9 @@ public class UserResDto {
     @Schema(description = "부스터 사용 여부", example = "true")
     private boolean isBoosted;
 
+    @Schema(description = "근무형태", example = "무직")
+    private WorkType workType;
+
     public static UserResDto from(User user) {
         return new UserResDto(
                 user.getId(),
@@ -48,7 +52,8 @@ public class UserResDto {
                 user.isCertified(),
                 user.isRoom(),
                 user.getUserProfile().isSmoking(),
-                user.getUserBoost() != null
+                user.getUserBoost() != null,
+                user.getUserProfile().getWorkType()
         );
     }
 }
