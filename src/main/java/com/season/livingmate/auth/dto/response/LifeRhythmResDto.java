@@ -19,7 +19,7 @@ public class LifeRhythmResDto {
     @Schema(description = "유저 아이디", example = "1")
     private Long userId;
 
-    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "PREELANCER"})
+    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "FREELANCER", "UNEMPLOYED"})
     private WorkType workType;
 
     @ArraySchema(schema = @Schema(description = "출근 요일 목록", example = "월,화,수,목,금"))
