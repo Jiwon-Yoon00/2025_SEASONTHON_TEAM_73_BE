@@ -5,6 +5,7 @@ import com.season.livingmate.gpt.api.dto.response.UserRecommendationResDto;
 import com.season.livingmate.gpt.application.UserRecommendationService;
 import com.season.livingmate.main.api.dto.DashboardResDto;
 import com.season.livingmate.user.api.dto.response.LikeGetResDto;
+import com.season.livingmate.user.api.dto.response.UserListResDto;
 import com.season.livingmate.user.application.UserProfileLikeService;
 import com.season.livingmate.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class MainDashboardService {
     public DashboardResDto getNoRoomDashboard(User user) {
         // 찜한 사용자 조회
         Pageable pageable = PageRequest.of(0, 5);
-        Page<LikeGetResDto> likedUsersPage = userProfileLikeService.getLike(
+        Page<UserListResDto> likedUsersPage = userProfileLikeService.getLike(
                 new CustomUserDetails(user),
                 pageable
         );
@@ -62,7 +63,7 @@ public class MainDashboardService {
     public DashboardResDto getHasRoomDashboard(User user) {
         // 찜한 사용자 조회
         Pageable pageable = PageRequest.of(0, 5);
-        Page<LikeGetResDto> likedUsersPage = userProfileLikeService.getLike(
+        Page<UserListResDto> likedUsersPage = userProfileLikeService.getLike(
                 new CustomUserDetails(user),
                 pageable
         );
@@ -108,9 +109,9 @@ public class MainDashboardService {
         }
     }
 
-    private DashboardResDto.LikedUserCard convertToLikedUserCard(LikeGetResDto likeGetResDto) {
+    private DashboardResDto.LikedUserCard convertToLikedUserCard(UserListResDto likeGetResDto) {
         return new DashboardResDto.LikedUserCard(
-                likeGetResDto.getLikedUserId(),
+                likeGetResDto.getId(),
                 likeGetResDto.getNickname(),
                 likeGetResDto.getGender().getDescription(),
                 likeGetResDto.getAge(),

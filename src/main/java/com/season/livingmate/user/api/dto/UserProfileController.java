@@ -4,7 +4,7 @@ import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.user.api.dto.response.UserProfileResDto;
-import com.season.livingmate.user.api.dto.response.UserResDto;
+import com.season.livingmate.user.api.dto.response.UserListResDto;
 import com.season.livingmate.user.api.dto.resquest.UserFilterReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
@@ -61,23 +61,23 @@ public class UserProfileController {
 
     @Operation(summary = "모든 유저 프로필 조회")
     @GetMapping("/all")
-    public ResponseEntity<Response<Page<UserResDto>>> getAllUserProfiles(@AuthenticationPrincipal CustomUserDetails userDetails, Pageable pageable) {
+    public ResponseEntity<Response<Page<UserListResDto>>> getAllUserProfiles(@AuthenticationPrincipal CustomUserDetails userDetails, Pageable pageable) {
 
-        Page<UserResDto> dto = userProfileService.getAllUserProfiles(userDetails, pageable);
+        Page<UserListResDto> dto = userProfileService.getAllUserProfiles(userDetails, pageable);
 
         return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }
 
     @Operation(summary = "필터링된 유저 프로필 조회")
     @PostMapping ("/filter")
-    public ResponseEntity<Response<Page<UserResDto>>> filterUsers(
+    public ResponseEntity<Response<Page<UserListResDto>>> filterUsers(
             @RequestBody UserFilterReqDto userFilterReqDto,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserResDto> dto = userProfileService.filterUsers(userFilterReqDto, userDetails, pageable);
+        Page<UserListResDto> dto = userProfileService.filterUsers(userFilterReqDto, userDetails, pageable);
 
         return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }

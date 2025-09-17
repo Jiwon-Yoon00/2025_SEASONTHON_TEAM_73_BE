@@ -6,25 +6,21 @@ import com.season.livingmate.exception.status.ErrorStatus;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.repository.PostRepository;
 import com.season.livingmate.user.api.dto.response.UserProfileResDto;
-import com.season.livingmate.user.api.dto.response.UserResDto;
+import com.season.livingmate.user.api.dto.response.UserListResDto;
 import com.season.livingmate.user.api.dto.resquest.UserFilterReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
-import com.season.livingmate.user.domain.CountRange;
-import com.season.livingmate.user.domain.SensitivityLevel;
 import com.season.livingmate.user.domain.User;
 import com.season.livingmate.user.domain.UserProfile;
 import com.season.livingmate.user.domain.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +86,7 @@ public class UserProfileService {
 
     // 모든 유저의 프로필 정보를 조회하는 메서드
     @Transactional(readOnly = true)
-    public Page<UserResDto> getAllUserProfiles(CustomUserDetails userDetails, Pageable pageable) {
+    public Page<UserListResDto> getAllUserProfiles(CustomUserDetails userDetails, Pageable pageable) {
         Long loggedInUserId = userDetails.getUserId();
 
         // 부스트 유저 아이디 리스트
@@ -107,12 +103,12 @@ public class UserProfileService {
                 pageable
         );
 
-        return profiles.map(profile -> UserResDto.from(profile.getUser()));
+        return profiles.map(profile -> UserListResDto.from(profile.getUser()));
     }
 
     // 필터링된 유저 프로필 조회
     @Transactional(readOnly = true)
-    public Page<UserResDto> filterUsers(UserFilterReqDto dto, CustomUserDetails userDetails, Pageable pageable) {
+    public Page<UserListResDto> filterUsers(UserFilterReqDto dto, CustomUserDetails userDetails, Pageable pageable) {
         Long loggedInUserId = userDetails.getUserId();
 
         List<Long> boostUserIds = userBoostRepository.findBoostUserIds();
@@ -128,6 +124,6 @@ public class UserProfileService {
                 pageable
         );
 
-        return profiles.map(profile -> UserResDto.from(profile.getUser()));
+        return profiles.map(profile -> UserListResDto.from(profile.getUser()));
     }
 }
