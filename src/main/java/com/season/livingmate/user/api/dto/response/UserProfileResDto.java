@@ -87,17 +87,20 @@ public class UserProfileResDto {
 
     private List<PostListRes> posts;
 
+    private static String safeValue(String value) {
+        return (value == null || value.isEmpty()) ? "없음" : value;
+    }
 
     public static UserProfileResDto from(UserProfile profile, List<Post> posts) {
         LifeHabitDto lifeHabit = new LifeHabitDto(
                 profile.getWorkType(),
                 profile.getWorkDays(),
-                profile.getWakeUpTimeWorkday(),
-                profile.getGoWorkTime(),
-                profile.getComeHomeTime(),
-                profile.getSleepTimeWorkday(),
-                profile.getWakeUpTimeHoliday(),
-                profile.getSleepTimeHoliday(),
+                safeValue(profile.getWakeUpTimeWorkday()),
+                safeValue(profile.getGoWorkTime()),
+                safeValue(profile.getComeHomeTime()),
+                safeValue(profile.getSleepTimeWorkday()),
+                safeValue(profile.getWakeUpTimeHoliday()),
+                safeValue(profile.getSleepTimeHoliday()),
                 profile.getAlarmCount()
         );
 
@@ -150,3 +153,5 @@ public class UserProfileResDto {
 
     }
 }
+
+
