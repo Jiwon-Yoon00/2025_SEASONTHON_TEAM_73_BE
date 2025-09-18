@@ -64,7 +64,7 @@ public class UserProfileResDto {
     @AllArgsConstructor
     public static class CleaningHabitDto {
         private SensitivityLevel bathroomCleaningLevel;
-        private SensitivityLevel tidinessLevel;
+        private TidinessLevel tidinessLevel;
     }
 
     @Getter
@@ -105,7 +105,7 @@ public class UserProfileResDto {
 
         CleaningHabitDto cleaningHabit = new CleaningHabitDto(
                 profile.getBathroomCleaningLevel() != null ? profile.getBathroomCleaningLevel() : SensitivityLevel.UNKNOWN,
-                profile.getTidinessLevel() != null ? profile.getTidinessLevel() : SensitivityLevel.UNKNOWN
+                profile.getTidinessLevel() != null ? profile.getTidinessLevel() : TidinessLevel.UNKNOWN
         );
 
         SoundSensitivityDto soundSensitivity = new SoundSensitivityDto(
