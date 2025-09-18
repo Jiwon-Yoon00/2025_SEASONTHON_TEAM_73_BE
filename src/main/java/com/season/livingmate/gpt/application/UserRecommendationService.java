@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -236,10 +238,7 @@ public class UserRecommendationService {
 
     private List<UserRecommendationResDto> parseGptResponse(String gptResponse, List<User> candidates) {
         try {
-            // gpt 응답에서 json만 추출
             String jsonResponse = extractJsonFromResponse(gptResponse);
-
-            // json 파싱
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode recommendationsNode = rootNode.get("recommendations");
 
@@ -249,97 +248,57 @@ public class UserRecommendationService {
 
             if (recommendationsNode != null && recommendationsNode.isArray()) {
                 for (JsonNode recNode : recommendationsNode) {
-                    String userIdStr = recNode.get("userId").asText(null);
-                    if (userIdStr == null) continue;
+                    if (recommendations.size() >= 10) break;
 
-                    Long userId;
+                    String userIdStr = recNode.get("userId").asText();
                     try {
-                        userId = Long.parseLong(userIdStr);
-                    } catch (NumberFormatException e) {
-                        continue;
+                        Long userId = Long.parseLong(userIdStr);
+                        User user = userMap.get(userId);
+                        if (user != null) {
+                            // reasonByItem -> reasonItems / reasonScores 로 분해
+                            List<String> reasonItems = new ArrayList<>();
+                            List<Integer> reasonScores = new ArrayList<>();
+                            readReasonArrays(recNode, reasonItems, reasonScores);
+
+                            recommendations.add(new UserRecommendationResDto(
+                                    UserRecommendationResDto.UserBasicInfo.from(user),
+                                    recNode.get("score").asInt(),
+                                    reasonItems,
+                                    reasonScores
+                            ));
+                        }
+                    } catch (NumberFormatException ignore) {
+                        // userId가 숫자가 아니면 스킵
                     }
-
-                    User user = userMap.get(userId);
-                    if (user == null) continue;
-
-                    int matchScore = getIntFlexible(recNode.get("score"));
-
-                    // reasonItems / reasonScores
-                    List<String> reasonItems = readStringArray(recNode.get("reasonItems"));
-                    List<Integer> reasonScores = readIntArray(recNode.get("reasonScores"));
-
-                    // 길이 동일, 최대 3개
-                    if (reasonItems.isEmpty() || reasonScores.isEmpty()) continue;
-
-                    int len = Math.min(3, Math.min(reasonItems.size(), reasonScores.size()));
-                    reasonItems  = reasonItems.subList(0, len);
-                    reasonScores = reasonScores.subList(0, len);
-
-                    // 점수 0~100까지
-                    for (int i = 0; i < reasonScores.size(); i++) {
-                        int v = reasonScores.get(i);
-                        if (v < 0) v = 0;
-                        if (v > 100) v = 100;
-                        reasonScores.set(i, v);
-                    }
-
-                    recommendations.add(new UserRecommendationResDto(
-                            UserRecommendationResDto.UserBasicInfo.from(user),
-                            matchScore,
-                            reasonItems,
-                            reasonScores
-                    ));
                 }
-            }
-
-            // 점수 내림차순 정렬 후 상위 10명만 유지
-            recommendations.sort(Comparator.comparing(UserRecommendationResDto::matchScore).reversed());
-            if (recommendations.size() > 10) {
-                return recommendations.subList(0, 10);
             }
             return recommendations;
-
         } catch (JsonProcessingException e) {
-            log.warn("parseGptResponse JSON error", e);
             return new ArrayList<>();
         } catch (Exception e) {
-            log.warn("parseGptResponse general error", e);
             return new ArrayList<>();
         }
     }
 
-    private int getIntFlexible(JsonNode node) {
-        if (node == null || node.isNull()) return 0;
-        if (node.isInt()) return node.asInt();
-        String s = node.asText();
-        try {
-            return Integer.parseInt(s.trim());
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-    }
-
-    private List<String> readStringArray(JsonNode node) {
-        if (node == null || !node.isArray()) return Collections.emptyList();
-        List<String> list = new ArrayList<>();
-        node.forEach(n -> list.add(n.asText()));
-        return list;
-    }
-
-    private List<Integer> readIntArray(JsonNode node) {
-        if (node == null || !node.isArray()) return Collections.emptyList();
-        List<Integer> list = new ArrayList<>();
-        node.forEach(n -> {
-            if (n.isInt()) list.add(n.asInt());
-            else {
-                try {
-                    list.add(Integer.parseInt(n.asText().trim()));
-                } catch (NumberFormatException e) {
-                    list.add(0);
-                }
+    private void readReasonArrays(JsonNode recNode,
+                                  List<String> outItems,
+                                  List<Integer> outScores) {
+        JsonNode items = recNode.get("reasonItems");
+        if (items != null && items.isArray()) {
+            for (JsonNode it : items) {
+                outItems.add(it.asText());
             }
-        });
-        return list;
+        }
+
+        JsonNode scores = recNode.get("reasonScores");
+        if (scores != null && scores.isArray()) {
+            for (JsonNode sc : scores) {
+                // 정수만 허용, 0~100 범위로
+                int v = sc.isNumber() ? sc.asInt() : 0;
+                v = Math.max(0, Math.min(100, v));
+                outScores.add(v);
+            }
+        }
     }
 
     private String extractJsonFromResponse(String response) {
@@ -363,5 +322,35 @@ public class UserRecommendationService {
             // 방이 없으면 -> 방 있는 사용자 추천
             return userRepository.findByIsRoomAndIdNot(true, currentUser.getId());
         }
+    }
+
+    private void extractReasonItemsAndScores(JsonNode reasonByItemNode,
+                                             List<String> outItems,
+                                             List<Integer> outScores) {
+        if (reasonByItemNode == null || !reasonByItemNode.isObject()) return;
+
+        Pattern scorePattern = Pattern.compile("일치도\\s*(\\d{1,3})\\s*/\\s*100");
+
+        reasonByItemNode.fields().forEachRemaining(entry -> {
+            String key = entry.getKey();
+            String value = entry.getValue().asText();
+            String koreanFieldName = getFieldDisplayName(key);
+
+            // 표시용 아이템 문장
+            outItems.add("• " + koreanFieldName + ": " + value);
+
+            // 점수 추출
+            Matcher m = scorePattern.matcher(value);
+            if (m.find()) {
+                try {
+                    int score = Integer.parseInt(m.group(1));
+                    // 0~100 범위로(혹시나 잘못 온 경우 안전장치)
+                    score = Math.max(0, Math.min(100, score));
+                    outScores.add(score);
+                } catch (NumberFormatException ignore) {
+                    // 점수 파싱 실패 시 추가하지 않음
+                }
+            }
+        });
     }
 }
