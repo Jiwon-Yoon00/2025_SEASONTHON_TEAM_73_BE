@@ -34,7 +34,7 @@ public class UserListResDto {
     private Gender gender;
 
     @Schema(description = "증명서 제출 여부", example = "false")
-    private boolean isCertified;
+    private WorkType isCertified;
 
     @Schema(description = "방 소유 여부", example = "true")
     private boolean room;
@@ -51,12 +51,12 @@ public class UserListResDto {
     public static UserListResDto from(User user) {
         return new UserListResDto(
                 user.getId(),
-                user.getUserProfile().getProfileImageUrl(),
+                user.getUserProfile().getProfileImageUrl() != null ? user.getUserProfile().getProfileImageUrl() : null,
                 user.getNickname(),
                 user.getAge(),
                 user.isVerified(),
                 user.getGender(),
-                user.isCertified(),
+                user.getWorkType(),
                 user.isRoom(),
                 user.getUserProfile().isSmoking(),
                 user.getUserBoost() != null,
@@ -73,7 +73,7 @@ public class UserListResDto {
                 likedUser.getAge(),
                 likedUser.isVerified(),
                 likedUser.getGender(),
-                likedUser.isCertified(),
+                likedUser.getWorkType(),
                 likedUser.isRoom(),
                 likedUser.getUserProfile().isSmoking(),
                 likedUser.getUserBoost() != null,
