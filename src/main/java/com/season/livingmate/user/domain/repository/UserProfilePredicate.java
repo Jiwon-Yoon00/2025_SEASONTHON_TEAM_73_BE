@@ -27,7 +27,7 @@ public final class UserProfilePredicate {
     }
 
     // 청결 성향
-    public static BooleanExpression cleanlinessLevel(List<SensitivityLevel> levels) {
+    public static BooleanExpression cleanlinessLevel(List<TidinessLevel> levels) {
         return (levels == null || levels.isEmpty()) ? null : up.tidinessLevel.in(levels);
     }
 
