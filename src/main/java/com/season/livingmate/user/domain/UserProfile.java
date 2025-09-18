@@ -70,7 +70,7 @@ public class UserProfile extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
-    private SensitivityLevel tidinessLevel; // 정리정돈 성향
+    private TidinessLevel tidinessLevel; // 정리정돈 성향
 
     /*
     * 소리 민감도

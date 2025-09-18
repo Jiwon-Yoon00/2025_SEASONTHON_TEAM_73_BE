@@ -74,7 +74,7 @@ public class UserProfileUpdateReqDto {
     private SensitivityLevel bathroomCleaningLevel;
 
     @Schema(description = "정리정돈 성향", example = "LOW", allowableValues = {"LOW", "MEDIUM", "HIGH"})
-    private SensitivityLevel tidinessLevel;
+    private TidinessLevel tidinessLevel;
 
     @Schema(description = "흡연 여부", example = "false")
     private boolean smoking;

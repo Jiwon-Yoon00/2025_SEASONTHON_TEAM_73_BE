@@ -2,6 +2,7 @@ package com.season.livingmate.user.api.dto.resquest;
 
 import com.season.livingmate.user.domain.CountRange;
 import com.season.livingmate.user.domain.SensitivityLevel;
+import com.season.livingmate.user.domain.TidinessLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -24,5 +25,5 @@ public class UserFilterReqDto {
     private List<String> pet;
 
     @Schema(description = "정리정돈 성향", example = "[\"LOW\", \"MEDIUM\"]", nullable = true)
-    private List<SensitivityLevel> tidinessLevel; // 정리정돈 성향
+    private List<TidinessLevel> tidinessLevel; // 정리정돈 성향
 }
