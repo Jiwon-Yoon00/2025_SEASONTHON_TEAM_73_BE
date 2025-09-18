@@ -235,7 +235,8 @@ public class PostService {
         Gender userGender = user.getGender();
 
         // 입력된 값이 있으면 AND로, 없으면 전체 조회
-        Specification<Post> spec = PostSpecs.build(req, userGender);
+        Specification<Post> spec = PostSpecs.build(req, userGender)
+                .and(PostSpecs.withUserFilter(req.userFilter()));
 
         Page<PostListRes> page = postRepository.findAll(spec, pageable)
                 .map(PostListRes::from);

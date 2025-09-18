@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EarphoneUsage {
 	ALAWAYS("항상"), NIGHT_ONLY("밤에만"),
-	NONE("안 써요");
+	NONE("안 써요"), UNKNOWN("미작성");
 
 	private final String description;
 

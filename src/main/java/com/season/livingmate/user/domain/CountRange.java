@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum CountRange {
 	ZERO("0회"),
 	ONE_TO_THREE("1~3회"),
-	MORE_THAN_FOUR("4회 이상");
+	MORE_THAN_FOUR("4회 이상"), UNKNOWN("미작성");
 
 	private final String description;
 

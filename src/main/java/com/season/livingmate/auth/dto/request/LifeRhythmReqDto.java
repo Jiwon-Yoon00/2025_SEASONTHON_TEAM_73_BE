@@ -15,38 +15,31 @@ import java.util.List;
 @Getter
 public class LifeRhythmReqDto {
 
-    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "FREELANCER"})
+    @Schema(description = "통근 유형", example = "OFFICE", allowableValues = {"OFFICE", "STUDENT", "REMOTE", "FREELANCER", "UNEMPLOYED"})
     private WorkType workType;
 
     @ArraySchema(schema = @Schema(description = "출근 요일 목록", example = "월,화,수,목,금"))
     private List<String> workDays;
 
     @Schema(description = "출근일 기상 시간", example = "07:00")
-    @NotBlank
     private String wakeUpTimeWorkday;
 
     @Schema(description = "출근 시간", example = "09:00")
-    @NotBlank
     private String goWorkTime;
 
     @Schema(description = "귀가 시간", example = "20:00")
-    @NotBlank
     private String comeHomeTime;
 
     @Schema(description = "출근일 취침 시간", example = "23:00")
-    @NotBlank
     private String sleepTimeWorkday;
 
     @Schema(description = "휴일 기상 시간", example = "08:00")
-    @NotBlank
     private String wakeUpTimeHoliday;
 
     @Schema(description = "휴일 취침 시간", example = "24:00")
-    @NotBlank
     private String sleepTimeHoliday;
 
     @Schema(description = "알람 듣는 횟수", example = "ONE", allowableValues = {"ONCE", "TWICE", "THREE_OR_MORE"})
-    @NotNull
     private AlarmCount alarmCount;
 
     public UserProfile toEntity(LifeRhythmReqDto dto, User user) {

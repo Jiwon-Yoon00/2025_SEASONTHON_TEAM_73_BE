@@ -110,6 +110,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         "roomId", dto.getChatRoomId(),
                         "content", resDto.getContent(),
                         "sender", resDto.getSenderId(),
+                        "senderName", resDto.getSenderName(),
+                        "senderProfile", resDto.getSenderProfile(),
                         "messageId", resDto.getMessageId()
                 )
         ));

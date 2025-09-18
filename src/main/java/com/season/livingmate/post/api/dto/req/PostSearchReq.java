@@ -1,6 +1,7 @@
 package com.season.livingmate.post.api.dto.req;
 
 import com.season.livingmate.post.domain.RoomType;
+import com.season.livingmate.user.api.dto.resquest.UserFilterReqDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -48,7 +49,11 @@ public record PostSearchReq(
             description = "선택한 동 목록", 
             example = "역삼동"
         )
-        List<String> dongs
+        List<String> dongs,
+
+        @Schema(
+                description = "사용자 필터 조건"
+        ) UserFilterReqDto userFilter
 ) {
     // 한국어 String을 RoomType enum으로 변환
     public List<RoomType> getRoomTypeEnums() {

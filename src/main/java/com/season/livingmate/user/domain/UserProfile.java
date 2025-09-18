@@ -123,12 +123,13 @@ public class UserProfile extends BaseEntity {
     @Column(nullable = true)
     private String certificateImageUrl;
 
+
     // 추천 가중치 필드 추가
     @Column(columnDefinition = "json")
     @Convert(converter = StringListJsonConverter.class)
     private List<String> recommendationWeights; // 추천 가중치 3개 항목
 
-    public void update(UserProfileUpdateReqDto dto) {
+    public void update(UserProfileUpdateReqDto dto, User user) {
         if (dto.getWorkType() != null) this.workType = dto.getWorkType();
         if (dto.getWorkDays() != null && !dto.getWorkDays().isEmpty()) this.workDays = dto.getWorkDays();
         if (dto.getWakeUpTimeWorkday() != null) this.wakeUpTimeWorkday = dto.getWakeUpTimeWorkday();
@@ -152,9 +153,14 @@ public class UserProfile extends BaseEntity {
         if (dto.getPet() != null && !dto.getPet().isEmpty()) this.pet = dto.getPet();
         this.disease = dto.getDisease();
         if (dto.getIntroduce() != null) this.introduce = dto.getIntroduce();
+
         if (dto.getRecommendationWeights() != null && !dto.getRecommendationWeights().isEmpty()) {
             this.recommendationWeights = dto.getRecommendationWeights();
         }
+        
+        user.setAge(dto.getAge());
+        if (dto.getNickname() != null && !dto.getNickname().isEmpty()) user.setNickname(dto.getNickname());
+
     }
 
     public void updateFromCreateDto(UserProfileCreateReqDto dto) {

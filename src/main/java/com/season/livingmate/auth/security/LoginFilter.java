@@ -71,10 +71,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
         map.put("username", username);
+        map.put("nickname", userDetails.getUser().getNickname());
         map.put("accessToken", accessToken);
         map.put("refreshToken", refreshToken);
         map.put("verified", userDetails.getUser().isVerified());
-        map.put("isCertified", userDetails.getUser().isCertified());
+        map.put("isCertified", userDetails.getUser().getWorkType());
         map.put("isRoom", userDetails.getUser().isRoom());
         map.put("isPersonalitySurveyCompleted", userDetails.getUser().isPersonalitySurveyCompleted());
 

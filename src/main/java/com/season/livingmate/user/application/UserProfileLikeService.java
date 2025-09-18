@@ -3,7 +3,7 @@ package com.season.livingmate.user.application;
 import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.status.ErrorStatus;
-import com.season.livingmate.user.api.dto.response.LikeGetResDto;
+import com.season.livingmate.user.api.dto.response.UserListResDto;
 import com.season.livingmate.user.domain.User;
 import com.season.livingmate.user.domain.UserProfileLike;
 import com.season.livingmate.user.domain.repository.UserProfileLikeRepository;
@@ -62,12 +62,12 @@ public class UserProfileLikeService {
 
     // 좋아요 목록 조회
     @Transactional(readOnly = true)
-    public Page<LikeGetResDto> getLike(CustomUserDetails userDetails, Pageable pageable) {
+    public Page<UserListResDto> getLike(CustomUserDetails userDetails, Pageable pageable) {
 
         User user = userDetails.getUser();
 
         Page<UserProfileLike> likedProfiles = userProfileLikeRepository.findAllByUserId(user.getId(), pageable);
 
-        return likedProfiles.map(LikeGetResDto::from);
+        return likedProfiles.map(UserListResDto::from);
     }
 }
