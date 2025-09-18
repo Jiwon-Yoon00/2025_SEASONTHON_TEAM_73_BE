@@ -57,10 +57,6 @@ public class S3Service {
 
         S3UploadResult result = s3Manager.uploadCertificate(file, userProfile.getId(), userProfile.getCertificateImageUrl());
 
-        // 인증서 업로드 시 isCertified true로 변경
-        User user = userProfile.getUser();
-        user.setCertified(true);
-
         userProfile.setCertificateImageUrl(result.getFileUrl());
         userProfileRepository.save(userProfile);
 

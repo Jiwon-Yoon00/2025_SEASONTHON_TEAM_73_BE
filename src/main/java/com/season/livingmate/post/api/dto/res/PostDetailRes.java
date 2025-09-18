@@ -5,7 +5,9 @@ import com.season.livingmate.post.domain.PaymentStructure;
 import com.season.livingmate.post.domain.Post;
 import com.season.livingmate.post.domain.RoomType;
 import com.season.livingmate.user.domain.Gender;
+import com.season.livingmate.user.domain.WorkType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.hibernate.jdbc.Work;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -75,7 +77,7 @@ public record PostDetailRes(
 
         String userProfileImageUrl, // 유저 프로필 이미지 추가
 
-        Boolean isCertified,
+        WorkType isCertified,
 
         LocalDateTime createdAt,
 
@@ -99,7 +101,7 @@ public record PostDetailRes(
                 Long userId = p.getUser().getId();
                 String userName = p.getUser().getNickname();
                 String userProfileImageUrl = p.getUser().getUserProfile() != null ? p.getUser().getUserProfile().getProfileImageUrl() : null;
-                boolean isCertified = p.getUser().isCertified();
+                WorkType isCertified = p.getUser().getWorkType();
 
                 return new PostDetailRes(
                         p.getPostId(),
