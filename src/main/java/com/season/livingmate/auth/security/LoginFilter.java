@@ -75,7 +75,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         map.put("accessToken", accessToken);
         map.put("refreshToken", refreshToken);
         map.put("verified", userDetails.getUser().isVerified());
-        map.put("isCertified", userDetails.getUser().isCertified());
+        map.put("isCertified", userDetails.getUser().getWorkType());
         map.put("isRoom", userDetails.getUser().isRoom());
         map.put("isPersonalitySurveyCompleted", userDetails.getUser().isPersonalitySurveyCompleted());
 

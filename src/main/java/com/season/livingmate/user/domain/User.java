@@ -54,8 +54,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "receiver") // 사용자가 받은 채팅방 목록
     private List<ChatRoom> receivedChatRooms = new ArrayList<>();
 
-    @Column(nullable = false)
-    private boolean isCertified; // 증명서 제출 여부
+    @Enumerated(EnumType.STRING)
+    private WorkType workType; // 증명서 제출 여부
 
     @Column(nullable = false)
     private boolean isPersonalitySurveyCompleted; // 성향조사 완료 여부
