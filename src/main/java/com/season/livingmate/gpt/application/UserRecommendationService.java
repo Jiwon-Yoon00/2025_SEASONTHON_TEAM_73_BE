@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.status.ErrorStatus;
-import com.season.livingmate.gpt.api.dto.request.UserRecommendationReqDto;
 import com.season.livingmate.gpt.api.dto.response.UserRecommendationResDto;
 import com.season.livingmate.user.domain.User;
 import com.season.livingmate.user.domain.UserProfile;
@@ -16,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -237,50 +238,66 @@ public class UserRecommendationService {
 
     private List<UserRecommendationResDto> parseGptResponse(String gptResponse, List<User> candidates) {
         try {
-            // gpt 응답에서 json만 추출
             String jsonResponse = extractJsonFromResponse(gptResponse);
-
-            // json파싱
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode recommendationsNode = rootNode.get("recommendations");
 
-            // 추천 결과 생성
             List<UserRecommendationResDto> recommendations = new ArrayList<>();
             Map<Long, User> userMap = candidates.stream()
                     .collect(Collectors.toMap(User::getId, user -> user));
 
-            if (recommendationsNode !=  null && recommendationsNode.isArray()){
-                for(JsonNode recNode : recommendationsNode){
-                    if(recommendations.size() >= 10){
-                        break; // 10명만
-                    }
-                    
+            if (recommendationsNode != null && recommendationsNode.isArray()) {
+                for (JsonNode recNode : recommendationsNode) {
+                    if (recommendations.size() >= 10) break;
+
                     String userIdStr = recNode.get("userId").asText();
-                    
-                    // 숫자로 변환 가능한지 확인
                     try {
                         Long userId = Long.parseLong(userIdStr);
                         User user = userMap.get(userId);
-                        
-                        if(user != null){
-                            String combinedReason = combineReasonByItem(recNode.get("reasonByItem"));
+                        if (user != null) {
+                            // reasonByItem -> reasonItems / reasonScores 로 분해
+                            List<String> reasonItems = new ArrayList<>();
+                            List<Integer> reasonScores = new ArrayList<>();
+                            readReasonArrays(recNode, reasonItems, reasonScores);
+
                             recommendations.add(new UserRecommendationResDto(
                                     UserRecommendationResDto.UserBasicInfo.from(user),
                                     recNode.get("score").asInt(),
-                                    combinedReason
+                                    reasonItems,
+                                    reasonScores
                             ));
                         }
-                    } catch (NumberFormatException e) {
-                        continue;
+                    } catch (NumberFormatException ignore) {
+                        // userId가 숫자가 아니면 스킵
                     }
                 }
             }
-
             return recommendations;
         } catch (JsonProcessingException e) {
             return new ArrayList<>();
         } catch (Exception e) {
             return new ArrayList<>();
+        }
+    }
+
+    private void readReasonArrays(JsonNode recNode,
+                                  List<String> outItems,
+                                  List<Integer> outScores) {
+        JsonNode items = recNode.get("reasonItems");
+        if (items != null && items.isArray()) {
+            for (JsonNode it : items) {
+                outItems.add(it.asText());
+            }
+        }
+
+        JsonNode scores = recNode.get("reasonScores");
+        if (scores != null && scores.isArray()) {
+            for (JsonNode sc : scores) {
+                // 정수만 허용, 0~100 범위로
+                int v = sc.isNumber() ? sc.asInt() : 0;
+                v = Math.max(0, Math.min(100, v));
+                outScores.add(v);
+            }
         }
     }
 
@@ -307,21 +324,34 @@ public class UserRecommendationService {
         }
     }
 
-    private String combineReasonByItem(JsonNode reasonByItemNode) {
-        if (reasonByItemNode == null || !reasonByItemNode.isObject()) {
-            return "추천 이유를 생성할 수 없습니다.";
-        }
+    private void extractReasonItemsAndScores(JsonNode reasonByItemNode,
+                                             List<String> outItems,
+                                             List<Integer> outScores) {
+        if (reasonByItemNode == null || !reasonByItemNode.isObject()) return;
 
-        StringBuilder combinedReason = new StringBuilder();
+        Pattern scorePattern = Pattern.compile("일치도\\s*(\\d{1,3})\\s*/\\s*100");
+
         reasonByItemNode.fields().forEachRemaining(entry -> {
             String key = entry.getKey();
             String value = entry.getValue().asText();
-            
-            // 필드명을 한국어로 변환
             String koreanFieldName = getFieldDisplayName(key);
-            combinedReason.append("• ").append(koreanFieldName).append(": ").append(value).append(" ");
-        });
 
-        return combinedReason.toString().trim();
+            // 표시용 아이템 문장
+            outItems.add("• " + koreanFieldName + ": " + value);
+
+            // 점수 추출
+            Matcher m = scorePattern.matcher(value);
+            if (m.find()) {
+                try {
+                    int score = Integer.parseInt(m.group(1));
+                    // 0~100 범위로(혹시나 잘못 온 경우 안전장치)
+                    score = Math.max(0, Math.min(100, score));
+                    outScores.add(score);
+                } catch (NumberFormatException ignore) {
+                    // 점수 파싱 실패 시 추가하지 않음
+                }
+            }
+        });
     }
 }
+
