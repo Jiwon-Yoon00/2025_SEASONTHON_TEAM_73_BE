@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.season.livingmate.exception.CustomException;
 import com.season.livingmate.exception.status.ErrorStatus;
-import com.season.livingmate.gpt.api.dto.request.UserRecommendationReqDto;
 import com.season.livingmate.gpt.api.dto.response.UserRecommendationResDto;
 import com.season.livingmate.user.domain.User;
 import com.season.livingmate.user.domain.UserProfile;
@@ -240,48 +239,107 @@ public class UserRecommendationService {
             // gpt 응답에서 json만 추출
             String jsonResponse = extractJsonFromResponse(gptResponse);
 
-            // json파싱
+            // json 파싱
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode recommendationsNode = rootNode.get("recommendations");
 
-            // 추천 결과 생성
             List<UserRecommendationResDto> recommendations = new ArrayList<>();
             Map<Long, User> userMap = candidates.stream()
                     .collect(Collectors.toMap(User::getId, user -> user));
 
-            if (recommendationsNode !=  null && recommendationsNode.isArray()){
-                for(JsonNode recNode : recommendationsNode){
-                    if(recommendations.size() >= 10){
-                        break; // 10명만
-                    }
-                    
-                    String userIdStr = recNode.get("userId").asText();
-                    
-                    // 숫자로 변환 가능한지 확인
+            if (recommendationsNode != null && recommendationsNode.isArray()) {
+                for (JsonNode recNode : recommendationsNode) {
+                    String userIdStr = recNode.get("userId").asText(null);
+                    if (userIdStr == null) continue;
+
+                    Long userId;
                     try {
-                        Long userId = Long.parseLong(userIdStr);
-                        User user = userMap.get(userId);
-                        
-                        if(user != null){
-                            String combinedReason = combineReasonByItem(recNode.get("reasonByItem"));
-                            recommendations.add(new UserRecommendationResDto(
-                                    UserRecommendationResDto.UserBasicInfo.from(user),
-                                    recNode.get("score").asInt(),
-                                    combinedReason
-                            ));
-                        }
+                        userId = Long.parseLong(userIdStr);
                     } catch (NumberFormatException e) {
                         continue;
                     }
+
+                    User user = userMap.get(userId);
+                    if (user == null) continue;
+
+                    int matchScore = getIntFlexible(recNode.get("score"));
+
+                    // reasonItems / reasonScores
+                    List<String> reasonItems = readStringArray(recNode.get("reasonItems"));
+                    List<Integer> reasonScores = readIntArray(recNode.get("reasonScores"));
+
+                    // 길이 동일, 최대 3개
+                    if (reasonItems.isEmpty() || reasonScores.isEmpty()) continue;
+
+                    int len = Math.min(3, Math.min(reasonItems.size(), reasonScores.size()));
+                    reasonItems  = reasonItems.subList(0, len);
+                    reasonScores = reasonScores.subList(0, len);
+
+                    // 점수 0~100까지
+                    for (int i = 0; i < reasonScores.size(); i++) {
+                        int v = reasonScores.get(i);
+                        if (v < 0) v = 0;
+                        if (v > 100) v = 100;
+                        reasonScores.set(i, v);
+                    }
+
+                    recommendations.add(new UserRecommendationResDto(
+                            UserRecommendationResDto.UserBasicInfo.from(user),
+                            matchScore,
+                            reasonItems,
+                            reasonScores
+                    ));
                 }
             }
 
+            // 점수 내림차순 정렬 후 상위 10명만 유지
+            recommendations.sort(Comparator.comparing(UserRecommendationResDto::matchScore).reversed());
+            if (recommendations.size() > 10) {
+                return recommendations.subList(0, 10);
+            }
             return recommendations;
+
         } catch (JsonProcessingException e) {
+            log.warn("parseGptResponse JSON error", e);
             return new ArrayList<>();
         } catch (Exception e) {
+            log.warn("parseGptResponse general error", e);
             return new ArrayList<>();
         }
+    }
+
+    private int getIntFlexible(JsonNode node) {
+        if (node == null || node.isNull()) return 0;
+        if (node.isInt()) return node.asInt();
+        String s = node.asText();
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    private List<String> readStringArray(JsonNode node) {
+        if (node == null || !node.isArray()) return Collections.emptyList();
+        List<String> list = new ArrayList<>();
+        node.forEach(n -> list.add(n.asText()));
+        return list;
+    }
+
+    private List<Integer> readIntArray(JsonNode node) {
+        if (node == null || !node.isArray()) return Collections.emptyList();
+        List<Integer> list = new ArrayList<>();
+        node.forEach(n -> {
+            if (n.isInt()) list.add(n.asInt());
+            else {
+                try {
+                    list.add(Integer.parseInt(n.asText().trim()));
+                } catch (NumberFormatException e) {
+                    list.add(0);
+                }
+            }
+        });
+        return list;
     }
 
     private String extractJsonFromResponse(String response) {
@@ -305,23 +363,5 @@ public class UserRecommendationService {
             // 방이 없으면 -> 방 있는 사용자 추천
             return userRepository.findByIsRoomAndIdNot(true, currentUser.getId());
         }
-    }
-
-    private String combineReasonByItem(JsonNode reasonByItemNode) {
-        if (reasonByItemNode == null || !reasonByItemNode.isObject()) {
-            return "추천 이유를 생성할 수 없습니다.";
-        }
-
-        StringBuilder combinedReason = new StringBuilder();
-        reasonByItemNode.fields().forEachRemaining(entry -> {
-            String key = entry.getKey();
-            String value = entry.getValue().asText();
-            
-            // 필드명을 한국어로 변환
-            String koreanFieldName = getFieldDisplayName(key);
-            combinedReason.append("• ").append(koreanFieldName).append(": ").append(value).append(" ");
-        });
-
-        return combinedReason.toString().trim();
     }
 }
