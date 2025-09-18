@@ -60,9 +60,12 @@ public class GptService {
                 "recommendations": [
                     {
                         "userId": "실제존재하는사용자ID",
-                        "score": 85,
-                        "reasonItems": ["%s", "%s", "%s"],
-                        "reasonScores": [85, 72, 90]
+                        "score": "85",
+                        "reasonByItem": {
+                              "%s": "일치도 XX/100 — nickname: 핵심 근거 한 가지",
+                              "%s": "일치도 XX/100 — nickname: 핵심 근거 한 가지",
+                              "%s": "일치도 XX/100 — nickname: 핵심 근거 한 가지"
+                        }
                     }
                 ]
             }
@@ -71,7 +74,7 @@ public class GptService {
             - userId는 반드시 위에 나열된 사용 가능한 사용자 ID 중 하나여야 합니다
             - 사용 가능한 사용자 ID: %s
             - **반드시 정확히 10명을 추천해주세요**
-            - 매칭 점수(score)는 0-100 사이의 정수로 해주세요
+            - 매칭 점수는 0-100 사이의 정수 문자열로 해주세요
             
             핵심 추천 원칙 (절대 우선순위):
             - **점수가 높은 순서대로 내림차순으로 정렬해서 추천해주세요**
@@ -112,13 +115,8 @@ public class GptService {
             
             - 가중치가 높은 항목일수록 더 중요하게 고려해주세요
             - 응답은 반드시 JSON 형식이어야 하며, 다른 설명이나 텍스트는 포함하지 마세요
-            """, currentUserProfile,
-                String.join("\n\n", candidateProfiles),
-                weights,
-                selectedItemsStr,
-                userIdList,
-            selectedItems.get(0), selectedItems.get(1), selectedItems.get(2),
-                userIdList);
+            """, currentUserProfile, String.join("\n\n", candidateProfiles), weights, selectedItemsStr, userIdList, 
+            selectedItems.get(0), selectedItems.get(1), selectedItems.get(2), userIdList);
 
         return callGptApi(prompt);
     }

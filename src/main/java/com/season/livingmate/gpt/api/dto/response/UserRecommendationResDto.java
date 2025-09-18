@@ -3,14 +3,11 @@ package com.season.livingmate.gpt.api.dto.response;
 import com.season.livingmate.user.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.List;
-
 @Schema(description = "사용자 추천 응답 DTO")
 public record UserRecommendationResDto(
         UserBasicInfo user,
         Integer matchScore,
-        List<String> reasonItems,
-        List<Integer> reasonScores
+        String reason
 ){
     public record UserBasicInfo (
             Long id,
