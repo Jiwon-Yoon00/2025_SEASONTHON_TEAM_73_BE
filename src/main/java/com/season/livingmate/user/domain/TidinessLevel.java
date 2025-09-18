@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TidinessLevel {
-    LOW("항상 제자리에 둬요"), MEDIUM("정돈된 편이에요"), HIGH("어지르는 편이에요"), UNKNOWN("미작성");
+    LOW("항상 제자리에 둬요"), MEDIUM("대체로 정돈된 편이에요"), HIGH("어지르는 편이에요"), UNKNOWN("미작성");
 
     private final String description;
 
