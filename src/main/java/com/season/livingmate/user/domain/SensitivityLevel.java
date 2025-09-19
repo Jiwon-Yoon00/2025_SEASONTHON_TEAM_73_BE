@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum SensitivityLevel {
-	LOW("둔감해요"), MEDIUM("보통이에요"), HIGH("예민한 편이에요");
+	LOW("둔감해요"), MEDIUM("보통이에요"), HIGH("예민한 편이에요"), UNKNOWN("미작성");
 
 	private final String description;
 

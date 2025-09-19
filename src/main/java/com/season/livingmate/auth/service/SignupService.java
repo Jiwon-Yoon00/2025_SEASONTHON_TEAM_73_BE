@@ -61,6 +61,7 @@ public class SignupService {
     @Transactional
     public void signup(SignupReqDto signupReqDto){
         validateDuplicateUsername(signupReqDto.getUsername());
+        validateDuplicateNickname(signupReqDto.getNickname());
 
         SignupReqDto encryptedDto = new SignupReqDto();
         encryptedDto.setUsername(signupReqDto.getUsername());
@@ -78,6 +79,13 @@ public class SignupService {
     // 아이디 중복 검사
     public void validateDuplicateUsername(String username) {
         if(userRepository.existsByUsername(username)) {
+            throw new CustomException(ErrorStatus.DUPLICATE_RESOURCE);
+        }
+    }
+
+    // 닉네임 중복 검사
+    public void validateDuplicateNickname(String nickname) {
+        if(userRepository.existsByNickname(nickname)) {
             throw new CustomException(ErrorStatus.DUPLICATE_RESOURCE);
         }
     }

@@ -10,7 +10,6 @@ import lombok.*;
 
 import java.util.List;
 
-// 나중에 json 검증 코드 작성하기!!
 @Entity
 @Builder
 @AllArgsConstructor
@@ -71,7 +70,7 @@ public class UserProfile extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
-    private SensitivityLevel tidinessLevel; // 정리정돈 성향
+    private TidinessLevel tidinessLevel; // 정리정돈 성향
 
     /*
     * 소리 민감도
@@ -118,7 +117,19 @@ public class UserProfile extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    public void update(UserProfileUpdateReqDto dto) {
+    @Column(nullable = true)
+    private String profileImageUrl;
+
+    @Column(nullable = true)
+    private String certificateImageUrl;
+
+
+    // 추천 가중치 필드 추가
+    @Column(columnDefinition = "json")
+    @Convert(converter = StringListJsonConverter.class)
+    private List<String> recommendationWeights; // 추천 가중치 3개 항목
+
+    public void update(UserProfileUpdateReqDto dto, User user) {
         if (dto.getWorkType() != null) this.workType = dto.getWorkType();
         if (dto.getWorkDays() != null && !dto.getWorkDays().isEmpty()) this.workDays = dto.getWorkDays();
         if (dto.getWakeUpTimeWorkday() != null) this.wakeUpTimeWorkday = dto.getWakeUpTimeWorkday();
@@ -142,6 +153,14 @@ public class UserProfile extends BaseEntity {
         if (dto.getPet() != null && !dto.getPet().isEmpty()) this.pet = dto.getPet();
         this.disease = dto.getDisease();
         if (dto.getIntroduce() != null) this.introduce = dto.getIntroduce();
+
+        if (dto.getRecommendationWeights() != null && !dto.getRecommendationWeights().isEmpty()) {
+            this.recommendationWeights = dto.getRecommendationWeights();
+        }
+        
+        user.setAge(dto.getAge());
+        if (dto.getNickname() != null && !dto.getNickname().isEmpty()) user.setNickname(dto.getNickname());
+
     }
 
     public void updateFromCreateDto(UserProfileCreateReqDto dto) {
@@ -159,6 +178,7 @@ public class UserProfile extends BaseEntity {
         this.pet = dto.getPet();
         this.disease = dto.getDisease();
         this.introduce = dto.getIntroduce();
+        this.recommendationWeights = dto.getRecommendationWeights();
     }
 
 

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum PhoneMode {
     SILENT("무음"),
     VIBRATE("진동"),
-    SOUND("소리");
+    SOUND("소리"), UNKNOWN("미작성");
 
     private final String description;
 

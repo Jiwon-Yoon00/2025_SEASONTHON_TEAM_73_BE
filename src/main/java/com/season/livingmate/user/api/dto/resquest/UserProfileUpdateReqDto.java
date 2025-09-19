@@ -74,7 +74,7 @@ public class UserProfileUpdateReqDto {
     private SensitivityLevel bathroomCleaningLevel;
 
     @Schema(description = "정리정돈 성향", example = "LOW", allowableValues = {"LOW", "MEDIUM", "HIGH"})
-    private SensitivityLevel tidinessLevel;
+    private TidinessLevel tidinessLevel;
 
     @Schema(description = "흡연 여부", example = "false")
     private boolean smoking;
@@ -87,4 +87,16 @@ public class UserProfileUpdateReqDto {
 
     @Schema(description = "자기소개", example = "안녕하세요, 새로운 사용자입니다.")
     private String introduce;
+
+    @ArraySchema(schema = @Schema(description = "추천 가중치 항목 3개", example = "[\"smellLevel\", \"sleepLevel\", \"tidinessLevel\"]"))
+    private List<String> recommendationWeights;
+
+    @Schema(description = "프로필 이미지 URL", example = "http://example.com/profile.jpg")
+    private String profileImageUrl;
+
+    @Schema(description = "나이", example = "25")
+    private int age;
+
+    @Schema(description = "닉네임", example = "user123")
+    private String nickname;
 }

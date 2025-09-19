@@ -126,52 +126,6 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    // 요청자가 게시물 작성자에게 채팅 신청
-//    @Transactional
-//    public ChatRoomResDto requestChatRoom(Long postId, CustomUserDetails userDetails){
-//        Post post = postRepository.findById(postId)
-//                .orElseThrow(() -> new CustomException(ErrorStatus.RESOURCE_NOT_FOUND));
-//
-//        User user = userDetails.getUser();
-//
-//        if (post.getUser().getId().equals(user.getId())) { // post 작성자와 신청자가 같으면 안됨
-//            throw new CustomException(ErrorStatus.FORBIDDEN);
-//        }
-//
-//        Optional<ChatRoom> existRoom =  chatRoomRepository.findByPost_PostIdAndSender_Id(post.getPostId(), user.getId());
-//        if(existRoom.isPresent()){
-//            throw new CustomException(ErrorStatus.CHAT_ROOM_ALREADY_APPLIED); // 이미 신청한 경우 예외
-//        }
-//
-//        ChatRoom chatRoom = ChatRoom.builder()
-//                .post(post)
-//                .sender(user)
-//                .receiver(post.getUser())
-//                .chatRoomStatus(ChatRoomStatus.PENDING)
-//                .build();
-//
-//        chatRoomRepository.save(chatRoom);
-//        return  ChatRoomResDto.from(chatRoom);
-//
-//    }
-
-    // 작성자가 신청자 목록 조회
-    @Transactional(readOnly = true)
-    public Map<ChatRoomStatus, List<ChatRoomResDto>> getChatRoomsByStatusForReceiver(CustomUserDetails userDetails) {
-        User receiver = userDetails.getUser();
-
-        // 작성자가 받은 모든 상태 채팅방 조회
-        List<ChatRoom> rooms = chatRoomRepository.findByReceiver_IdAndChatRoomStatusIn(
-                receiver.getId(),
-                List.of(ChatRoomStatus.PENDING, ChatRoomStatus.ACCEPTED)
-        );
-
-        return rooms.stream()
-                .map(ChatRoomResDto::from)
-                .collect(Collectors.groupingBy(ChatRoomResDto::getChatRoomStatus));
-    }
-
-
     // 작성자가 수락
     @Transactional
     public ChatRoomResDto acceptChatRoom(Long chatRoomId, CustomUserDetails userDetails) {
@@ -206,12 +160,13 @@ public class ChatService {
         messageRepository.deleteAll(chatRoom.getMessages());
     }
 
-    //요청자가 자신의 채팅방 목록 조회 (상태별)
+    //채팅방 목록 조회
     @Transactional(readOnly = true)
     public Map<ChatRoomStatus, List<ChatRoomResDto>> getMyChatRoomsByStatus(CustomUserDetails userDetails) {
         User requester = userDetails.getUser();
 
-        List<ChatRoom> rooms = chatRoomRepository.findBySender_IdAndChatRoomStatusIn(
+        List<ChatRoom> rooms = chatRoomRepository.findByReceiver_IdOrSender_IdAndChatRoomStatusIn(
+                requester.getId(),
                 requester.getId(),
                 List.of(ChatRoomStatus.PENDING, ChatRoomStatus.ACCEPTED)
         );

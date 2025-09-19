@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum DishShare {
-    SHARE("공용 식기"), PERSONAL("개인 식기");
+    SHARE("공용 식기"), PERSONAL("개인 식기"), UNKNOWN("미작성");
 
     private final String description;
 

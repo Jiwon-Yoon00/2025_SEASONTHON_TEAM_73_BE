@@ -35,13 +35,18 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Long userId = (Long) session.getAttributes().get("userId");
         if (userId == null) {
             log.warn("WebSocket 연결 실패: 인증 정보 없음");
-            session.close();
+            session.sendMessage(new TextMessage(mapper.writeValueAsString(
+                    Map.of("event", "error", "message", "인증되지 않은 사용자입니다.")
+            )));
+            session.close(CloseStatus.NOT_ACCEPTABLE.withReason("인증 정보 없음"));
             return;
         }
 
         log.info("WebSocket 연결 성공: {}, userId={}", session.getId(), userId);
         session.sendMessage(new TextMessage(mapper.writeValueAsString(
-                Map.of("event", "connect", "message", "WebSocket 연결 완료")
+                Map.of("event", "connect",
+                        "message", "WebSocket 연결 완료",
+                        "userId", userId)
         )));
     }
 
@@ -51,7 +56,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Long userId = (Long) session.getAttributes().get("userId");
         if (userId == null) {
             log.warn("인증되지 않은 사용자의 메시지 요청");
-            session.close();
+            session.sendMessage(new TextMessage(mapper.writeValueAsString(
+                    Map.of("event", "error", "message", "인증되지 않은 사용자입니다.")
+            )));
+            session.close(CloseStatus.NOT_ACCEPTABLE.withReason("인증 정보 없음"));
             return;
         }
 
@@ -85,7 +93,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         // 본인에게 전송 확인
         session.sendMessage(new TextMessage(mapper.writeValueAsString(
-                Map.of("event", "send", "roomId", dto.getChatRoomId(), "messageId", resDto.getMessageId(), "status", "sent")
+                Map.of("event", "send",
+                        "roomId", dto.getChatRoomId(),
+                        "messageId", resDto.getMessageId(),
+                        "content", resDto.getContent(),
+                        "sender", resDto.getSenderId(),
+                        "senderName", resDto.getSenderName(),
+                        "senderProfile", resDto.getSenderProfile(),
+                        "status", "sent")
         )));
 
         // 상대방에게 전달
@@ -95,6 +110,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         "roomId", dto.getChatRoomId(),
                         "content", resDto.getContent(),
                         "sender", resDto.getSenderId(),
+                        "senderName", resDto.getSenderName(),
+                        "senderProfile", resDto.getSenderProfile(),
                         "messageId", resDto.getMessageId()
                 )
         ));
@@ -142,7 +159,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         } catch (Exception e) {
             log.error("메시지 전송 실패: sessionId={}, reason={}", session.getId(), e.getMessage(), e);
             try {
-                session.close(); // 문제가 생긴 세션은 정리
+                session.close(CloseStatus.NOT_ACCEPTABLE.withReason("메세지 전송 실패")); // 문제가 생긴 세션은 정리
             } catch (Exception ignored) {}
         }
     }

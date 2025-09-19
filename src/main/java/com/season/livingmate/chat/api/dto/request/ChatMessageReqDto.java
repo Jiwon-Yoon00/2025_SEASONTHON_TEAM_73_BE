@@ -19,7 +19,7 @@ import java.util.WeakHashMap;
 @Schema(description = "메세지 요청 DTO")
 public class ChatMessageReqDto {
 
-    @Schema(description = "메세지 타입", example = "TEXT", allowableValues = {"TEXT", "IMAGHE", "FILE", "SYSTEM"})
+    @Schema(description = "메세지 타입", example = "TEXT", allowableValues = {"TEXT", "IMAGE", "FILE", "SYSTEM"})
     @NotNull
     private MessageType type;
 

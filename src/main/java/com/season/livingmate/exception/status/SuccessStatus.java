@@ -37,9 +37,13 @@ public enum SuccessStatus {
     // 채팅 신청
     APPLY_CHAT_ROOM(HttpStatus.CREATED, "CHAT201", "채팅 신청이 성공적으로 완료되었습니다."),
     ACCEPT_CHAT_ROOM(HttpStatus.OK, "CHAT200", "채팅 신청이 성공적으로 수락되었습니다."),
-    REJECT_CHAT_ROOM(HttpStatus.OK, "CHAT200", "채팅 신청이 성공적으로 거절되었습니다."),;
+    REJECT_CHAT_ROOM(HttpStatus.OK, "CHAT200", "채팅 신청이 성공적으로 거절되었습니다."),
 
 
+    // 좋아요
+    CREATE_LIKE(HttpStatus.CREATED, "LIKE201", "좋아요가 성공적으로 생성되었습니다."),
+    DELETE_LIKE(HttpStatus.OK, "LIKE200", "좋아요가 성공적으로 삭제되었습니다."),
+    READ_LIKE(HttpStatus.OK, "LIKE200", "좋아요가 성공적으로 조회되었습니다.");
 
 
     private final HttpStatus status;

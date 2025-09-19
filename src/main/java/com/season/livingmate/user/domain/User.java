@@ -45,14 +45,20 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserProfile userProfile;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserBoost userBoost;
+
     @OneToMany(mappedBy = "sender") // 사용자가 보낸 채팅방 목록
     private List<ChatRoom> sentChatRooms = new ArrayList<>();
 
     @OneToMany(mappedBy = "receiver") // 사용자가 받은 채팅방 목록
     private List<ChatRoom> receivedChatRooms = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private WorkType workType; // 증명서 제출 여부
+
     @Column(nullable = false)
-    private boolean isCertified; // 증명서 제출 여부
+    private boolean isPersonalitySurveyCompleted; // 성향조사 완료 여부
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens;

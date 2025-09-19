@@ -3,8 +3,7 @@ package com.season.livingmate.user.api.dto;
 import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
-import com.season.livingmate.user.api.dto.response.UserProfileResDto;
-import com.season.livingmate.user.api.dto.response.UserResDto;
+import com.season.livingmate.user.api.dto.response.UserListResDto;
 import com.season.livingmate.user.application.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,15 +27,15 @@ public class UserController {
 
     @Operation(summary = "유저정보 조회")
     @GetMapping("/me")
-    public ResponseEntity<Response<UserResDto>> getUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        UserResDto dto =  userService.getUser(userDetails);
+    public ResponseEntity<Response<UserListResDto>> getUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserListResDto dto =  userService.getUser(userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }
 
     @Operation(summary = "상대방 유저 정보 조회")
     @GetMapping("/{userId}")
-    public ResponseEntity<Response<UserResDto>> getOther(@PathVariable Long userId) {
-        UserResDto dto = userService.getOther(userId);
+    public ResponseEntity<Response<UserListResDto>> getOther(@PathVariable Long userId) {
+        UserListResDto dto = userService.getOther(userId);
         return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }
 }

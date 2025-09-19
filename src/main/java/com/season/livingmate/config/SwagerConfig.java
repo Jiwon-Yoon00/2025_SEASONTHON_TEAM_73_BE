@@ -44,7 +44,10 @@ public class SwagerConfig {
 				)
 				.components(components)
 				.addSecurityItem(securityRequirement)
-				.servers(List.of(new Server().url("https://livingmate.store")));
+				.servers(List.of(
+						new Server().url("https://livingmate.store"),
+						new Server().url("http://localhost:8080")
+				));
 
 		PathItem logoutPath = new PathItem().post(new Operation()
 				.operationId("logout")

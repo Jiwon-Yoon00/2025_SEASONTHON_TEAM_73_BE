@@ -4,6 +4,8 @@ import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
 import com.season.livingmate.user.api.dto.response.UserProfileResDto;
+import com.season.livingmate.user.api.dto.response.UserListResDto;
+import com.season.livingmate.user.api.dto.resquest.UserFilterReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileCreateReqDto;
 import com.season.livingmate.user.api.dto.resquest.UserProfileUpdateReqDto;
 import com.season.livingmate.user.application.UserProfileService;
@@ -11,6 +13,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
+
 
     @Operation(summary = "유저프로필 생성")
     @PatchMapping("/init")
@@ -51,5 +57,28 @@ public class UserProfileController {
     public ResponseEntity<Response<UserProfileResDto>> getOtherProfile(@PathVariable Long userId) {
         UserProfileResDto userProfileResDto = userProfileService.getOtherProfile(userId);
         return ResponseEntity.ok(Response.success(SuccessStatus.GET_PROFILE, userProfileResDto));
+    }
+
+    @Operation(summary = "모든 유저 프로필 조회")
+    @GetMapping("/all")
+    public ResponseEntity<Response<Page<UserListResDto>>> getAllUserProfiles(@AuthenticationPrincipal CustomUserDetails userDetails, Pageable pageable) {
+
+        Page<UserListResDto> dto = userProfileService.getAllUserProfiles(userDetails, pageable);
+
+        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
+    }
+
+    @Operation(summary = "필터링된 유저 프로필 조회")
+    @PostMapping ("/filter")
+    public ResponseEntity<Response<Page<UserListResDto>>> filterUsers(
+            @RequestBody UserFilterReqDto userFilterReqDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserListResDto> dto = userProfileService.filterUsers(userFilterReqDto, userDetails, pageable);
+
+        return ResponseEntity.ok(Response.success(SuccessStatus.SUCCESS, dto));
     }
 }

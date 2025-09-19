@@ -3,12 +3,11 @@ package com.season.livingmate.post.api.dto;
 import com.season.livingmate.auth.security.CustomUserDetails;
 import com.season.livingmate.exception.Response;
 import com.season.livingmate.exception.status.SuccessStatus;
+import com.season.livingmate.post.api.dto.req.PostCreateReq;
 import com.season.livingmate.post.api.dto.req.PostSearchReq;
+import com.season.livingmate.post.api.dto.req.PostUpdateReq;
 import com.season.livingmate.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.post.api.dto.res.PostListRes;
-import com.season.livingmate.post.api.dto.req.PostCreateReq;
-import com.season.livingmate.post.api.dto.req.PostUpdateReq;
-
 import com.season.livingmate.post.application.PostService;
 import com.season.livingmate.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,9 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -32,12 +28,11 @@ public class PostController {
     private final PostService postService;
 
     @Operation(summary = "게시글 생성 API")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Response<Long>> createPost(@RequestPart("data") PostCreateReq req,
-                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Response<Long>> createPost(@RequestBody PostCreateReq req,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.createPost(req, imageFile, user);
+        Response<Long> res = postService.createPost(req, user);
         return ResponseEntity
                 .status(SuccessStatus.CREATE_POST.getStatus())
                 .body(res);
@@ -61,20 +56,19 @@ public class PostController {
     }
 
     @Operation(summary = "게시글 수정 API")
-    @PatchMapping("{postId}")
+    @PatchMapping(value = "{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<Long>> updatePost(@PathVariable Long postId,
-                                                     @RequestPart("data") PostUpdateReq req,
-                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
-                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                                    @RequestBody PostUpdateReq req,
+                                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
-        Response<Long> res = postService.updatePost(postId, req, imageFile, user);
+        Response<Long> res = postService.updatePost(postId, req, user);
         return ResponseEntity.ok(res);
     }
 
     @Operation(summary = "게시글 삭제 API")
     @DeleteMapping("{postId}")
     public ResponseEntity<Response<Long>> deletePost(@PathVariable Long postId,
-                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
         Response<Long> res = postService.deletePost(postId, user);
         return ResponseEntity.ok(res);

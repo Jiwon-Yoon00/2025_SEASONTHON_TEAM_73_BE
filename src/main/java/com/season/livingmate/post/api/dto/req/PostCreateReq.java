@@ -83,7 +83,7 @@ public record PostCreateReq(
         @Schema(description = "방 개수", example = "2")
         int roomCount,
 
-        @Schema(description = "모집 희망 성별", example = "MALE")
+        @Schema(description = "모집 희망 성별", example = "[\"MALE\", \"FEMALE\"]")
         List<Gender> preferredGender
 ) {
 }

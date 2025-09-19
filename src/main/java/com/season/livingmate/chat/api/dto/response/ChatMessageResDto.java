@@ -34,6 +34,9 @@ public class ChatMessageResDto {
     @Schema(description = "보낸사람 nickname", example = "0yuniverse0")
     private String senderName;
 
+    @Schema(description = "보낸 사람 프로필", example = "url")
+    private String senderProfile;
+
     @Schema(description = "메세지 내용", example = "안녕하세요! 룸메로 지원하고 싶습니다!")
     private String content;
 
@@ -48,7 +51,8 @@ public class ChatMessageResDto {
                 .messageId(message.getId())
                 .chatRoomId(message.getChatRoom().getId())
                 .senderId(message.getSender().getId())
-                .senderName(message.getSender().getUsername())
+                .senderName(message.getSender().getNickname())
+                .senderProfile(message.getSender().getUserProfile().getProfileImageUrl())
                 .content(message.getContent())
                 .createdAt(message.getCreatedAt())
                 .read(message.isRead())
