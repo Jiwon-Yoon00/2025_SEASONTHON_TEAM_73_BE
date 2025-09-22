@@ -5,7 +5,7 @@ import com.season.livingmate.domain.gpt.api.dto.response.UserRecommendationRes;
 import com.season.livingmate.domain.gpt.application.UserRecommendationService;
 import com.season.livingmate.domain.main.api.dto.DashboardRes;
 import com.season.livingmate.domain.user.api.dto.response.UserListRes;
-import com.season.livingmate.domain.user.application.UserProfileLikeService;
+import com.season.livingmate.domain.like.application.UserLikeService;
 import com.season.livingmate.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class MainDashboardService {
 
-    private final UserProfileLikeService userProfileLikeService;
+    private final UserLikeService userLikeService;
     private final UserRecommendationService userRecommendationService;
 
     public DashboardRes getNoRoomDashboard(User user) {
         // 찜한 사용자 조회
         Pageable pageable = PageRequest.of(0, 5);
-        Page<UserListRes> likedUsersPage = userProfileLikeService.getLike(
+        Page<UserListRes> likedUsersPage = userLikeService.getLike(
                 new CustomUserDetails(user),
                 pageable
         );
@@ -62,7 +62,7 @@ public class MainDashboardService {
     public DashboardRes getHasRoomDashboard(User user) {
         // 찜한 사용자 조회
         Pageable pageable = PageRequest.of(0, 5);
-        Page<UserListRes> likedUsersPage = userProfileLikeService.getLike(
+        Page<UserListRes> likedUsersPage = userLikeService.getLike(
                 new CustomUserDetails(user),
                 pageable
         );

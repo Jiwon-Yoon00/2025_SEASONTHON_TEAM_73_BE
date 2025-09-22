@@ -1,6 +1,9 @@
-package com.season.livingmate.domain.user.domain;
+package com.season.livingmate.domain.like.domain.entity;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.entity.BaseEntity;
+import com.season.livingmate.global.exception.CustomException;
+import com.season.livingmate.global.exception.status.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserProfileLike extends BaseEntity {
+public class UserLike extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +28,12 @@ public class UserProfileLike extends BaseEntity {
     @JoinColumn(name = "liked_user_id")
     private User likedUser;
 
-    public static UserProfileLike create(User user, User likedUser) {
-        return UserProfileLike.builder()
+    public static UserLike create(User user, User likedUser) {
+        if(user.getId().equals(likedUser.getId())){
+            throw new CustomException(ErrorStatus.SELF_LIKE_NOT_ALLOWED);
+        }
+
+        return UserLike.builder()
                 .user(user)
                 .likedUser(likedUser)
                 .build();

@@ -1,5 +1,6 @@
 package com.season.livingmate.domain.user.domain;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.converter.StringListJsonConverter;
 import com.season.livingmate.global.entity.BaseEntity;
 import com.season.livingmate.domain.user.api.dto.resquest.UserProfileCreateReq;

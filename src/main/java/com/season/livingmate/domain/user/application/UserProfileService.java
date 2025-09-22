@@ -1,5 +1,6 @@
 package com.season.livingmate.domain.user.application;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.domain.user.domain.repository.UserBoostRepository;
 import com.season.livingmate.domain.user.domain.repository.UserProfileRepository;
@@ -14,9 +15,7 @@ import com.season.livingmate.domain.user.api.dto.response.UserListRes;
 import com.season.livingmate.domain.user.api.dto.resquest.UserFilterReq;
 import com.season.livingmate.domain.user.api.dto.resquest.UserProfileCreateReq;
 import com.season.livingmate.domain.user.api.dto.resquest.UserProfileUpdateReq;
-import com.season.livingmate.domain.user.domain.User;
 import com.season.livingmate.domain.user.domain.UserProfile;
-import com.season.livingmate.user.domain.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +46,7 @@ public class UserProfileService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.PROFILE_NOT_FOUND));
         userProfile.updateFromCreateDto(userProfileCreateReq);
 
-        user.setPersonalitySurveyCompleted(true);
+
         userRepository.save(user); // 변경된 USER 엔티티 저장
 
         List<Post> myPosts = postRepository.findAllByUserId(userDetails.getUserId());

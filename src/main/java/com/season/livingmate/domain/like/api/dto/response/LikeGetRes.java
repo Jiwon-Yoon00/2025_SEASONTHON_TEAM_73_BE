@@ -1,7 +1,7 @@
-package com.season.livingmate.domain.user.api.dto.response;
+package com.season.livingmate.domain.like.api.dto.response;
 
-import com.season.livingmate.domain.user.domain.Gender;
-import com.season.livingmate.domain.user.domain.UserProfileLike;
+import com.season.livingmate.domain.like.domain.entity.UserLike;
+import com.season.livingmate.domain.user.domain.entity.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,17 +36,17 @@ public class LikeGetRes {
     @Schema(description = "좋아요 받은 유저 프로필 이미지", example = "url")
     private String profileImageUrl;
 
-    public static LikeGetRes from(UserProfileLike userProfileLike) {
+    public static LikeGetRes from(UserLike userLike) {
         return new LikeGetRes(
-                userProfileLike.getId(),
-                userProfileLike.getUser().getId(),
-                userProfileLike.getLikedUser().getId(),
-                userProfileLike.getLikedUser().getNickname(),
+                userLike.getId(),
+                userLike.getUser().getId(),
+                userLike.getLikedUser().getId(),
+                userLike.getLikedUser().getNickname(),
                 // userProfileLike.getLikedUserId().getBio(),
-                userProfileLike.getLikedUser().getGender(),
-                userProfileLike.getLikedUser().getAge(),
-                userProfileLike.getLikedUser().getUserProfile().isSmoking(),
-                userProfileLike.getLikedUser().getUserProfile().getProfileImageUrl()
+                userLike.getLikedUser().getGender(),
+                userLike.getLikedUser().getAge(),
+                userLike.getLikedUser().getUserProfile().isSmoking(),
+                userLike.getLikedUser().getUserProfile().getProfileImageUrl()
         );
     }
 }

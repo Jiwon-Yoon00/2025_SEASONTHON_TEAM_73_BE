@@ -3,6 +3,7 @@ package com.season.livingmate.domain.user.api.dto.response;
 import com.season.livingmate.domain.user.domain.*;
 import com.season.livingmate.domain.post.api.dto.res.PostListRes;
 import com.season.livingmate.domain.post.domain.Post;
+import com.season.livingmate.domain.user.domain.entity.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

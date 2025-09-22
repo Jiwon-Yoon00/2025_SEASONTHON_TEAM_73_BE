@@ -5,7 +5,7 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.season.livingmate.domain.user.api.dto.resquest.UserFilterReq;
-import com.season.livingmate.domain.user.domain.Gender;
+import com.season.livingmate.domain.user.domain.entity.Gender;
 import com.season.livingmate.user.domain.QUser;
 import com.season.livingmate.user.domain.QUserProfile;
 import com.season.livingmate.domain.user.domain.UserProfile;

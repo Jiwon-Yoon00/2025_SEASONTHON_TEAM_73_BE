@@ -1,10 +1,10 @@
-package com.season.livingmate.domain.user.api;
+package com.season.livingmate.domain.like.api;
 
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.SuccessStatus;
 import com.season.livingmate.domain.user.api.dto.response.UserListRes;
-import com.season.livingmate.domain.user.application.UserProfileLikeService;
+import com.season.livingmate.domain.like.application.UserLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "유저프로필 좋아요", description = "유저프로필 좋아요 관련 API")
 @RequestMapping("/likes")
-public class UserProfileLikeController {
-    private final UserProfileLikeService userProfileLikeService;
+public class UserLikeController {
+    private final UserLikeService userLikeService;
 
 
     @PostMapping("/{userId}")
     @Operation(summary = "유저프로필 좋아요 생성")
     public ResponseEntity<Response<Boolean>> createLike(@PathVariable Long userId , @AuthenticationPrincipal CustomUserDetails userDetails) {
-        boolean isLiked = userProfileLikeService.createLike(userId,userDetails);
+        boolean isLiked = userLikeService.createLike(userId,userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.CREATE_LIKE, isLiked));
     }
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "유저프로필 좋아요 취소")
     public ResponseEntity<Response<Void>> deleteLike(@PathVariable Long userId , @AuthenticationPrincipal CustomUserDetails userDetails) {
-        userProfileLikeService.deleteLike(userId, userDetails);
+        userLikeService.deleteLike(userId, userDetails);
         return ResponseEntity.ok(Response.success(SuccessStatus.DELETE_LIKE, null));
     }
 
@@ -44,7 +44,7 @@ public class UserProfileLikeController {
                                                                @RequestParam(defaultValue = "0") int page,
                                                                @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserListRes> likedProfiles = userProfileLikeService.getLike(userDetails, pageable);
+        Page<UserListRes> likedProfiles = userLikeService.getLike(userDetails, pageable);
 
         return ResponseEntity.ok(Response.success(SuccessStatus.READ_LIKE, likedProfiles));
     }

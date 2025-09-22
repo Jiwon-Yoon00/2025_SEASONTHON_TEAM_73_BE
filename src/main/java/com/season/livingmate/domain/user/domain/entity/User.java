@@ -1,6 +1,9 @@
-package com.season.livingmate.domain.user.domain;
+package com.season.livingmate.domain.user.domain.entity;
 
-import com.season.livingmate.domain.auth.entity.RefreshToken;
+import com.season.livingmate.domain.user.domain.UserBoost;
+import com.season.livingmate.domain.user.domain.UserProfile;
+import com.season.livingmate.domain.user.domain.WorkType;
+import com.season.livingmate.global.auth.domain.RefreshToken;
 import com.season.livingmate.domain.chat.domain.ChatRoom;
 import com.season.livingmate.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -38,7 +41,7 @@ public class User extends BaseEntity {
     private int age;
 
     @Column(nullable = false)
-    private boolean isRoom;
+    private boolean hasRoom;
 
     private boolean verified; // 본인인증 완료 여부
 
@@ -48,18 +51,18 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserBoost userBoost;
 
-    @OneToMany(mappedBy = "sender") // 사용자가 보낸 채팅방 목록
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL) // 사용자가 보낸 채팅방 목록
     private List<ChatRoom> sentChatRooms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "receiver") // 사용자가 받은 채팅방 목록
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL) // 사용자가 받은 채팅방 목록
     private List<ChatRoom> receivedChatRooms = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private WorkType workType; // 증명서 제출 여부
+    private WorkType workType; // 직업 유형
 
     @Column(nullable = false)
-    private boolean isPersonalitySurveyCompleted; // 성향조사 완료 여부
+    private boolean personalitySurveyCompleted; // 성향조사 완료 여부
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<RefreshToken> refreshTokens;
+    private List<RefreshToken> refreshTokens = new ArrayList<>();
 }

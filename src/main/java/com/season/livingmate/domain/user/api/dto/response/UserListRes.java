@@ -1,9 +1,10 @@
 package com.season.livingmate.domain.user.api.dto.response;
 
-import com.season.livingmate.domain.user.domain.Gender;
-import com.season.livingmate.domain.user.domain.User;
-import com.season.livingmate.domain.user.domain.UserProfileLike;
+
+import com.season.livingmate.domain.like.domain.entity.UserLike;
 import com.season.livingmate.domain.user.domain.WorkType;
+import com.season.livingmate.domain.user.domain.entity.Gender;
+import com.season.livingmate.domain.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,14 +56,14 @@ public class UserListRes {
                 user.isVerified(),
                 user.getGender(),
                 user.getWorkType(),
-                user.isRoom(),
+                user.isHasRoom(),
                 user.getUserProfile().isSmoking(),
                 user.getUserBoost() != null,
                 user.getUserProfile().getWorkType()
         );
     }
 
-    public static UserListRes from(UserProfileLike user) {
+    public static UserListRes from(UserLike user) {
         User likedUser = user.getLikedUser();
         return new UserListRes(
                 likedUser.getId(),
@@ -72,7 +73,7 @@ public class UserListRes {
                 likedUser.isVerified(),
                 likedUser.getGender(),
                 likedUser.getWorkType(),
-                likedUser.isRoom(),
+                likedUser.isHasRoom(),
                 likedUser.getUserProfile().isSmoking(),
                 likedUser.getUserBoost() != null,
                 likedUser.getUserProfile().getWorkType()

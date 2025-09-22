@@ -1,6 +1,7 @@
 package com.season.livingmate.domain.user.domain.repository;
 
-import com.season.livingmate.domain.user.domain.User;
+
+import com.season.livingmate.domain.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

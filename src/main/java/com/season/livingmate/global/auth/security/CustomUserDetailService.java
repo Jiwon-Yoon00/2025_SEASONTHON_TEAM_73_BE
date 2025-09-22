@@ -1,8 +1,8 @@
 package com.season.livingmate.global.auth.security;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
-import com.season.livingmate.domain.user.domain.User;
 import com.season.livingmate.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

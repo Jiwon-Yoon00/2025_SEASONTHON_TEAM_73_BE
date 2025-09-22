@@ -1,12 +1,13 @@
-package com.season.livingmate.domain.user.application;
+package com.season.livingmate.domain.like.application;
+
+import com.season.livingmate.domain.like.domain.entity.UserLike;
+import com.season.livingmate.domain.user.domain.entity.User;
 
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
 import com.season.livingmate.domain.user.api.dto.response.UserListRes;
-import com.season.livingmate.domain.user.domain.User;
-import com.season.livingmate.domain.user.domain.UserProfileLike;
-import com.season.livingmate.domain.user.domain.repository.UserProfileLikeRepository;
+import com.season.livingmate.domain.like.domain.repository.UserLikeRepository;
 import com.season.livingmate.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserProfileLikeService {
+public class UserLikeService {
 
-    private final UserProfileLikeRepository userProfileLikeRepository;
+    private final UserLikeRepository userLikeRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -27,12 +28,8 @@ public class UserProfileLikeService {
 
         User user = userDetails.getUser();
 
-        if(user.getId().equals(targetUserId)){
-            throw new CustomException(ErrorStatus.SELF_LIKE_NOT_ALLOWED);
-        }
-
         // 이미 좋아요를 눌렀는지 확인
-        boolean exists = userProfileLikeRepository.existsByUserIdAndLikedUserId(user.getId(), targetUserId);
+        boolean exists = userLikeRepository.existsByUserIdAndLikedUserId(user.getId(), targetUserId);
         if (exists) {
             throw new CustomException(ErrorStatus.ALREADY_LIKED);
         }
@@ -42,8 +39,8 @@ public class UserProfileLikeService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
 
 
-        UserProfileLike userProfileLike = UserProfileLike.create(user, likedUser);
-        userProfileLikeRepository.save(userProfileLike);
+        UserLike userLike = UserLike.create(user, likedUser);
+        userLikeRepository.save(userLike);
 
         return true;
     }
@@ -53,10 +50,10 @@ public class UserProfileLikeService {
     public void deleteLike(Long targetUserId, CustomUserDetails userDetails) {
         User user = userDetails.getUser();
 
-        UserProfileLike like = userProfileLikeRepository.findByUserIdAndLikedUserId(user.getId(), targetUserId)
+        UserLike like = userLikeRepository.findByUserIdAndLikedUserId(user.getId(), targetUserId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.LIKE_NOT_FOUND));
 
-        userProfileLikeRepository.delete(like);
+        userLikeRepository.delete(like);
     }
 
 
@@ -66,7 +63,7 @@ public class UserProfileLikeService {
 
         User user = userDetails.getUser();
 
-        Page<UserProfileLike> likedProfiles = userProfileLikeRepository.findAllByUserId(user.getId(), pageable);
+        Page<UserLike> likedProfiles = userLikeRepository.findAllByUserId(user.getId(), pageable);
 
         return likedProfiles.map(UserListRes::from);
     }

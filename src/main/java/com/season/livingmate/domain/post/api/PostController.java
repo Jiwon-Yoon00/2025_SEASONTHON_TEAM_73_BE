@@ -9,7 +9,7 @@ import com.season.livingmate.domain.post.api.dto.req.PostUpdateReq;
 import com.season.livingmate.domain.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.domain.post.api.dto.res.PostListRes;
 import com.season.livingmate.domain.post.application.PostService;
-import com.season.livingmate.domain.user.domain.User;
+import com.season.livingmate.domain.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -2,9 +2,10 @@ package com.season.livingmate.domain.user.domain.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.season.livingmate.domain.user.domain.CountRange;
-import com.season.livingmate.domain.user.domain.Gender;
+
 import com.season.livingmate.domain.user.domain.SensitivityLevel;
 import com.season.livingmate.domain.user.domain.TidinessLevel;
+import com.season.livingmate.domain.user.domain.entity.Gender;
 import com.season.livingmate.user.domain.*;
 import lombok.RequiredArgsConstructor;
 

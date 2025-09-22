@@ -1,4 +1,4 @@
-package com.season.livingmate.domain.user.domain;
+package com.season.livingmate.domain.user.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
