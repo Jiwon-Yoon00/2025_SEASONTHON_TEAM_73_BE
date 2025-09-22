@@ -1,6 +1,6 @@
 package com.season.livingmate.domain.chat.infra;
 
-import com.season.livingmate.domain.auth.security.JwtProvider;
+import com.season.livingmate.global.auth.security.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

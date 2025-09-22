@@ -1,6 +1,6 @@
 package com.season.livingmate.domain.chat.api;
 
-import com.season.livingmate.domain.auth.security.CustomUserDetails;
+import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.domain.chat.api.dto.response.ChatMessageRes;
 import com.season.livingmate.domain.chat.api.dto.response.ChatRoomRes;
 import com.season.livingmate.domain.chat.application.ChatService;

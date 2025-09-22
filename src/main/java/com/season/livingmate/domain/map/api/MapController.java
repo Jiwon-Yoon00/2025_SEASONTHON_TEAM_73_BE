@@ -1,6 +1,6 @@
 package com.season.livingmate.domain.map.api;
 
-import com.season.livingmate.domain.auth.security.CustomUserDetails;
+import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.domain.map.api.dto.PostDetailMapRes;
 import com.season.livingmate.domain.map.api.dto.PostMapDetailRes;

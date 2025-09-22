@@ -1,6 +1,6 @@
 package com.season.livingmate.domain.main.application;
 
-import com.season.livingmate.domain.auth.security.CustomUserDetails;
+import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.domain.gpt.api.dto.response.UserRecommendationRes;
 import com.season.livingmate.domain.gpt.application.UserRecommendationService;
 import com.season.livingmate.domain.main.api.dto.DashboardRes;

@@ -1,6 +1,6 @@
 package com.season.livingmate.domain.user.application;
 
-import com.season.livingmate.domain.auth.security.CustomUserDetails;
+import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
 import com.season.livingmate.domain.user.api.dto.response.UserListRes;

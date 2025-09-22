@@ -2,9 +2,9 @@ package com.season.livingmate.global.config;
 
 import java.util.Collections;
 
-import com.season.livingmate.domain.auth.security.*;
-import com.season.livingmate.domain.auth.service.RefreshTokenService;
+import com.season.livingmate.global.auth.application.RefreshTokenService;
 import com.season.livingmate.domain.user.domain.repository.UserRepository;
+import com.season.livingmate.global.auth.security.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

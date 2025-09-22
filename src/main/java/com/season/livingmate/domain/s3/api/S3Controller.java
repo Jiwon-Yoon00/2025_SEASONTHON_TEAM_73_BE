@@ -1,6 +1,6 @@
 package com.season.livingmate.domain.s3.api;
 
-import com.season.livingmate.domain.auth.security.CustomUserDetails;
+import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.SuccessStatus;
 import com.season.livingmate.domain.s3.api.dto.S3UploadRes;

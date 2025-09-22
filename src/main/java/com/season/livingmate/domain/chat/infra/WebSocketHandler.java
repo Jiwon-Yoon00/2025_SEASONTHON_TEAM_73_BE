@@ -1,8 +1,8 @@
 package com.season.livingmate.domain.chat.infra;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.season.livingmate.domain.auth.security.CustomUserDetailService;
-import com.season.livingmate.domain.auth.security.CustomUserDetails;
+import com.season.livingmate.global.auth.security.CustomUserDetailService;
+import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.domain.chat.api.dto.request.ChatMessageReq;
 import com.season.livingmate.domain.chat.api.dto.response.ChatMessageRes;
 import com.season.livingmate.domain.chat.application.ChatService;
