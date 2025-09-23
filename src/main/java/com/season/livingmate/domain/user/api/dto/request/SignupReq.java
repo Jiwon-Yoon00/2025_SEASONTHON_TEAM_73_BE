@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Schema(description = "회원가입 요청 DTO")
 public class SignupReq {
     @NotBlank(message = "아이디는 필수입니다.")
     @Schema(description = "사용자 아이디", example = "testuser", required = true)
