@@ -3,7 +3,7 @@ package com.season.livingmate.domain.like.api;
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.SuccessStatus;
-import com.season.livingmate.domain.user.api.dto.response.UserListRes;
+import com.season.livingmate.domain.userProfile.api.dto.response.UserListRes;
 import com.season.livingmate.domain.like.application.UserLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

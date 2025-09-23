@@ -1,11 +1,12 @@
 package com.season.livingmate.domain.s3.application;
 
+import com.season.livingmate.domain.userProfile.domain.entity.UserProfile;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
 import com.season.livingmate.domain.s3.S3Folder;
 import com.season.livingmate.domain.s3.api.dto.S3UploadRes;
-import com.season.livingmate.domain.user.domain.UserProfile;
-import com.season.livingmate.domain.user.domain.repository.UserProfileRepository;
+
+import com.season.livingmate.domain.userProfile.domain.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

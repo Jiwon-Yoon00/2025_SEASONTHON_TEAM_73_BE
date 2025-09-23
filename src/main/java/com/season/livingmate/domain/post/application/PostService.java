@@ -1,5 +1,8 @@
 package com.season.livingmate.domain.post.application;
 
+import com.season.livingmate.domain.post.domain.entity.GeoPoint;
+import com.season.livingmate.domain.post.domain.entity.PaymentStructure;
+import com.season.livingmate.domain.post.domain.entity.Post;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.ErrorStatus;
@@ -13,9 +16,7 @@ import com.season.livingmate.domain.post.api.dto.req.PostSearchReq;
 import com.season.livingmate.domain.post.api.dto.req.PostUpdateReq;
 import com.season.livingmate.domain.post.api.dto.res.PostDetailRes;
 import com.season.livingmate.domain.post.api.dto.res.PostListRes;
-import com.season.livingmate.domain.post.domain.GeoPoint;
-import com.season.livingmate.domain.post.domain.PaymentStructure;
-import com.season.livingmate.domain.post.domain.Post;
+
 import com.season.livingmate.domain.post.domain.repository.PostRepository;
 import com.season.livingmate.domain.post.domain.repository.PostSpecs;
 import com.season.livingmate.domain.user.domain.entity.Gender;

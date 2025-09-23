@@ -1,7 +1,8 @@
 package com.season.livingmate.domain.map.api.dto;
 
 import com.season.livingmate.domain.map.util.CoordinateUtil;
-import com.season.livingmate.domain.post.domain.Post;
+
+import com.season.livingmate.domain.post.domain.entity.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "지도용 게시글 마커 DTO")

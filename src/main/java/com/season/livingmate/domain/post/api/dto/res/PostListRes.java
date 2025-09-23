@@ -1,9 +1,12 @@
 package com.season.livingmate.domain.post.api.dto.res;
 
-import com.season.livingmate.domain.post.domain.Post;
-import com.season.livingmate.domain.user.domain.Gender;
-import com.season.livingmate.domain.user.domain.User;
-import com.season.livingmate.domain.user.domain.UserProfile;
+
+
+
+import com.season.livingmate.domain.post.domain.entity.Post;
+import com.season.livingmate.domain.user.domain.entity.Gender;
+import com.season.livingmate.domain.user.domain.entity.User;
+import com.season.livingmate.domain.userProfile.domain.entity.UserProfile;
 
 import java.time.LocalDateTime;
 

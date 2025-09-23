@@ -1,10 +1,10 @@
 package com.season.livingmate.global.auth.application;
 
 
-import com.season.livingmate.global.auth.domain.BlacklistReason;
-import com.season.livingmate.global.auth.domain.BlacklistToken;
+import com.season.livingmate.domain.user.domain.entity.User;
+import com.season.livingmate.global.auth.domain.entity.BlacklistReason;
+import com.season.livingmate.global.auth.domain.entity.BlacklistToken;
 import com.season.livingmate.global.auth.domain.repository.BlacklistTokenRepository;
-import com.season.livingmate.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,11 +1,11 @@
 package com.season.livingmate.domain.gpt.api;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.SuccessStatus;
 import com.season.livingmate.domain.gpt.api.dto.response.UserRecommendationRes;
 import com.season.livingmate.domain.gpt.application.UserRecommendationService;
-import com.season.livingmate.domain.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

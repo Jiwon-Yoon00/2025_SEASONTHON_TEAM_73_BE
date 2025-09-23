@@ -1,7 +1,7 @@
 package com.season.livingmate.global.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.season.livingmate.global.auth.api.dto.request.LoginReq;
+import com.season.livingmate.domain.user.api.dto.request.LoginReq;
 import com.season.livingmate.global.auth.application.RefreshTokenService;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.ErrorStatus;
@@ -76,7 +76,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         map.put("refreshToken", refreshToken);
         map.put("verified", userDetails.getUser().isVerified());
         map.put("isCertified", userDetails.getUser().getWorkType());
-        map.put("isRoom", userDetails.getUser().isRoom());
+        map.put("isRoom", userDetails.getUser().isHasRoom());
         map.put("isPersonalitySurveyCompleted", userDetails.getUser().isPersonalitySurveyCompleted());
 
         Response<Map<String, Object>> apiRes = Response.success(SuccessStatus.SUCCESS,map);

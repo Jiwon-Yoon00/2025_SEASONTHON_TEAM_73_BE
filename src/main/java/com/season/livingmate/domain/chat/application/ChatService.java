@@ -1,5 +1,7 @@
 package com.season.livingmate.domain.chat.application;
 
+import com.season.livingmate.domain.post.domain.entity.Post;
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.domain.chat.api.dto.request.ChatMessageReq;
 import com.season.livingmate.domain.chat.api.dto.response.ChatMessageRes;
@@ -11,9 +13,7 @@ import com.season.livingmate.domain.chat.domain.repository.ChatRoomRepository;
 import com.season.livingmate.domain.chat.domain.repository.MessageRepository;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
-import com.season.livingmate.domain.post.domain.Post;
 import com.season.livingmate.domain.post.domain.repository.PostRepository;
-import com.season.livingmate.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

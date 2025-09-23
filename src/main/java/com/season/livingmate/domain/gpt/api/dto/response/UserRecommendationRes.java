@@ -1,6 +1,7 @@
 package com.season.livingmate.domain.gpt.api.dto.response;
 
-import com.season.livingmate.domain.user.domain.User;
+
+import com.season.livingmate.domain.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;

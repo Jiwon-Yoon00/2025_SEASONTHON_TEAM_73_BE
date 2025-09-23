@@ -6,7 +6,7 @@ import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
-import com.season.livingmate.domain.user.api.dto.response.UserListRes;
+import com.season.livingmate.domain.userProfile.api.dto.response.UserListRes;
 import com.season.livingmate.domain.like.domain.repository.UserLikeRepository;
 import com.season.livingmate.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

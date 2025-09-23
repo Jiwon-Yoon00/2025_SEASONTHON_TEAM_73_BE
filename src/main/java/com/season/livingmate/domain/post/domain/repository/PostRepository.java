@@ -1,6 +1,7 @@
 package com.season.livingmate.domain.post.domain.repository;
 
-import com.season.livingmate.domain.post.domain.Post;
+
+import com.season.livingmate.domain.post.domain.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

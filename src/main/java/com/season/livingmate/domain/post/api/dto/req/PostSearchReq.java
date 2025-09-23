@@ -1,7 +1,7 @@
 package com.season.livingmate.domain.post.api.dto.req;
 
-import com.season.livingmate.domain.post.domain.RoomType;
-import com.season.livingmate.domain.user.api.dto.resquest.UserFilterReq;
+import com.season.livingmate.domain.post.domain.entity.enums.RoomType;
+import com.season.livingmate.domain.userProfile.api.dto.request.UserFilterReq;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;

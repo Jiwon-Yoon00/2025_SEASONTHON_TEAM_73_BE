@@ -1,12 +1,14 @@
 package com.season.livingmate.domain.post.domain.repository;
 
 import com.season.livingmate.domain.post.api.dto.req.PostSearchReq;
-import com.season.livingmate.domain.post.domain.Post;
-import com.season.livingmate.domain.post.domain.RoomType;
-import com.season.livingmate.domain.user.api.dto.resquest.UserFilterReq;
+
+import com.season.livingmate.domain.post.domain.entity.Post;
+import com.season.livingmate.domain.post.domain.entity.enums.RoomType;
+import com.season.livingmate.domain.userProfile.api.dto.request.UserFilterReq;
 import com.season.livingmate.domain.user.domain.entity.Gender;
 import com.season.livingmate.domain.user.domain.entity.User;
-import com.season.livingmate.domain.user.domain.UserProfile;
+
+import com.season.livingmate.domain.userProfile.domain.entity.UserProfile;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;

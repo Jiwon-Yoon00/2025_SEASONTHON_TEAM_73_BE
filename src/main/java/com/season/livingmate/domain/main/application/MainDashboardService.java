@@ -1,12 +1,12 @@
 package com.season.livingmate.domain.main.application;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.domain.gpt.api.dto.response.UserRecommendationRes;
 import com.season.livingmate.domain.gpt.application.UserRecommendationService;
 import com.season.livingmate.domain.main.api.dto.DashboardRes;
-import com.season.livingmate.domain.user.api.dto.response.UserListRes;
+import com.season.livingmate.domain.userProfile.api.dto.response.UserListRes;
 import com.season.livingmate.domain.like.application.UserLikeService;
-import com.season.livingmate.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

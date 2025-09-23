@@ -1,12 +1,12 @@
 package com.season.livingmate.domain.map.api;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.auth.security.CustomUserDetails;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.domain.map.api.dto.PostDetailMapRes;
 import com.season.livingmate.domain.map.api.dto.PostMapDetailRes;
 import com.season.livingmate.domain.map.api.dto.PostMapRes;
 import com.season.livingmate.domain.map.application.MapService;
-import com.season.livingmate.domain.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

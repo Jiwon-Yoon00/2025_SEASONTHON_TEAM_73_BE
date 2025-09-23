@@ -1,9 +1,9 @@
 package com.season.livingmate.domain.post.api.dto.res;
 
-import com.season.livingmate.domain.post.domain.HeatingType;
-import com.season.livingmate.domain.post.domain.PaymentStructure;
-import com.season.livingmate.domain.post.domain.Post;
-import com.season.livingmate.domain.user.domain.WorkType;
+import com.season.livingmate.domain.post.domain.entity.PaymentStructure;
+import com.season.livingmate.domain.post.domain.entity.Post;
+import com.season.livingmate.domain.post.domain.entity.enums.HeatingType;
+import com.season.livingmate.domain.userProfile.domain.entity.enums.WorkType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;

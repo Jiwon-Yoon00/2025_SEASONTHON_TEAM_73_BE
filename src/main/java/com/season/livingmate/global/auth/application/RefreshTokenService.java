@@ -1,13 +1,13 @@
 package com.season.livingmate.global.auth.application;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.auth.api.dto.response.RefreshTokenRes;
-import com.season.livingmate.global.auth.domain.RefreshToken;
+import com.season.livingmate.global.auth.domain.entity.RefreshToken;
 
 import com.season.livingmate.global.auth.domain.repository.RefreshTokenRepository;
 import com.season.livingmate.global.auth.security.JwtProvider;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
-import com.season.livingmate.domain.user.domain.User;
 import com.season.livingmate.domain.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

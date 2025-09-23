@@ -1,5 +1,7 @@
 package com.season.livingmate.domain.map.application;
 
+import com.season.livingmate.domain.post.domain.entity.Post;
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.ErrorStatus;
@@ -8,9 +10,8 @@ import com.season.livingmate.domain.map.api.dto.PostDetailMapRes;
 import com.season.livingmate.domain.map.api.dto.PostMapDetailRes;
 import com.season.livingmate.domain.map.api.dto.PostMapRes;
 import com.season.livingmate.domain.map.domain.repository.MapRepository;
-import com.season.livingmate.domain.post.domain.Post;
+
 import com.season.livingmate.domain.post.domain.repository.PostSpecs;
-import com.season.livingmate.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

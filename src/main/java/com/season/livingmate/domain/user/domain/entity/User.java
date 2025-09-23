@@ -1,9 +1,10 @@
 package com.season.livingmate.domain.user.domain.entity;
 
-import com.season.livingmate.domain.user.domain.UserBoost;
-import com.season.livingmate.domain.user.domain.UserProfile;
-import com.season.livingmate.domain.user.domain.WorkType;
-import com.season.livingmate.global.auth.domain.RefreshToken;
+
+import com.season.livingmate.domain.boost.domain.entity.UserBoost;
+import com.season.livingmate.domain.userProfile.domain.entity.UserProfile;
+import com.season.livingmate.domain.userProfile.domain.entity.enums.WorkType;
+import com.season.livingmate.global.auth.domain.entity.RefreshToken;
 import com.season.livingmate.domain.chat.domain.ChatRoom;
 import com.season.livingmate.global.entity.BaseEntity;
 import jakarta.persistence.*;

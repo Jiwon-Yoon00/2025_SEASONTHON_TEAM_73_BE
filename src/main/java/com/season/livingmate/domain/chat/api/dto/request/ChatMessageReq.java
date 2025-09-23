@@ -4,7 +4,7 @@ import com.season.livingmate.domain.chat.domain.ChatRoom;
 import com.season.livingmate.domain.chat.domain.Message;
 import com.season.livingmate.domain.chat.domain.MessageType;
 import com.season.livingmate.domain.chat.domain.WebSocketType;
-import com.season.livingmate.domain.user.domain.User;
+import com.season.livingmate.domain.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

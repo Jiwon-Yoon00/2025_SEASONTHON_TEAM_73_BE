@@ -1,6 +1,6 @@
 package com.season.livingmate.global.auth.domain.repository;
 
-import com.season.livingmate.global.auth.domain.BlacklistToken;
+import com.season.livingmate.global.auth.domain.entity.BlacklistToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

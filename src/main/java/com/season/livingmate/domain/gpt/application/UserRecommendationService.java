@@ -3,11 +3,12 @@ package com.season.livingmate.domain.gpt.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.season.livingmate.domain.userProfile.domain.entity.UserProfile;
 import com.season.livingmate.global.exception.CustomException;
 import com.season.livingmate.global.exception.status.ErrorStatus;
 import com.season.livingmate.domain.gpt.api.dto.response.UserRecommendationRes;
 import com.season.livingmate.domain.user.domain.entity.User;
-import com.season.livingmate.domain.user.domain.UserProfile;
+
 import com.season.livingmate.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -315,7 +316,7 @@ public class UserRecommendationService {
 
     private List<User> getCandidates(User currentUser) {
         // isRoom 조건 필터링
-        if(currentUser.isRoom()){
+        if(currentUser.isHasRoom()){
             // 방이 있으면 -> 방 없는 사용자 추천
             return userRepository.findByIsRoomAndIdNot(false, currentUser.getId());
         } else {

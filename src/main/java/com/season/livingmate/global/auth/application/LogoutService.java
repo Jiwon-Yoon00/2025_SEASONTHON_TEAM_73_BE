@@ -1,13 +1,15 @@
 package com.season.livingmate.global.auth.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.season.livingmate.domain.auth.entity.BlacklistReason;
+
+import com.season.livingmate.domain.user.domain.entity.User;
+import com.season.livingmate.global.auth.domain.entity.BlacklistReason;
 import com.season.livingmate.global.auth.domain.repository.RefreshTokenRepository;
 import com.season.livingmate.global.auth.security.JwtProvider;
 import com.season.livingmate.global.exception.Response;
 import com.season.livingmate.global.exception.status.ErrorStatus;
 import com.season.livingmate.global.exception.status.SuccessStatus;
-import com.season.livingmate.domain.user.domain.User;
+
 import com.season.livingmate.domain.user.domain.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;

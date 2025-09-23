@@ -1,7 +1,7 @@
 package com.season.livingmate.domain.chat.domain;
 
+import com.season.livingmate.domain.user.domain.entity.User;
 import com.season.livingmate.global.entity.BaseEntity;
-import com.season.livingmate.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 

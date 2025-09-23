@@ -1,7 +1,7 @@
 package com.season.livingmate.domain.post.api.dto.req;
 
-import com.season.livingmate.domain.post.domain.HeatingType;
-import com.season.livingmate.domain.post.domain.RoomType;
+import com.season.livingmate.domain.post.domain.entity.enums.HeatingType;
+import com.season.livingmate.domain.post.domain.entity.enums.RoomType;
 import com.season.livingmate.domain.user.domain.entity.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 
